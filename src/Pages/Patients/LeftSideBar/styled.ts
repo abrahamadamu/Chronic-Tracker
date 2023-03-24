@@ -9,9 +9,4 @@ const LeftBar = styled(Grid)(({ theme }) => ({
   backgroundColor: theme.palette.primary.main,
 }));
 
-const ContentSide = styled(Grid)(({ theme }) => ({
-  flexGrow: "1",
-  backgroundColor: "#dfe9f1",
-}));
-
-export { LeftBar, ContentSide };
+export { LeftBar };
