@@ -16,7 +16,7 @@ function Patients() {
   const [curLeftMenu, setCurLeftMenu] = useState<LeftMenuType>(leftMenus[0]);
 
   return (
-    <Grid container justifyContent="stretch">
+    <Grid container direction="row" wrap="nowrap">
       <LeftSideBar
         leftMenus={leftMenus}
         curLeftMenu={{ get: curLeftMenu, set: setCurLeftMenu }}
