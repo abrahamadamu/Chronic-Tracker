@@ -1,9 +1,13 @@
-import { Container } from "./styled";
+import { ReactNode } from "react";
+import { Grid } from "@mui/material";
+import { Container, ContentBox } from "./styled";
 
-function ContentSide() {
+function ContentSide({ children }: { children: ReactNode }) {
   return (
     <Container>
-      <h1>Content</h1>
+      <Grid container justifyContent="center" paddingTop="70px">
+        <ContentBox elevation={3}>{children}</ContentBox>
+      </Grid>
     </Container>
   );
 }

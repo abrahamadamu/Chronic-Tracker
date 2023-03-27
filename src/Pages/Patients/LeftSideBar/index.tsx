@@ -1,12 +1,19 @@
+import { ReactNode } from "react";
 import { List, ListItemButton, Typography } from "@mui/material";
 import { LeftBar } from "./styled";
+
+type LeftMenuType = {
+  id: string;
+  name: string;
+  component: ReactNode;
+};
 
 function LeftSideBar({
   leftMenus,
   curLeftMenu,
 }: {
-  leftMenus: string[];
-  curLeftMenu: { get: string; set: (p: string) => void };
+  leftMenus: LeftMenuType[];
+  curLeftMenu: { get: LeftMenuType; set: (p: LeftMenuType) => void };
 }) {
   return (
     <LeftBar>
@@ -17,7 +24,7 @@ function LeftSideBar({
       <br />
       <List>
         {leftMenus.map((menu) => (
-          <LeftBarItem key={menu} current={curLeftMenu} text={menu} />
+          <LeftBarItem key={menu.id} current={curLeftMenu} item={menu} />
         ))}
       </List>
     </LeftBar>
@@ -25,13 +32,13 @@ function LeftSideBar({
 }
 
 function LeftBarItem({
-  text,
+  item,
   current,
 }: {
-  text: string;
-  current: { get: string; set: (v: string) => void };
+  item: LeftMenuType;
+  current: { get: LeftMenuType; set: (v: LeftMenuType) => void };
 }) {
-  const selected = text === current.get;
+  const selected = item.id === current.get.id;
   const selectedStyles = selected
     ? { backgroundColor: "white", color: "primary.main" }
     : {};
@@ -50,11 +57,12 @@ function LeftBarItem({
         color: "white",
         ...selectedStyles,
       }}
-      onClick={() => current.set(text)}
+      onClick={() => current.set(item)}
     >
-      <Typography color="inherit">{text}</Typography>
+      <Typography color="inherit">{item.name}</Typography>
     </ListItemButton>
   );
 }
 
 export default LeftSideBar;
+export type { LeftMenuType };
