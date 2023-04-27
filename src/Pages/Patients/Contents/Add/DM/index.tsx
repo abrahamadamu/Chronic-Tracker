@@ -1,9 +1,11 @@
-import { TextField } from "@mui/material";
+import { useState } from "react";
+import { TextField, Tab } from "@mui/material";
 import InputGroup from "../Components/InputGroup";
+import { FormContainer } from "./styled";
 
 function DM() {
   return (
-    <>
+    <FormContainer>
       <InputGroup title="Visit Information">
         <TextField variant="standard" label="Visit type" size="small" />
         <TextField variant="standard" label="Full name" size="small" />
@@ -31,7 +33,7 @@ function DM() {
           size="small"
         />
       </InputGroup>
-    </>
+    </FormContainer>
   );
 }
 

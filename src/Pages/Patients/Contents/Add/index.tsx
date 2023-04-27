@@ -1,9 +1,6 @@
 import { useState } from "react";
 import { Grid, Typography, Tabs, Tab } from "@mui/material";
 import { TabType, FormDataType } from "./types";
-import { TextField } from "@mui/material";
-import { FormContainer } from "./styled";
-import InputGroup from "./Components/InputGroup";
 
 import Personal from "./Personal";
 import DM from "./DM";
@@ -44,16 +41,14 @@ function TabContent({
   return (
     <>
       <Typography variant="h5"> {currentTab.title}</Typography>
-      <FormContainer>
-        {(() => {
-          switch (currentTab.name) {
-            case "Personal":
-              return <Personal />;
-            case "DM And Hypertension":
-              return <DM />;
-          }
-        })()}
-      </FormContainer>
+      {(() => {
+        switch (currentTab.name) {
+          case "Personal":
+            return <Personal />;
+          case "DM And Hypertension":
+            return <DM />;
+        }
+      })()}
     </>
   );
 }

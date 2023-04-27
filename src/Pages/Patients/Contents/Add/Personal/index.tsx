@@ -1,9 +1,10 @@
 import { TextField } from "@mui/material";
 import InputGroup from "../Components/InputGroup";
+import { FormContainer } from "./styled";
 
 function Personal() {
   return (
-    <>
+    <FormContainer>
       <InputGroup title="Basic Info">
         <TextField
           variant="standard"
@@ -35,7 +36,7 @@ function Personal() {
           size="small"
         />
       </InputGroup>
-    </>
+    </FormContainer>
   );
 }
 

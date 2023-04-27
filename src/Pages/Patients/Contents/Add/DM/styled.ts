@@ -7,10 +7,3 @@ export const FormContainer = styled(Box)(({ theme }) => ({
   gridTemplateColumns: "repeat(2, 1fr)",
   gap: "40px 70px",
 }));
-
-export const SubContainer = styled(Box)(({ theme }) => ({
-  display: "grid",
-  gridTemplateColumns: "1fr 1fr",
-  alignContent: "baseline",
-  gap: "10px 20px",
-}));
