@@ -40,7 +40,6 @@ function TabContent({
 }) {
   return (
     <>
-      <Typography variant="h5"> {currentTab.title}</Typography>
       {(() => {
         switch (currentTab.name) {
           case "Personal":

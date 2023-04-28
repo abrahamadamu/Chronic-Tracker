@@ -1,39 +1,36 @@
 import { useState } from "react";
-import { TextField, Tab } from "@mui/material";
-import InputGroup from "../Components/InputGroup";
-import { FormContainer } from "./styled";
+import { Tabs, Tab, Box } from "@mui/material";
+
+import History from "./History";
+
+const tabs = [
+  "History and Risk Factors",
+  "Anthropometry and Vital signs",
+  "Physical Examination",
+  "Laboratory Investigations",
+  "Treatment Plan and Adherence",
+];
 
 function DM() {
+  const [tab, setTab] = useState(tabs[0]);
+
   return (
-    <FormContainer>
-      <InputGroup title="Visit Information">
-        <TextField variant="standard" label="Visit type" size="small" />
-        <TextField variant="standard" label="Full name" size="small" />
-        <TextField variant="standard" label="Age" size="small" />
-        <TextField variant="standard" label="Sex" size="small" />
-        <TextField variant="standard" label="Height" size="small" />
-        <TextField
-          variant="standard"
-          label="Waist Circumference (cm)"
-          size="small"
-        />
-      </InputGroup>
-      <InputGroup title="Address">
-        <TextField variant="standard" label="Zone/Sub-City" size="small" />
-        <TextField variant="standard" label="Woreda" size="small" />
-        <TextField variant="standard" label="Kebele" size="small" />
-        <TextField variant="standard" label="House Number" size="small" />
-        <TextField variant="standard" label="Phone Number" size="small" />
-      </InputGroup>
-      <InputGroup title="More">
-        <TextField variant="standard" label="Date of enrollment" size="small" />
-        <TextField
-          variant="standard"
-          label="Full initial diagnosis"
-          size="small"
-        />
-      </InputGroup>
-    </FormContainer>
+    <Box sx={{ padding: "0 30px", marginTop: "20px" }}>
+      {/* <Typography variant="h5"> DM And Hypertension</Typography> */}
+      {/* <br /> */}
+      <Tabs value={tab} onChange={(e, v) => setTab(v)} variant="fullWidth">
+        {tabs.map((tab) => (
+          <Tab
+            label={tab}
+            value={tab}
+            key={tab}
+            sx={{ textTransform: "none" }}
+          />
+        ))}
+      </Tabs>
+      <br />
+      <History />
+    </Box>
   );
 }
 
