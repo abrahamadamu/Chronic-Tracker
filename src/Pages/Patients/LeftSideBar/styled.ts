@@ -6,7 +6,7 @@ const LeftBar = styled(Grid)(({ theme }) => ({
   height: "100vh",
   width: "250px",
 
-  backgroundColor: theme.palette.primary.main,
+  backgroundColor: theme.palette.primary.dark,
 }));
 
 export { LeftBar };

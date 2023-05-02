@@ -3,6 +3,8 @@ import { Tabs, Tab, Box } from "@mui/material";
 
 import History from "./History";
 
+type Data = Record<string, Record<string, any>>;
+
 const tabs = [
   "History and Risk Factors",
   "Anthropometry and Vital signs",
@@ -13,6 +15,7 @@ const tabs = [
 
 function DM() {
   const [tab, setTab] = useState(tabs[0]);
+  const [data, setData] = useState<Data>({});
 
   return (
     <Box sx={{ padding: "0 30px", marginTop: "20px" }}>
@@ -29,7 +32,7 @@ function DM() {
         ))}
       </Tabs>
       <br />
-      <History />
+      <History data={{ get: data, set: setData }} id="history" />
     </Box>
   );
 }
