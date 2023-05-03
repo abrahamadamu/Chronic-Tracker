@@ -122,6 +122,7 @@ function ChoiceList({
     >
       {options.map((option) => (
         <ListItem
+          key={option + currentCategory}
           sx={{
             justifyContent: "space-between",
             alignItems: "center",
@@ -130,6 +131,9 @@ function ChoiceList({
               category && currentCategory.get === option
                 ? "background.lightinput2"
                 : "unset",
+            "&:hover": {
+              backgroundColor: "background.lightinput2",
+            },
           }}
           onMouseEnter={() => {
             if (category) {
