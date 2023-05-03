@@ -11,17 +11,22 @@ import {
 import { ModalWindow } from "./styles";
 import { ChevronRight } from "@mui/icons-material";
 
-import { symptoms as symptomsData } from "Data/dm and hypertension";
+import {
+  symptoms as symptomsData,
+  SymptomDataFormat,
+} from "Data/dm and hypertension";
+
+type CodeTextPair = { code: string; text: string };
 
 const centerStyle = { placeItems: "center", justifyContent: "center" };
 
-type ChoiceType = { category: string; value: string };
-
-const choices: ChoiceType[] = symptomsData;
+const choices: SymptomDataFormat[] = symptomsData;
 
 function AddToList() {
   const [open, setOpen] = useState(true);
-  const [currentCategory, setCurrentCategory] = useState<string>("");
+  const [currentCategory, setCurrentCategory] = useState<
+    CodeTextPair | undefined
+  >();
 
   return (
     <Modal open={open}>
@@ -77,33 +82,40 @@ function ChoiceList({
   choices,
   currentCategory,
 }: {
-  choices: ChoiceType[];
+  choices: SymptomDataFormat[];
   category: boolean;
-  currentCategory: { get: string; set: (v: string) => void };
+  currentCategory: {
+    get: CodeTextPair | undefined;
+    set: (v: CodeTextPair | undefined) => void;
+  };
 }) {
-  const [options, setOptions] = useState<string[]>([]);
+  const [options, setOptions] = useState<CodeTextPair[]>([]);
 
-  const [categories, setCategories] = useState<string[]>([]);
+  const [categories, setCategories] = useState<CodeTextPair[]>([]);
 
   useEffect(() => {
     if (!choices) return;
-    setCategories(
-      Array.from(new Set(symptomsData.map((item) => item.category)))
-    );
+    let categoriesArray: any = symptomsData.map((item) => item.category);
+    categoriesArray = categoriesArray.map((cat: Object) => JSON.stringify(cat));
+    categoriesArray = Array.from(new Set(categoriesArray));
+    categoriesArray = categoriesArray.map((cat: string) =>
+      JSON.parse(cat)
+    ) as typeof symptomsData;
+    setCategories(categoriesArray);
   }, [choices]);
 
   useEffect(() => {
-    let newOptions: string[];
+    let newOptions: { code: string; text: string }[];
     if (category) {
       newOptions = categories;
     } else {
       newOptions = choices
-        .filter((choice) => choice.category === currentCategory.get)
+        .filter((choice) => choice.category.code === currentCategory.get?.code)
         .map((choice) => choice.value);
     }
-    newOptions.sort((a, b) => {
-      a = (a + "").toLowerCase();
-      b = (b + "").toLowerCase();
+    newOptions.sort((o1, o2) => {
+      const a = (o1.text + "").toLowerCase();
+      const b = (o2.text + "").toLowerCase();
       return a > b ? 1 : a < b ? -1 : 0;
     });
     setOptions(newOptions);
@@ -122,7 +134,7 @@ function ChoiceList({
     >
       {options.map((option) => (
         <ListItem
-          key={option + currentCategory}
+          key={option.code + currentCategory.get?.code}
           sx={{
             justifyContent: "space-between",
             alignItems: "center",
@@ -142,7 +154,7 @@ function ChoiceList({
             }
           }}
         >
-          <Typography>{option}</Typography>
+          <Typography>{option.text}</Typography>
           {category ? (
             <ChevronRight sx={{ color: "gray" }} />
           ) : (

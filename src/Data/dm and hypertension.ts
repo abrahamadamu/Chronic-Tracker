@@ -1,164 +1,167 @@
-type DataFormat = { category: string; value: string };
+export type SymptomDataFormat = {
+  category: { code: string; text: string };
+  value: { code: string; text: string };
+};
 
 const valueMap = [
   {
     code: "SYMP_VAL_0",
-    value: "Polyuria",
+    text: "Polyuria",
   },
   {
     code: "SYMP_VAL_1",
-    value: "Nocturia",
+    text: "Nocturia",
   },
   {
     code: "SYMP_VAL_2",
-    value: "Polydispsia",
+    text: "Polydispsia",
   },
   {
     code: "SYMP_VAL_3",
-    value: "Fatigue",
+    text: "Fatigue",
   },
   {
     code: "SYMP_VAL_4",
-    value: "Nausea",
+    text: "Nausea",
   },
   {
     code: "SYMP_VAL_5",
-    value: "Vomiting",
+    text: "Vomiting",
   },
   {
     code: "SYMP_VAL_6",
-    value: "fast and deep breathing",
+    text: "fast and deep breathing",
   },
   {
     code: "SYMP_VAL_7",
-    value: "weakness",
+    text: "weakness",
   },
   {
     code: "SYMP_VAL_8",
-    value: "worsening poly symptoms",
+    text: "worsening poly symptoms",
   },
   {
     code: "SYMP_VAL_9",
-    value: "abdominal pain",
+    text: "abdominal pain",
   },
   {
     code: "SYMP_VAL_10",
-    value: "Hunger",
+    text: "Hunger",
   },
   {
     code: "SYMP_VAL_11",
-    value: "palpitations",
+    text: "palpitations",
   },
   {
     code: "SYMP_VAL_12",
-    value: "light headedness",
+    text: "light headedness",
   },
   {
     code: "SYMP_VAL_13",
-    value: "dizziness",
+    text: "dizziness",
   },
   {
     code: "SYMP_VAL_14",
-    value: "sweating",
+    text: "sweating",
   },
   {
     code: "SYMP_VAL_15",
-    value: "extreme fatigue",
+    text: "extreme fatigue",
   },
   {
     code: "SYMP_VAL_16",
-    value: "confusion",
+    text: "confusion",
   },
   {
     code: "SYMP_VAL_17",
-    value: "bad dreams",
+    text: "bad dreams",
   },
   {
     code: "SYMP_VAL_18",
-    value: "F:fever",
+    text: "F:fever",
   },
   {
     code: "SYMP_VAL_19",
-    value: "C:cold",
+    text: "C:cold",
   },
   {
     code: "SYMP_VAL_20",
-    value: "SL: Skin lesions",
+    text: "SL: Skin lesions",
   },
   {
     code: "SYMP_VAL_21",
-    value: "dysuria",
+    text: "dysuria",
   },
   {
     code: "SYMP_VAL_22",
-    value: "frequency",
+    text: "frequency",
   },
   {
     code: "SYMP_VAL_23",
-    value: "Diabetic Foot Ulcer",
+    text: "Diabetic Foot Ulcer",
   },
   {
     code: "SYMP_VAL_24",
-    value: "tingling",
+    text: "tingling",
   },
   {
     code: "SYMP_VAL_25",
-    value: "numbness",
+    text: "numbness",
   },
   {
     code: "SYMP_VAL_26",
-    value: "burning sensation of Feet and hands",
+    text: "burning sensation of Feet and hands",
   },
   {
     code: "SYMP_VAL_27",
-    value: "Postural dizziness",
+    text: "Postural dizziness",
   },
   {
     code: "SYMP_VAL_28",
-    value: "Sexual dysfunction",
+    text: "Sexual dysfunction",
   },
   {
     code: "SYMP_VAL_29",
-    value: "Visual Blurring",
+    text: "Visual Blurring",
   },
 ];
 
 const categoryMap = [
   {
     code: "SYMP_CAT_0",
-    value: "HyperG",
+    text: "HyperG",
   },
   {
     code: "SYMP_CAT_1",
-    value: "DKA",
+    text: "DKA",
   },
   {
     code: "SYMP_CAT_2",
-    value: "HypoG",
+    text: "HypoG",
   },
   {
     code: "SYMP_CAT_3",
-    value: "Infection",
+    text: "Infection",
   },
   {
     code: "SYMP_CAT_4",
-    value: "UTI",
+    text: "UTI",
   },
   {
     code: "SYMP_CAT_5",
-    value: "DFU",
+    text: "DFU",
   },
   {
     code: "SYMP_CAT_6",
-    value: "PN",
+    text: "PN",
   },
   {
     code: "SYMP_CAT_7",
-    value: "AutoN",
+    text: "AutoN",
   },
   {
     code: "SYMP_CAT_8",
-    value: "VisB",
+    text: "VisB",
   },
 ];
 
@@ -289,16 +292,16 @@ let symptomsString: string = JSON.stringify(symptomsData);
 valueMap.forEach((map) => {
   symptomsString = symptomsString.replaceAll(
     '"' + map.code + '"',
-    '"' + map.value + '"'
+    JSON.stringify({ code: map.code, text: map.text })
   );
 });
 categoryMap.forEach((map) => {
   symptomsString = symptomsString.replaceAll(
     '"' + map.code + '"',
-    '"' + map.value + '"'
+    JSON.stringify({ code: map.code, text: map.text })
   );
 });
 
-const symptoms: DataFormat[] = JSON.parse(symptomsString);
+const symptoms: SymptomDataFormat[] = JSON.parse(symptomsString);
 
 export { symptoms };
