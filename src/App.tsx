@@ -6,6 +6,10 @@ const theme = createTheme({
     primary: {
       main: "#a830fa",
     },
+    background: {
+      lightinput: "#f9f9fd",
+      lightinput2: "#eaeafd",
+    },
   },
 });
 
