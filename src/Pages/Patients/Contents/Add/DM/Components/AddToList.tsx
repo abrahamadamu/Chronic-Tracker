@@ -28,6 +28,8 @@ function AddToList() {
     CodeTextPair | undefined
   >();
 
+  const [chosen, setChosen] = useState<SymptomDataFormat[]>([]);
+
   return (
     <Modal open={open}>
       <Grid container sx={{ height: "100%", ...centerStyle }}>
@@ -68,6 +70,7 @@ function AddToList() {
                   set: setCurrentCategory,
                 }}
                 choices={choices}
+                chosen={{ get: chosen, set: setChosen }}
               />
             </Box>
           </Grid>
@@ -81,6 +84,7 @@ function ChoiceList({
   category,
   choices,
   currentCategory,
+  chosen,
 }: {
   choices: SymptomDataFormat[];
   category: boolean;
@@ -88,6 +92,7 @@ function ChoiceList({
     get: CodeTextPair | undefined;
     set: (v: CodeTextPair | undefined) => void;
   };
+  chosen?: { set: (v: SymptomDataFormat[]) => void; get: SymptomDataFormat[] };
 }) {
   const [options, setOptions] = useState<CodeTextPair[]>([]);
 
@@ -132,36 +137,58 @@ function ChoiceList({
         ...(!category ? { minWidth: "30vw" } : {}),
       }}
     >
-      {options.map((option) => (
-        <ListItem
-          key={option.code + currentCategory.get?.code}
-          sx={{
-            justifyContent: "space-between",
-            alignItems: "center",
-            cursor: "pointer",
-            backgroundColor:
-              category && currentCategory.get === option
-                ? "background.lightinput2"
-                : "unset",
-            "&:hover": {
-              backgroundColor: "background.lightinput2",
-            },
-          }}
-          onMouseEnter={() => {
-            if (category) {
-              currentCategory.set(option);
-            } else {
-            }
-          }}
-        >
-          <Typography>{option.text}</Typography>
-          {category ? (
-            <ChevronRight sx={{ color: "gray" }} />
-          ) : (
-            <Checkbox sx={{ marginLeft: "20px", padding: "0" }} />
-          )}
-        </ListItem>
-      ))}
+      {options.map((option) => {
+        const isChosen =
+          chosen &&
+          chosen.get.filter((item) => item.value.code === option.code).length >
+            0;
+
+        return (
+          <ListItem
+            key={option.code + currentCategory.get?.code}
+            sx={{
+              justifyContent: "space-between",
+              alignItems: "center",
+              cursor: "pointer",
+              backgroundColor:
+                category && currentCategory.get === option
+                  ? "background.lightinput2"
+                  : "unset",
+              "&:hover": {
+                backgroundColor: "background.lightinput2",
+              },
+            }}
+            onMouseEnter={() => {
+              if (category) {
+                currentCategory.set(option);
+              } else {
+              }
+            }}
+            onClick={() => {
+              if (isChosen) {
+                chosen.set(
+                  chosen.get.filter((item) => item.value.code !== option.code)
+                );
+              } else if (currentCategory.get) {
+                chosen?.set([
+                  ...chosen.get,
+                  { category: currentCategory.get, value: option },
+                ]);
+              }
+            }}
+          >
+            <Typography>{option.text}</Typography>
+            {category ? (
+              <ChevronRight sx={{ color: "gray" }} />
+            ) : (
+              <Checkbox
+                sx={{ marginLeft: "20px", padding: "0" }}
+                checked={isChosen}
+              />
+            )}
+          </ListItem>
+        );
+      })}
     </List>
   );
 }
