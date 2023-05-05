@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   Typography,
   List,
@@ -9,65 +10,75 @@ import {
 } from "@mui/material";
 import { Add, Delete } from "@mui/icons-material";
 
-export type ListData = { category: string; value: string };
+import AddToList from "./AddToList";
+
+import { CategoryValuePair } from "Data/dm and hypertension";
 
 function EditableList({
   title,
-  id,
-  data,
+  chosen,
+  choices,
 }: {
   title: string;
-  id: string;
-  data: { get: Record<string, any>; set: (v: Record<string, any>) => void };
+  chosen: { get: CategoryValuePair[]; set: (v: CategoryValuePair[]) => void };
+  choices: CategoryValuePair[];
 }) {
-  const items: ListData[] = data.get[id];
-  if (!items) return <></>;
+  const [showList, setShowList] = useState(false);
+
+  if (!chosen.get) return <></>;
 
   return (
-    <Paper elevation={2} sx={{ padding: "10px" }}>
-      <Typography variant="h6">{title}</Typography>
-      {/* <hr /> */}
-      <List>
-        {items.map((item) => (
-          <Item
-            item={item}
-            data={data}
-            id={id}
-            key={item.category + item.value}
-          />
-        ))}
-        <ListItem>
-          <Button color="secondary">
-            <Grid container>
-              <Add />
-              <Typography>Add</Typography>
-            </Grid>
-          </Button>
-        </ListItem>
-      </List>
-    </Paper>
+    <>
+      <Paper elevation={2} sx={{ padding: "10px" }}>
+        <Typography variant="h6">{title}</Typography>
+        {/* <hr /> */}
+        <List>
+          {chosen.get.map((item) => (
+            <Item
+              item={item}
+              data={chosen}
+              key={item.category.code + item.value.code}
+            />
+          ))}
+          <ListItem>
+            <Button color="secondary" onClick={() => setShowList(true)}>
+              <Grid container>
+                <Add />
+                <Typography>Add</Typography>
+              </Grid>
+            </Button>
+          </ListItem>
+        </List>
+      </Paper>
+      <AddToList
+        choices={choices}
+        chosen={chosen}
+        open={{ get: showList, set: setShowList }}
+      />
+    </>
   );
 }
 
 function Item({
   item,
   data,
-  id,
 }: {
-  item: ListData;
-  data: { get: Record<string, any>; set: (v: Record<string, any>) => void };
-  id: string;
+  item: CategoryValuePair;
+  data: { get: CategoryValuePair[]; set: (v: CategoryValuePair[]) => void };
 }) {
   return (
     <ListItem>
       <Grid container justifyContent="space-between" alignItems="center">
-        <Typography>{item.value}</Typography>
+        <Typography>{item.value.text}</Typography>
         <IconButton
           onClick={() => {
-            const newData = structuredClone(data.get);
-            newData[id] = newData[id].filter(
-              (dat: ListData) =>
-                !(dat.category === item.category && dat.value === item.value)
+            let newData = [...data.get];
+            newData = newData.filter(
+              (dat: CategoryValuePair) =>
+                !(
+                  dat.category.code === item.category.code &&
+                  dat.value.code === item.value.code
+                )
             );
             data.set(newData);
           }}

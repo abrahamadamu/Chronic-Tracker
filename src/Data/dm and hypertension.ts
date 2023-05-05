@@ -1,4 +1,4 @@
-export type SymptomDataFormat = {
+export type CategoryValuePair = {
   category: { code: string; text: string };
   value: { code: string; text: string };
 };
@@ -302,6 +302,6 @@ categoryMap.forEach((map) => {
   );
 });
 
-const symptoms: SymptomDataFormat[] = JSON.parse(symptomsString);
+const symptoms: CategoryValuePair[] = JSON.parse(symptomsString);
 
 export { symptoms };

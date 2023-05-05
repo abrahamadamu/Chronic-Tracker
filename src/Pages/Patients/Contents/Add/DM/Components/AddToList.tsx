@@ -9,30 +9,38 @@ import {
   Checkbox,
 } from "@mui/material";
 import { ModalWindow } from "./styles";
-import { ChevronRight } from "@mui/icons-material";
+import { ChevronRight, Close } from "@mui/icons-material";
 
-import {
-  symptoms as symptomsData,
-  SymptomDataFormat,
-} from "Data/dm and hypertension";
+import { CategoryValuePair } from "Data/dm and hypertension";
 
 type CodeTextPair = { code: string; text: string };
 
 const centerStyle = { placeItems: "center", justifyContent: "center" };
 
-const choices: SymptomDataFormat[] = symptomsData;
-
-function AddToList() {
-  const [open, setOpen] = useState(true);
+function AddToList({
+  choices,
+  chosen,
+  open,
+}: {
+  choices: CategoryValuePair[];
+  chosen: { get: CategoryValuePair[]; set: (v: CategoryValuePair[]) => void };
+  open: { get: boolean; set: (v: boolean) => void };
+}) {
   const [currentCategory, setCurrentCategory] = useState<
     CodeTextPair | undefined
   >();
 
-  const [chosen, setChosen] = useState<SymptomDataFormat[]>([]);
-
   return (
-    <Modal open={open}>
-      <Grid container sx={{ height: "100%", ...centerStyle }}>
+    <Modal open={open.get}>
+      <Grid
+        id="emptycontainer"
+        container
+        sx={{ height: "100%", ...centerStyle }}
+        onClick={(e) => {
+          if ((e.target as HTMLElement).id === "emptycontainer")
+            open.set(false);
+        }}
+      >
         <ModalWindow
           container
           sx={{
@@ -41,10 +49,24 @@ function AddToList() {
             maxHeight: "70vh",
             height: "100%",
             flexDirection: "column",
+            position: "relative",
           }}
           gap={2}
         >
-          <Typography variant="h6">Select symptoms</Typography>
+          <Close
+            sx={{
+              position: "absolute",
+              top: "5px",
+              right: "5px",
+              cursor: "pointer",
+              fontSize: "30px",
+              "&:hover": { color: "red" },
+            }}
+            onClick={() => open.set(false)}
+          />
+          <Typography variant="h6" sx={{ marginTop: "20px" }}>
+            Select symptoms
+          </Typography>
           <Grid container gap={1} sx={{ flexGrow: 1, height: "0px" }}>
             <Box
               sx={{ height: "100%", display: "flex", flexDirection: "column" }}
@@ -70,7 +92,7 @@ function AddToList() {
                   set: setCurrentCategory,
                 }}
                 choices={choices}
-                chosen={{ get: chosen, set: setChosen }}
+                chosen={chosen}
               />
             </Box>
           </Grid>
@@ -86,13 +108,13 @@ function ChoiceList({
   currentCategory,
   chosen,
 }: {
-  choices: SymptomDataFormat[];
+  choices: CategoryValuePair[];
   category: boolean;
   currentCategory: {
     get: CodeTextPair | undefined;
     set: (v: CodeTextPair | undefined) => void;
   };
-  chosen?: { set: (v: SymptomDataFormat[]) => void; get: SymptomDataFormat[] };
+  chosen?: { set: (v: CategoryValuePair[]) => void; get: CategoryValuePair[] };
 }) {
   const [options, setOptions] = useState<CodeTextPair[]>([]);
 
@@ -100,12 +122,12 @@ function ChoiceList({
 
   useEffect(() => {
     if (!choices) return;
-    let categoriesArray: any = symptomsData.map((item) => item.category);
+    let categoriesArray: any = choices.map((item) => item.category);
     categoriesArray = categoriesArray.map((cat: Object) => JSON.stringify(cat));
     categoriesArray = Array.from(new Set(categoriesArray));
     categoriesArray = categoriesArray.map((cat: string) =>
       JSON.parse(cat)
-    ) as typeof symptomsData;
+    ) as typeof choices;
     setCategories(categoriesArray);
   }, [choices]);
 
@@ -154,9 +176,11 @@ function ChoiceList({
                 category && currentCategory.get === option
                   ? "background.lightinput2"
                   : "unset",
-              "&:hover": {
-                backgroundColor: "background.lightinput2",
-              },
+              "&:hover": !category
+                ? {
+                    backgroundColor: "background.lightinput2",
+                  }
+                : {},
             }}
             onMouseEnter={() => {
               if (category) {

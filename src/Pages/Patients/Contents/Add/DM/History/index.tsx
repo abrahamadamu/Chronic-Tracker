@@ -1,7 +1,11 @@
 import { useState } from "react";
 import { FormContainer } from "../styled";
-import EditableList, { ListData } from "../Components/EditableList";
-import AddToList from "../Components/AddToList";
+import EditableList from "../Components/EditableList";
+
+import {
+  symptoms as symptomsData,
+  CategoryValuePair,
+} from "Data/dm and hypertension";
 
 type DataType = Record<string, Record<string, any>>;
 
@@ -12,24 +16,17 @@ function History({
   id: string;
   data: { get: DataType; set: (v: DataType) => void };
 }) {
-  const [history, setHistory] = useState<DataType>({
-    symptoms: [
-      { group: "Some", value: "Apromania" },
-      { group: "Some", value: "Nausia" },
-      { group: "Some", value: "Dieting" },
-    ],
-  });
+  const [chosen, setChosen] = useState<CategoryValuePair[]>([]);
 
   return (
     <>
       <FormContainer>
         <EditableList
           title="Symptoms"
-          id="symptoms"
-          data={{ get: history, set: setHistory }}
+          choices={symptomsData}
+          chosen={{ get: chosen, set: setChosen }}
         />
       </FormContainer>
-      <AddToList />
     </>
   );
 }
