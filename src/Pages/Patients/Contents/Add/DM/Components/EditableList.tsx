@@ -12,7 +12,7 @@ import { Add, Delete } from "@mui/icons-material";
 
 import AddToList from "./AddToList";
 
-import { CategoryValuePair } from "Data/dm and hypertension";
+import { CategoryValuePair } from "Data/data";
 
 function EditableList({
   title,

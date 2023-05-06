@@ -2,10 +2,7 @@ import { useState } from "react";
 import { FormContainer } from "../styled";
 import EditableList from "../Components/EditableList";
 
-import {
-  symptoms as symptomsData,
-  CategoryValuePair,
-} from "Data/dm and hypertension";
+import { symptoms as symptomsData, CategoryValuePair } from "Data/data";
 
 type DataType = Record<string, Record<string, any>>;
 

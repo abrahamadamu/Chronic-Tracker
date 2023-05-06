@@ -1,7 +1,4 @@
-export type CategoryValuePair = {
-  category: { code: string; text: string };
-  value: { code: string; text: string };
-};
+import { CategoryValuePair } from "./data";
 
 const valueMap = [
   {

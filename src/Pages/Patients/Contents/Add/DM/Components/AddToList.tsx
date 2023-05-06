@@ -11,7 +11,7 @@ import {
 import { ModalWindow } from "./styles";
 import { ChevronRight, Close } from "@mui/icons-material";
 
-import { CategoryValuePair } from "Data/dm and hypertension";
+import { CategoryValuePair } from "Data/data";
 
 type CodeTextPair = { code: string; text: string };
 
