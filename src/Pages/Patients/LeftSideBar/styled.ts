@@ -3,7 +3,7 @@ import { Grid } from "@mui/material";
 
 const LeftBar = styled(Grid)(({ theme }) => ({
   paddingTop: "10%",
-  height: "100vh",
+  minHeight: "100vh",
   width: "250px",
 
   backgroundColor: theme.palette.primary.dark,
