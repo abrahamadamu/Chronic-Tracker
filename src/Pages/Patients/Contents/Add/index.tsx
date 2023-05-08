@@ -1,4 +1,13 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import {
+  Routes,
+  Route,
+  Link,
+  useParams,
+  Navigate,
+  useNavigate,
+  useLocation,
+} from "react-router-dom";
 import { Grid, Typography, Tabs, Tab } from "@mui/material";
 import { TabType, FormDataType } from "./types";
 
@@ -6,9 +15,24 @@ import Personal from "./Personal";
 import DM from "./DM";
 
 const tabs: TabType[] = [
-  { name: "Personal", title: "Personal Information" },
-  { name: "DM And Hypertension", title: "DM And Hypertension" },
-  { name: "Heart Disease", title: "Heart Disease" },
+  {
+    id: "personal",
+    name: "Personal",
+    title: "Personal Information",
+    component: Personal,
+  },
+  {
+    id: "dmhypertension",
+    name: "DM And Hypertension",
+    title: "DM And Hypertension",
+    component: DM,
+  },
+  {
+    id: "heart",
+    name: "Heart Disease",
+    title: "Heart Disease",
+    component: () => <></>,
+  },
 ];
 
 function AddPatient() {
@@ -18,36 +42,48 @@ function AddPatient() {
   return (
     <Grid container direction="column" gap={3}>
       <Typography variant="h4"> New patient</Typography>
-      <Tabs onChange={(e, v) => setCurrentTab(v)} value={currentTab}>
-        {tabs.map((tab) => (
-          <Tab label={tab.name} key={tab.name} />
-        ))}
-      </Tabs>
-      <TabContent
-        currentTab={tabs[currentTab]}
-        formData={{ get: formData, set: setFormData }}
-      />
+      <Routes>
+        <Route path="" element={<Navigate to={tabs[0].id} />} />
+        <Route
+          path=":URL_chronicinfotype/*"
+          element={<Content formData={{ get: formData, set: setFormData }} />}
+        />
+      </Routes>
     </Grid>
   );
 }
 
-function TabContent({
-  currentTab,
+function Content({
   formData,
 }: {
-  currentTab: TabType;
   formData: { get: FormDataType; set: (v: FormDataType) => void };
 }) {
+  const { URL_chronicinfotype } = useParams();
+
+  const [currentTab, setCurrentTab] = useState<TabType | undefined>();
+
+  const Component =
+    tabs.find((tab) => tab.id === URL_chronicinfotype)?.component ||
+    (() => <></>);
+
   return (
     <>
+      <Tabs
+        value={URL_chronicinfotype}
+        onChange={(e, value) => {
+          setCurrentTab(tabs.find((tab) => tab.id === value));
+        }}
+      >
+        {tabs.map((tab) => (
+          <Tab label={tab.name} value={tab.id} />
+        ))}
+      </Tabs>
       {(() => {
-        switch (currentTab.name) {
-          case "Personal":
-            return <Personal />;
-          case "DM And Hypertension":
-            return <DM />;
+        if (currentTab && currentTab.id !== URL_chronicinfotype) {
+          return <Navigate to={"../" + currentTab.id} />;
         }
       })()}
+      <Component />
     </>
   );
 }

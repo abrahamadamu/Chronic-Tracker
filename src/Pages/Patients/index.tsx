@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Routes, Route, useParams } from "react-router-dom";
+import { Routes, Route, useParams, Navigate } from "react-router-dom";
 import Grid from "@mui/material/Grid";
 
 import Container from "./ContentSide";
@@ -19,7 +19,8 @@ function Patients() {
       <LeftSideBar leftMenus={leftMenus} />
       <Container>
         <Routes>
-          <Route path=":URL_patientleftmenu" element={<ParamChecker />} />
+          <Route path="" element={<Navigate to={leftMenus[0].id} />} />
+          <Route path=":URL_patientleftmenu/*" element={<ParamChecker />} />
         </Routes>
       </Container>
     </Grid>

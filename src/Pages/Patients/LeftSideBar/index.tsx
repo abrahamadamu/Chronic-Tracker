@@ -23,7 +23,7 @@ function LeftSideBar({ leftMenus }: { leftMenus: LeftMenuType[] }) {
         {leftMenus.map((menu) => (
           <NavLink
             key={menu.id}
-            to={"/" + URL_mainpage + "/" + menu.id}
+            to={menu.id}
             style={{ color: "unset", textDecoration: "none" }}
           >
             {({ isActive }) => <LeftBarItem isActive={isActive} item={menu} />}
