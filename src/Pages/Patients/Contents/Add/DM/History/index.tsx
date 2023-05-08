@@ -2,7 +2,7 @@ import { useState } from "react";
 import { FormContainer } from "../styled";
 import EditableList from "../Components/EditableList";
 
-import { symptoms as symptomsData, CategoryValuePair } from "Data/data";
+import { symptomsList, riskfactorsList, CategoryValuePair } from "Data/data";
 
 type DataType = Record<string, Record<string, any>>;
 
@@ -13,15 +13,21 @@ function History({
   id: string;
   data: { get: DataType; set: (v: DataType) => void };
 }) {
-  const [chosen, setChosen] = useState<CategoryValuePair[]>([]);
+  const [symptoms, setSymptoms] = useState<CategoryValuePair[]>([]);
+  const [riskfactors, setRiskFactors] = useState<CategoryValuePair[]>([]);
 
   return (
     <>
       <FormContainer>
         <EditableList
           title="Symptoms"
-          choices={symptomsData}
-          chosen={{ get: chosen, set: setChosen }}
+          choices={symptomsList}
+          chosen={{ get: symptoms, set: setSymptoms }}
+        />
+        <EditableList
+          title="Risk Factors"
+          choices={riskfactorsList}
+          chosen={{ get: riskfactors, set: setRiskFactors }}
         />
       </FormContainer>
     </>

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Typography,
   List,
@@ -24,6 +24,11 @@ function EditableList({
   choices: CategoryValuePair[];
 }) {
   const [showList, setShowList] = useState(false);
+  const [chosenCategories, setChosenCategories] = useState<string[]>([]);
+
+  useEffect(() => {
+    setChosenCategories(chosen.get.map((cat) => cat.category.code));
+  }, [chosen.get]);
 
   if (!chosen.get) return <></>;
 
@@ -68,7 +73,12 @@ function Item({
 }) {
   return (
     <ListItem>
-      <Grid container justifyContent="space-between" alignItems="center">
+      <Grid
+        container
+        justifyContent="space-between"
+        alignItems="center"
+        wrap="nowrap"
+      >
         <Typography>{item.value.text}</Typography>
         <IconButton
           onClick={() => {

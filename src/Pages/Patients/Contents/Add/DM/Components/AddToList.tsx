@@ -79,6 +79,7 @@ function AddToList({
                   set: setCurrentCategory,
                 }}
                 choices={choices}
+                chosen={chosen}
               />
             </Box>
             <Box
@@ -119,6 +120,13 @@ function ChoiceList({
   const [options, setOptions] = useState<CodeTextPair[]>([]);
 
   const [categories, setCategories] = useState<CodeTextPair[]>([]);
+  const [chosenCategories, setChosenCategories] = useState<string[]>([]);
+
+  useEffect(() => {
+    if (category && chosen?.get) {
+      setChosenCategories(chosen.get.map((cat) => cat.category.code));
+    }
+  }, [chosen?.get]);
 
   useEffect(() => {
     if (!choices) return;
@@ -201,7 +209,13 @@ function ChoiceList({
               }
             }}
           >
-            <Typography>{option.text}</Typography>
+            <Typography
+              fontWeight={
+                category && chosenCategories.includes(option.code) ? "bold" : ""
+              }
+            >
+              {option.text}
+            </Typography>
             {category ? (
               <ChevronRight sx={{ color: "gray" }} />
             ) : (

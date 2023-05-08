@@ -1,8 +1,9 @@
-import { symptoms } from "./symptoms";
+import symptomsList from "./symptoms";
+import riskfactorsList from "./riskfactors";
 
 export type CategoryValuePair = {
   category: { code: string; text: string };
   value: { code: string; text: string };
 };
 
-export { symptoms };
+export { symptomsList, riskfactorsList };

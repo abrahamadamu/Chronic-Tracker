@@ -2,11 +2,9 @@ import { useState, useEffect } from "react";
 import {
   Routes,
   Route,
-  Link,
   useParams,
   Navigate,
   useNavigate,
-  useLocation,
 } from "react-router-dom";
 import { Grid, Typography, Tabs, Tab } from "@mui/material";
 import { TabType, FormDataType } from "./types";
@@ -59,8 +57,15 @@ function Content({
   formData: { get: FormDataType; set: (v: FormDataType) => void };
 }) {
   const { URL_chronicinfotype } = useParams();
+  const navigate = useNavigate();
 
   const [currentTab, setCurrentTab] = useState<TabType | undefined>();
+
+  useEffect(() => {
+    if (currentTab && currentTab.id !== URL_chronicinfotype) {
+      navigate("../" + currentTab.id);
+    }
+  }, [currentTab, URL_chronicinfotype]);
 
   const Component =
     tabs.find((tab) => tab.id === URL_chronicinfotype)?.component ||
@@ -78,11 +83,6 @@ function Content({
           <Tab label={tab.name} value={tab.id} />
         ))}
       </Tabs>
-      {(() => {
-        if (currentTab && currentTab.id !== URL_chronicinfotype) {
-          return <Navigate to={"../" + currentTab.id} />;
-        }
-      })()}
       <Component />
     </>
   );

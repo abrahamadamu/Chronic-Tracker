@@ -301,4 +301,4 @@ categoryMap.forEach((map) => {
 
 const symptoms: CategoryValuePair[] = JSON.parse(symptomsString);
 
-export { symptoms };
+export default symptoms;
