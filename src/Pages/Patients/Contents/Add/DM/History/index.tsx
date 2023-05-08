@@ -1,20 +1,24 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FormContainer } from "../styled";
 import EditableList from "../Components/EditableList";
 
-import { symptomsList, riskfactorsList, CategoryValuePair } from "Data/data";
+import { DataFormat } from "..";
 
-type DataType = Record<string, Record<string, any>>;
+import { symptomsList, riskfactorsList, CategoryValuePair } from "Data/data";
 
 function History({
   data,
   id,
 }: {
   id: string;
-  data: { get: DataType; set: (v: DataType) => void };
+  data: { get: DataFormat; set: (v: DataFormat) => void };
 }) {
   const [symptoms, setSymptoms] = useState<CategoryValuePair[]>([]);
   const [riskfactors, setRiskFactors] = useState<CategoryValuePair[]>([]);
+
+  useEffect(() => {
+    data.set({ ...data.get, symptoms, riskfactors });
+  }, [symptoms, riskfactors]);
 
   return (
     <>

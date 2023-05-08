@@ -9,19 +9,24 @@ import {
 import { Tabs, Tab, Box } from "@mui/material";
 
 import History from "./History";
+import Anthropometry from "./Anthropometry";
 
-type DataFormat = Record<string, Record<string, any>>;
+export type DataFormat = Record<string, Record<string, any> | string | number>;
 
 const tabs = [
   { id: "history", text: "History and Risk Factors", component: History },
-  { id: "anthropometry", text: "Anthropometry and Vital signs" },
+  {
+    id: "anthropometry",
+    text: "Anthropometry and Vital signs",
+    component: Anthropometry,
+  },
   { id: "physical", text: "Physical Examination" },
   { id: "laboratory", text: "Laboratory Investigations" },
   { id: "treatment", text: "Treatment Plan and Adherence" },
 ];
 
 function DM() {
-  const [data, setData] = useState<DataFormat>({});
+  const [data, setData] = useState<DataFormat>({ height: "1.6" });
 
   return (
     <Box sx={{ padding: "0 30px", marginTop: "20px" }}>
