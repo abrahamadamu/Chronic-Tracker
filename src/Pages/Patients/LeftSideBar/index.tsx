@@ -1,4 +1,5 @@
 import { ReactNode } from "react";
+import { NavLink, useParams } from "react-router-dom";
 import { List, ListItemButton, Typography } from "@mui/material";
 import { LeftBar } from "./styled";
 
@@ -8,13 +9,9 @@ type LeftMenuType = {
   component: ReactNode;
 };
 
-function LeftSideBar({
-  leftMenus,
-  curLeftMenu,
-}: {
-  leftMenus: LeftMenuType[];
-  curLeftMenu: { get: LeftMenuType; set: (p: LeftMenuType) => void };
-}) {
+function LeftSideBar({ leftMenus }: { leftMenus: LeftMenuType[] }) {
+  const { URL_mainpage } = useParams();
+
   return (
     <LeftBar>
       <Typography variant="h4" textAlign="center" color="white">
@@ -24,7 +21,13 @@ function LeftSideBar({
       <br />
       <List>
         {leftMenus.map((menu) => (
-          <LeftBarItem key={menu.id} current={curLeftMenu} item={menu} />
+          <NavLink
+            key={menu.id}
+            to={"/" + URL_mainpage + "/" + menu.id}
+            style={{ color: "unset", textDecoration: "none" }}
+          >
+            {({ isActive }) => <LeftBarItem isActive={isActive} item={menu} />}
+          </NavLink>
         ))}
       </List>
     </LeftBar>
@@ -33,13 +36,12 @@ function LeftSideBar({
 
 function LeftBarItem({
   item,
-  current,
+  isActive,
 }: {
   item: LeftMenuType;
-  current: { get: LeftMenuType; set: (v: LeftMenuType) => void };
+  isActive: boolean;
 }) {
-  const selected = item.id === current.get.id;
-  const selectedStyles = selected
+  const selectedStyles = isActive
     ? { backgroundColor: "white", color: "primary.main" }
     : {};
 
@@ -47,9 +49,8 @@ function LeftBarItem({
     <ListItemButton
       sx={{
         paddingY: "12px",
-        "&:hover": selected
+        "&:hover": isActive
           ? {
-              color: "black",
               backgroundColor: "white",
             }
           : {},
@@ -57,7 +58,6 @@ function LeftBarItem({
         color: "white",
         ...selectedStyles,
       }}
-      onClick={() => current.set(item)}
     >
       <Typography color="inherit">{item.name}</Typography>
     </ListItemButton>

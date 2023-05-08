@@ -1,11 +1,27 @@
+import { Routes, Route, Navigate, useParams } from "react-router-dom";
 import Patients from "./Patients";
 
 function Pages() {
   return (
     <>
-      <Patients />
+      <Routes>
+        <Route path="/" element={<Navigate to="/patients" />} />
+        <Route path="/:URL_mainpage/*" element={<MainPages />} />
+      </Routes>
     </>
   );
+}
+
+function MainPages() {
+  const pages = [{ path: "patients", page: <Patients /> }];
+  const { URL_mainpage } = useParams();
+
+  return (() => {
+    for (const page of pages) {
+      if (page.path === URL_mainpage) return page.page;
+    }
+    return <></>;
+  })();
 }
 
 export default Pages;

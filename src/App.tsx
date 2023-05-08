@@ -1,3 +1,4 @@
+import { BrowserRouter } from "react-router-dom";
 import Pages from "./Pages";
 import { ThemeProvider, createTheme } from "@mui/material";
 
@@ -16,7 +17,9 @@ const theme = createTheme({
 function App() {
   return (
     <ThemeProvider theme={theme}>
-      <Pages />
+      <BrowserRouter>
+        <Pages />
+      </BrowserRouter>
     </ThemeProvider>
   );
 }

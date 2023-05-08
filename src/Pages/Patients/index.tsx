@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Routes, Route, useParams } from "react-router-dom";
 import Grid from "@mui/material/Grid";
 
 import Container from "./ContentSide";
@@ -13,26 +14,27 @@ const leftMenus: LeftMenuType[] = [
 ];
 
 function Patients() {
-  const [curLeftMenu, setCurLeftMenu] = useState<LeftMenuType>(leftMenus[0]);
-
   return (
     <Grid container direction="row" wrap="nowrap">
-      <LeftSideBar
-        leftMenus={leftMenus}
-        curLeftMenu={{ get: curLeftMenu, set: setCurLeftMenu }}
-      />
+      <LeftSideBar leftMenus={leftMenus} />
       <Container>
-        {(() => {
-          for (const menu of leftMenus) {
-            if (menu.id === curLeftMenu.id) {
-              return menu.component;
-            }
-          }
-          return <></>;
-        })()}
+        <Routes>
+          <Route path=":URL_patientleftmenu" element={<ParamChecker />} />
+        </Routes>
       </Container>
     </Grid>
   );
+}
+
+function ParamChecker() {
+  const { URL_patientleftmenu } = useParams();
+
+  for (const menu of leftMenus) {
+    if (menu.id === URL_patientleftmenu) {
+      return <>{menu.component}</>;
+    }
+  }
+  return <></>;
 }
 
 export default Patients;
