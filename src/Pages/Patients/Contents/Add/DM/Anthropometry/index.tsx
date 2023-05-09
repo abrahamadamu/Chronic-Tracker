@@ -1,12 +1,8 @@
-import { useState } from "react";
 import { TextField } from "@mui/material";
 
 import { FormContainer } from "../styled";
-import EditableList from "../Components/EditableList";
 
 import { DataFormat } from "..";
-
-import { symptomsList, riskfactorsList, CategoryValuePair } from "Data/data";
 
 function History({
   data,

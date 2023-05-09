@@ -197,6 +197,7 @@ function ChoiceList({
               }
             }}
             onClick={() => {
+              if (category) return;
               if (isChosen) {
                 chosen.set(
                   chosen.get.filter((item) => item.value.code !== option.code)
