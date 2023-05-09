@@ -14,6 +14,7 @@ import { ChevronRight, Close } from "@mui/icons-material";
 import { CategoryValuePair } from "Data/data";
 
 type CodeTextPair = { code: string; text: string };
+type ListType = "category" | "value" | "simple";
 
 const centerStyle = { placeItems: "center", justifyContent: "center" };
 
@@ -21,10 +22,12 @@ function AddToList({
   choices,
   chosen,
   open,
+  listType,
 }: {
   choices: CategoryValuePair[];
   chosen: { get: CategoryValuePair[]; set: (v: CategoryValuePair[]) => void };
   open: { get: boolean; set: (v: boolean) => void };
+  listType?: "simple";
 }) {
   const [currentCategory, setCurrentCategory] = useState<
     CodeTextPair | undefined
@@ -68,34 +71,64 @@ function AddToList({
             Select symptoms
           </Typography>
           <Grid container gap={1} sx={{ flexGrow: 1, height: "0px" }}>
-            <Box
-              sx={{ height: "100%", display: "flex", flexDirection: "column" }}
-            >
-              <Typography>Category</Typography>
-              <ChoiceList
-                category={true}
-                currentCategory={{
-                  get: currentCategory,
-                  set: setCurrentCategory,
+            {listType !== "simple" ? (
+              <Box
+                sx={{
+                  height: "100%",
+                  display: "flex",
+                  flexDirection: "column",
                 }}
-                choices={choices}
-                chosen={chosen}
-              />
-            </Box>
-            <Box
-              sx={{ height: "100%", display: "flex", flexDirection: "column" }}
-            >
-              <Typography>Title</Typography>
-              <ChoiceList
-                category={false}
-                currentCategory={{
-                  get: currentCategory,
-                  set: setCurrentCategory,
-                }}
-                choices={choices}
-                chosen={chosen}
-              />
-            </Box>
+              >
+                <ChoiceList
+                  type="simple"
+                  currentCategory={{
+                    get: currentCategory,
+                    set: setCurrentCategory,
+                  }}
+                  choices={choices}
+                  chosen={chosen}
+                />
+              </Box>
+            ) : (
+              <>
+                <Box
+                  sx={{
+                    height: "100%",
+                    display: "flex",
+                    flexDirection: "column",
+                  }}
+                >
+                  <Typography>Category</Typography>
+                  <ChoiceList
+                    type="category"
+                    currentCategory={{
+                      get: currentCategory,
+                      set: setCurrentCategory,
+                    }}
+                    choices={choices}
+                    chosen={chosen}
+                  />
+                </Box>
+                <Box
+                  sx={{
+                    height: "100%",
+                    display: "flex",
+                    flexDirection: "column",
+                  }}
+                >
+                  <Typography>Title</Typography>
+                  <ChoiceList
+                    type="value"
+                    currentCategory={{
+                      get: currentCategory,
+                      set: setCurrentCategory,
+                    }}
+                    choices={choices}
+                    chosen={chosen}
+                  />
+                </Box>
+              </>
+            )}
           </Grid>
         </ModalWindow>
       </Grid>
@@ -104,13 +137,13 @@ function AddToList({
 }
 
 function ChoiceList({
-  category,
+  type,
   choices,
   currentCategory,
   chosen,
 }: {
   choices: CategoryValuePair[];
-  category: boolean;
+  type: ListType;
   currentCategory: {
     get: CodeTextPair | undefined;
     set: (v: CodeTextPair | undefined) => void;
@@ -123,7 +156,7 @@ function ChoiceList({
   const [chosenCategories, setChosenCategories] = useState<string[]>([]);
 
   useEffect(() => {
-    if (category && chosen?.get) {
+    if (type == "category" && chosen?.get) {
       setChosenCategories(chosen.get.map((cat) => cat.category.code));
     }
   }, [chosen?.get]);
@@ -141,12 +174,19 @@ function ChoiceList({
 
   useEffect(() => {
     let newOptions: { code: string; text: string }[];
-    if (category) {
+    if (type === "category") {
       newOptions = categories;
-    } else {
+    } else if (type === "value") {
       newOptions = choices
         .filter((choice) => choice.category.code === currentCategory.get?.code)
         .map((choice) => choice.value);
+    } else {
+      newOptions = choices.map((choice) => ({
+        code: choice.value.code,
+        text:
+          (choice.category.text ? "(" + choice.category.text + ") " : "") +
+          choice.value.text,
+      }));
     }
     newOptions.sort((o1, o2) => {
       const a = (o1.text + "").toLowerCase();
@@ -154,7 +194,7 @@ function ChoiceList({
       return a > b ? 1 : a < b ? -1 : 0;
     });
     setOptions(newOptions);
-  }, [currentCategory, category, categories]);
+  }, [currentCategory, type, categories]);
 
   return (
     <List
@@ -164,7 +204,7 @@ function ChoiceList({
         flexGrow: 1,
         overflow: "auto",
         backgroundColor: "background.lightinput",
-        ...(!category ? { minWidth: "30vw" } : {}),
+        ...(type === "value" ? { minWidth: "30vw" } : {}),
       }}
     >
       {options.map((option) => {
@@ -181,43 +221,62 @@ function ChoiceList({
               alignItems: "center",
               cursor: "pointer",
               backgroundColor:
-                category && currentCategory.get === option
+                type === "category" && currentCategory.get === option
                   ? "background.lightinput2"
                   : "unset",
-              "&:hover": !category
-                ? {
-                    backgroundColor: "background.lightinput2",
-                  }
-                : {},
+              "&:hover":
+                type !== "category"
+                  ? {
+                      backgroundColor: "background.lightinput2",
+                    }
+                  : {},
             }}
             onMouseEnter={() => {
-              if (category) {
+              if (type === "category") {
                 currentCategory.set(option);
               } else {
               }
             }}
             onClick={() => {
-              if (category) return;
+              if (type === "category") return;
+
               if (isChosen) {
                 chosen.set(
                   chosen.get.filter((item) => item.value.code !== option.code)
                 );
-              } else if (currentCategory.get) {
-                chosen?.set([
+              } else if (type === "value") {
+                if (currentCategory.get) {
+                  chosen?.set([
+                    ...chosen.get,
+                    { category: currentCategory.get, value: option },
+                  ]);
+                }
+              } else if (type === "simple") {
+                if (!chosen) return;
+                const chosenChoice = choices.filter(
+                  (choice) => choice.value.code === option.code
+                )[0];
+
+                chosen.set([
                   ...chosen.get,
-                  { category: currentCategory.get, value: option },
+                  {
+                    category: chosenChoice.category,
+                    value: chosenChoice.value,
+                  },
                 ]);
               }
             }}
           >
             <Typography
               fontWeight={
-                category && chosenCategories.includes(option.code) ? "bold" : ""
+                type === "category" && chosenCategories.includes(option.code)
+                  ? "bold"
+                  : ""
               }
             >
               {option.text}
             </Typography>
-            {category ? (
+            {type === "category" ? (
               <ChevronRight sx={{ color: "gray" }} />
             ) : (
               <Checkbox
