@@ -31,7 +31,7 @@ const musculoskeletal: CodeTextPair[] = [
   },
   {
     code: "MUSC_7",
-    text: "Pretrial Edema",
+    text: "Pretibial Edema",
   },
   {
     code: "MUSC_8",
