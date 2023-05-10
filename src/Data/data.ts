@@ -7,4 +7,6 @@ export type CategoryValuePair = {
   value: { code: string; text: string };
 };
 
+export type CodeTextPair = { code: string; text: string };
+
 export { symptomsList, riskfactorsList, oralList };

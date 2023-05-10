@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import {
   Typography,
   List,
@@ -12,23 +12,49 @@ import { Add, Delete } from "@mui/icons-material";
 
 import AddToList from "./AddToList";
 
-import { CategoryValuePair } from "Data/data";
+import { CategoryValuePair, CodeTextPair } from "Data/data";
+
+type CategoryChosenSetFunction = (v: CategoryValuePair[]) => void;
+type CategoryBasedChosen = {
+  get: CategoryValuePair[];
+  set: CategoryChosenSetFunction;
+};
+type SimpleChosen = { get: CodeTextPair[]; set: (v: CodeTextPair[]) => void };
 
 function EditableList({
   title,
   chosen,
   choices,
+  listType,
 }: {
   title: string;
-  chosen: { get: CategoryValuePair[]; set: (v: CategoryValuePair[]) => void };
-  choices: CategoryValuePair[];
+  chosen: CategoryBasedChosen | SimpleChosen;
+  choices: CodeTextPair[] | CategoryValuePair[];
+  listType?: "simple";
 }) {
   const [showList, setShowList] = useState(false);
-  const [chosenCategories, setChosenCategories] = useState<string[]>([]);
+
+  const hasCategory =
+    isCategoryValuePairArray(choices) && isCategoryBasedChosen(chosen, choices);
+
+  const [tempChosen, setTempChosen] = useState<CategoryValuePair[]>([]);
+
+  const intermChosen: {
+    get: CategoryValuePair[];
+    set: (v: CategoryValuePair[]) => void;
+  } = { get: tempChosen, set: setTempChosen };
 
   useEffect(() => {
-    setChosenCategories(chosen.get.map((cat) => cat.category.code));
-  }, [chosen.get]);
+    if (hasCategory) {
+      chosen.set(tempChosen);
+    } else if (!isCategoryChosenSetFunction(chosen.set, choices)) {
+      const data: CodeTextPair[] = tempChosen.map((chosen) => ({
+        code: chosen.value.code,
+        text: chosen.value.text,
+      }));
+      chosen.set(data);
+    }
+  }, [tempChosen]);
 
   if (!chosen.get) return <></>;
 
@@ -38,10 +64,15 @@ function EditableList({
         <Typography variant="h6">{title}</Typography>
         {/* <hr /> */}
         <List>
-          {chosen.get.map((item) => (
+          {toCategoryValuePair(intermChosen.get).map((item) => (
             <Item
               item={item}
-              data={chosen}
+              data={
+                intermChosen as {
+                  get: CategoryValuePair[] | CodeTextPair[];
+                  set: (v: CategoryValuePair[] | CodeTextPair[]) => void;
+                }
+              }
               key={item.category.code + item.value.code}
             />
           ))}
@@ -56,12 +87,49 @@ function EditableList({
         </List>
       </Paper>
       <AddToList
-        choices={choices}
-        chosen={chosen}
+        choices={toCategoryValuePair(choices)}
+        chosen={intermChosen}
         open={{ get: showList, set: setShowList }}
+        listType={!hasCategory ? "simple" : listType}
       />
     </>
   );
+}
+
+function isCategoryValuePairArray(
+  choices: CategoryValuePair[] | CodeTextPair[]
+): choices is CategoryValuePair[] {
+  if (choices.length === 0) return true;
+
+  return !!(choices[0] as CategoryValuePair).category;
+}
+function isCategoryBasedChosen(
+  data: any,
+  choices: any
+): data is CategoryBasedChosen {
+  if (choices.length < 1) return true; //Bad already
+  return !!choices[0].category;
+}
+function isCategoryChosenSetFunction(
+  data: any,
+  full: CodeTextPair[] | CategoryValuePair[]
+): data is CategoryChosenSetFunction {
+  return isCategoryBasedChosen(full, full);
+}
+
+function isCategoryValuePair(
+  data: CategoryValuePair | CodeTextPair
+): data is CategoryValuePair {
+  return !!(data as CategoryValuePair).category;
+}
+
+function toCategoryValuePair(choices: CategoryValuePair[] | CodeTextPair[]) {
+  if (isCategoryValuePairArray(choices)) return choices;
+  else
+    return choices.map((choice) => ({
+      category: { code: "", text: "" },
+      value: choice,
+    }));
 }
 
 function Item({
@@ -69,7 +137,10 @@ function Item({
   data,
 }: {
   item: CategoryValuePair;
-  data: { get: CategoryValuePair[]; set: (v: CategoryValuePair[]) => void };
+  data: {
+    get: CategoryValuePair[] | CodeTextPair[];
+    set: (v: CategoryValuePair[] | CodeTextPair[]) => void;
+  };
 }) {
   return (
     <ListItem>
@@ -82,13 +153,21 @@ function Item({
         <Typography>{item.value.text}</Typography>
         <IconButton
           onClick={() => {
-            let newData = [...data.get];
+            let newData = [...data.get] as any;
             newData = newData.filter(
-              (dat: CategoryValuePair) =>
-                !(
-                  dat.category.code === item.category.code &&
-                  dat.value.code === item.value.code
-                )
+              (dat: CategoryValuePair | CodeTextPair) => {
+                if (isCategoryValuePair(dat)) {
+                  return !(
+                    dat.category.code === item.category.code &&
+                    dat.value.code === item.value.code
+                  );
+                } else {
+                  return !(
+                    dat.code === (item as any).code &&
+                    dat.code === (item as any).code
+                  );
+                }
+              }
             );
             data.set(newData);
           }}
