@@ -60,7 +60,14 @@ function EditableList({
 
   return (
     <>
-      <Paper elevation={2} sx={{ padding: "10px" }}>
+      <Paper
+        elevation={2}
+        sx={{
+          padding: "10px",
+          display: "flex",
+          flexDirection: "column",
+        }}
+      >
         <Typography variant="h6">{title}</Typography>
         {/* <hr /> */}
         <List>
@@ -76,15 +83,27 @@ function EditableList({
               key={item.category.code + item.value.code}
             />
           ))}
-          <ListItem>
-            <Button color="secondary" onClick={() => setShowList(true)}>
-              <Grid container>
-                <Add />
-                <Typography>Add</Typography>
-              </Grid>
-            </Button>
-          </ListItem>
         </List>
+        <div style={{ flexGrow: 1 }} />
+        <ListItem
+          sx={{
+            padding: 0,
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "center",
+          }}
+        >
+          <Button
+            color="secondary"
+            sx={{ padding: "10px 20px" }}
+            onClick={() => setShowList(true)}
+          >
+            <Grid container>
+              <Add />
+              <Typography>Add</Typography>
+            </Grid>
+          </Button>
+        </ListItem>
       </Paper>
       <AddToList
         choices={toCategoryValuePair(choices)}

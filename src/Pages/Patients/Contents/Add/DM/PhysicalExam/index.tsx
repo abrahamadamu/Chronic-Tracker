@@ -6,7 +6,7 @@ import EditableList from "../Components/EditableList";
 
 import { DataFormat } from "..";
 
-import { oralList, CategoryValuePair } from "Data/data";
+import { oralList, skinList, CategoryValuePair, CodeTextPair } from "Data/data";
 
 function History({
   data,
@@ -16,6 +16,7 @@ function History({
   data: { get: DataFormat; set: (v: DataFormat) => void };
 }) {
   const [oral, setOral] = useState<CategoryValuePair[]>([]);
+  const [skin, setSkin] = useState<CodeTextPair[]>([]);
 
   return (
     <>
@@ -24,6 +25,13 @@ function History({
           title="Oral/Dental"
           choices={oralList}
           chosen={{ get: oral, set: setOral }}
+          listType="simple"
+        />
+        <EditableList
+          title="Skin and Injection Site"
+          choices={skinList}
+          chosen={{ get: skin, set: setSkin }}
+          listType="simple"
         />
         {/* <TextField
           label="Weight (Kg)"
