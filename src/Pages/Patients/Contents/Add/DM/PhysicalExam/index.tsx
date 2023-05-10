@@ -6,7 +6,14 @@ import EditableList from "../Components/EditableList";
 
 import { DataFormat } from "..";
 
-import { oralList, skinList, CategoryValuePair, CodeTextPair } from "Data/data";
+import {
+  CategoryValuePair,
+  CodeTextPair,
+  oralList,
+  skinList,
+  musculoskeletalList,
+  neurologicList,
+} from "Data/data";
 
 function History({
   data,
@@ -17,6 +24,8 @@ function History({
 }) {
   const [oral, setOral] = useState<CategoryValuePair[]>([]);
   const [skin, setSkin] = useState<CodeTextPair[]>([]);
+  const [musculoskeletal, setMusculoSkeletal] = useState<CodeTextPair[]>([]);
+  const [neurologic, setNeurologic] = useState<CategoryValuePair[]>([]);
 
   return (
     <>
@@ -32,6 +41,17 @@ function History({
           choices={skinList}
           chosen={{ get: skin, set: setSkin }}
           listType="simple"
+        />
+        <EditableList
+          title="Musculoskeletal Exam/ Foot exam"
+          choices={musculoskeletalList}
+          chosen={{ get: musculoskeletal, set: setMusculoSkeletal }}
+          listType="simple"
+        />
+        <EditableList
+          title="Neurologic and Dilated eye exam"
+          choices={neurologicList}
+          chosen={{ get: neurologic, set: setNeurologic }}
         />
         {/* <TextField
           label="Weight (Kg)"

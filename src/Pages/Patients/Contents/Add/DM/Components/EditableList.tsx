@@ -1,4 +1,5 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useRef } from "react";
+import { isEqual } from "lodash";
 import {
   Typography,
   List,
@@ -32,6 +33,9 @@ function EditableList({
   choices: CodeTextPair[] | CategoryValuePair[];
   listType?: "simple";
 }) {
+  const prevChosenValue = useRef<CategoryValuePair[] | CodeTextPair[]>([]);
+  const prevTempChosen = useRef<CategoryValuePair[]>([]);
+
   const [showList, setShowList] = useState(false);
 
   const hasCategory =
@@ -46,15 +50,30 @@ function EditableList({
 
   useEffect(() => {
     if (hasCategory) {
-      chosen.set(tempChosen);
+      if (!isEqual(chosen.get, tempChosen)) {
+        chosen.set(tempChosen);
+        prevChosenValue.current = chosen.get;
+      }
     } else if (!isCategoryChosenSetFunction(chosen.set, choices)) {
       const data: CodeTextPair[] = tempChosen.map((chosen) => ({
         code: chosen.value.code,
         text: chosen.value.text,
       }));
-      chosen.set(data);
+
+      if (!isEqual(chosen.get, data)) {
+        chosen.set(data);
+        prevChosenValue.current = chosen.get;
+      }
     }
   }, [tempChosen]);
+
+  useEffect(() => {
+    if (!isEqual(chosen.get, tempChosen)) {
+      const newData = toCategoryValuePair(chosen.get);
+      setTempChosen(newData);
+      prevTempChosen.current = newData;
+    }
+  }, [chosen.get]);
 
   if (!chosen.get) return <></>;
 
@@ -118,16 +137,16 @@ function EditableList({
 function isCategoryValuePairArray(
   choices: CategoryValuePair[] | CodeTextPair[]
 ): choices is CategoryValuePair[] {
-  if (choices.length === 0) return true;
+  if (choices.length < 0) return true;
 
-  return !!(choices[0] as CategoryValuePair).category;
+  return !!(choices[0] as CategoryValuePair)?.category;
 }
 function isCategoryBasedChosen(
   data: any,
-  choices: any
+  choices: CodeTextPair[] | CategoryValuePair[]
 ): data is CategoryBasedChosen {
   if (choices.length < 1) return true; //Bad already
-  return !!choices[0].category;
+  return !!(choices[0] as CategoryValuePair)?.category;
 }
 function isCategoryChosenSetFunction(
   data: any,
@@ -139,7 +158,7 @@ function isCategoryChosenSetFunction(
 function isCategoryValuePair(
   data: CategoryValuePair | CodeTextPair
 ): data is CategoryValuePair {
-  return !!(data as CategoryValuePair).category;
+  return !!(data as CategoryValuePair)?.category;
 }
 
 function toCategoryValuePair(choices: CategoryValuePair[] | CodeTextPair[]) {
