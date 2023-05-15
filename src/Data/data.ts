@@ -4,6 +4,7 @@ import oralList from "./oral";
 import skinList from "./skin";
 import musculoskeletalList from "./musculoskeletal";
 import neurologicList from "./neurologic";
+import laboratoryList from "./laboratory";
 
 export type CategoryValuePair = {
   category: { code: string; text: string };
@@ -19,6 +20,7 @@ const toExport = {
   skinList,
   musculoskeletalList,
   neurologicList,
+  laboratoryList,
 };
 
 export {
@@ -28,6 +30,7 @@ export {
   skinList,
   musculoskeletalList,
   neurologicList,
+  laboratoryList,
 };
 
 const duplicateValidation = CheckExportsDuplicateValueCodeError(toExport);

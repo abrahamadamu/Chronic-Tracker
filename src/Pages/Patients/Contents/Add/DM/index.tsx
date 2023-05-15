@@ -11,6 +11,7 @@ import { Tabs, Tab, Box } from "@mui/material";
 import History from "./History";
 import Anthropometry from "./Anthropometry";
 import PhysicalExam from "./PhysicalExam";
+import Laboratory from "./Laboratory";
 
 export type DataFormat = Record<string, Record<string, any> | string | number>;
 
@@ -22,7 +23,11 @@ const tabs = [
     component: Anthropometry,
   },
   { id: "physical", text: "Physical Examination", component: PhysicalExam },
-  { id: "laboratory", text: "Laboratory Investigations" },
+  {
+    id: "laboratory",
+    text: "Laboratory Investigations",
+    component: Laboratory,
+  },
   { id: "treatment", text: "Treatment Plan and Adherence" },
 ];
 
