@@ -129,6 +129,7 @@ function EditableList({
         chosen={intermChosen}
         open={{ get: showList, set: setShowList }}
         listType={!hasCategory ? "simple" : listType}
+        title={title}
       />
     </>
   );

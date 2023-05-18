@@ -12,6 +12,7 @@ import History from "./History";
 import Anthropometry from "./Anthropometry";
 import PhysicalExam from "./PhysicalExam";
 import Laboratory from "./Laboratory";
+import Treatment from "./Treatment";
 
 export type DataFormat = Record<string, Record<string, any> | string | number>;
 
@@ -28,7 +29,11 @@ const tabs = [
     text: "Laboratory Investigations",
     component: Laboratory,
   },
-  { id: "treatment", text: "Treatment Plan and Adherence" },
+  {
+    id: "treatment",
+    text: "Treatment Plan and Adherence",
+    component: Treatment,
+  },
 ];
 
 function DM() {

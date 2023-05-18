@@ -21,11 +21,13 @@ function AddToList({
   choices,
   chosen,
   open,
+  title,
   listType,
 }: {
   choices: CategoryValuePair[];
   chosen: { get: CategoryValuePair[]; set: (v: CategoryValuePair[]) => void };
   open: { get: boolean; set: (v: boolean) => void };
+  title: string;
   listType?: "simple";
 }) {
   const [currentCategory, setCurrentCategory] = useState<
@@ -67,7 +69,7 @@ function AddToList({
             onClick={() => open.set(false)}
           />
           <Typography variant="h6" sx={{ marginTop: "20px" }}>
-            Select symptoms
+            Select {title}
           </Typography>
           <Grid container gap={1} sx={{ flexGrow: 1, height: "0px" }}>
             {listType === "simple" ? (
