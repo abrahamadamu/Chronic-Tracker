@@ -6,7 +6,7 @@ function ContentSide({ children }: { children: ReactNode }) {
   return (
     <Container>
       <Grid container justifyContent="center" paddingTop="70px">
-        <ContentBox elevation={3}>{children}</ContentBox>
+        <ContentBox elevation={0}>{children}</ContentBox>
       </Grid>
     </Container>
   );

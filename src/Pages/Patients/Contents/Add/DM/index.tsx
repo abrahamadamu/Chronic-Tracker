@@ -6,7 +6,7 @@ import {
   useParams,
   Navigate,
 } from "react-router-dom";
-import { Tabs, Tab, Box } from "@mui/material";
+import { Tabs, Tab, Box, Typography, Paper } from "@mui/material";
 
 import History from "./History";
 import Anthropometry from "./Anthropometry";
@@ -40,7 +40,7 @@ function DM() {
   const [data, setData] = useState<DataFormat>({ height: "1.6" });
 
   return (
-    <Box sx={{ padding: "0 30px", marginTop: "20px" }}>
+    <Box sx={{ padding: "0 30px" }}>
       <Routes>
         <Route path="" element={<Navigate to={tabs[0].id} />} />
         <Route
@@ -72,30 +72,60 @@ function Content({
 
   return (
     <>
-      {/* <Typography variant="h5"> DM And Hypertension</Typography> */}
-      {/* <br /> */}
-      <Tabs
-        value={URL_dmcategory}
-        onChange={(e, v) => setCurrentTab(tabs.find((tab) => tab.id === v))}
-        variant="fullWidth"
-      >
-        {tabs.map((tab) => (
-          <Tab
-            label={tab.text}
-            value={tab.id}
-            key={tab.id}
-            sx={{ textTransform: "none" }}
-          />
-        ))}
-      </Tabs>
+      <Typography textAlign="center" variant="h5" sx={{ color: "grey" }}>
+        Patient Data For DM and Hypertension
+      </Typography>
       <br />
-      {(() => {
-        const tab = tabs.find((tab) => tab.id === URL_dmcategory);
-        if (!tab) return <></>;
-        const Component = tab.component ?? (() => <></>);
+      <br />
+      <Paper elevation={0} sx={{ padding: "0 0 20px 0" }}>
+        <Tabs
+          value={URL_dmcategory}
+          onChange={(e, v) => setCurrentTab(tabs.find((tab) => tab.id === v))}
+          variant="fullWidth"
+          sx={{
+            backgroundColor: "secondary.main",
+            borderTop: "9px solid",
+            borderTopColor: "secondary.main",
+          }}
+          TabIndicatorProps={{
+            style: { backgroundColor: "white", color: "white" },
+          }}
+          textColor="secondary"
+        >
+          {tabs.map((tab) => (
+            <Tab
+              label={tab.text}
+              value={tab.id}
+              key={tab.id}
+              sx={{
+                textTransform: "none",
+                color: "white",
+                borderLeft: "2px solid white",
+                "&:nth-child(1)": {
+                  borderLeft: "unset",
+                },
+                "&.Mui-selected": {
+                  // borderTop: "solid 5px",
+                  // borderTopColor: "secondary.main",
+                  // borderRadius: "10px 10px 0 0",
+                  // marginTop: "4px",
+                  backgroundColor: "white",
+                },
+              }}
+            />
+          ))}
+        </Tabs>
+        <br />
+        <Box sx={{ padding: "20px" }}>
+          {(() => {
+            const tab = tabs.find((tab) => tab.id === URL_dmcategory);
+            if (!tab) return <></>;
+            const Component = tab.component ?? (() => <></>);
 
-        return <Component data={data} id={tab.id} />;
-      })()}
+            return <Component data={data} id={tab.id} />;
+          })()}
+        </Box>
+      </Paper>
     </>
   );
 }
