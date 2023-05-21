@@ -8,7 +8,8 @@ import {
   InputLabel,
 } from "@mui/material";
 import { FormContainer } from "../styled";
-import EditableList from "../Components/EditableList";
+import EditableList from "../Components/CustomMultiList";
+import MedicationInput from "../Components/MedicationInput";
 
 import { DataFormat } from "..";
 

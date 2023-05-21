@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { FormContainer } from "../styled";
-import EditableList from "../Components/EditableList";
+import EditableList from "../Components/CustomMultiList";
 
 import { DataFormat } from "..";
 

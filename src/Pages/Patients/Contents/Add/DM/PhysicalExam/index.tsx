@@ -2,7 +2,7 @@ import { useState } from "react";
 import { TextField } from "@mui/material";
 
 import { FormContainer } from "../styled";
-import EditableList from "../Components/EditableList";
+import EditableList from "../Components/CustomMultiList";
 
 import { DataFormat } from "..";
 
