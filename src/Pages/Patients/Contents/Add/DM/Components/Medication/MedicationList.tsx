@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-import MultiList from "./MultiList";
+import MultiList from "../MultiList";
 import MedicationInput, { GivenMedicationFormat } from "./MedicationInput";
 
 function MedicationList() {

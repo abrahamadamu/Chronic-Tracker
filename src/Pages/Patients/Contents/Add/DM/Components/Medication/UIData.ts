@@ -1,0 +1,60 @@
+export const doseUnits = [
+  { id: "ml", text: "ml" },
+  { id: "mg", text: "mg" },
+  { id: "IU", text: "IU" },
+  { id: "drop", text: "Drop" },
+  { id: "tablespoon", text: "Tablespoon" },
+  { id: "teaspoon", text: "Teaspoon" },
+  { id: "unit", text: "Unit" },
+  { id: "puff", text: "Puff" },
+];
+
+export const frequencyUnits = [
+  { id: "Immediately", text: "Immediately" },
+  { id: "Once a day", text: "Once a day" },
+  { id: "Twice a day", text: "Twice a day" },
+  { id: "Thrice a day", text: "Thrice a day" },
+  { id: "Four times a day", text: "Four times a day" },
+  { id: "Every Hour", text: "Every Hour" },
+  { id: "Every 2 hours", text: "Every 2 hours" },
+  { id: "Every 3 hours", text: "Every 3 hours" },
+  { id: "Every 4 hours", text: "Every 4 hours" },
+  { id: "Every 6 hours", text: "Every 6 hours" },
+  { id: "Every 8 hours", text: "Every 8 hours" },
+  { id: "Every 12 hours", text: "Every 12 hours" },
+  { id: "On alternate days", text: "On alternate days" },
+  { id: "Once a week", text: "Once a week" },
+  { id: "Twice a week", text: "Twice a week" },
+  { id: "Thrice a week", text: "Thrice a week" },
+  { id: "Every 2 weeks", text: "Every 2 weeks" },
+  { id: "Every 3 weeks", text: "Every 3 weeks" },
+  { id: "Once a month", text: "Once a month" },
+  { id: "Five times a day", text: "Five times a day" },
+  { id: "Four days a week", text: "Four days a week" },
+  { id: "Five days a week", text: "Five days a week" },
+  { id: "Six days a week", text: "Six days a week" },
+];
+
+export const routes = [
+  { id: "Intramuscular", text: "Intramuscular" },
+  { id: "Nasal", text: "Nasal" },
+  { id: "Topical", text: "Topical" },
+  { id: "Intraosseous", text: "Intraosseous" },
+  { id: "Intrathecal", text: "Intrathecal" },
+  { id: "Intraperitoneal", text: "Intraperitoneal" },
+  { id: "Intradermal", text: "Intradermal" },
+  { id: "Nasogastric", text: "Nasogastric" },
+  { id: "Sub Lingual", text: "Sub Lingual" },
+  { id: "Per Rectum", text: "Per Rectum" },
+  { id: "Sub Cutaneous", text: "Sub Cutaneous" },
+  { id: "Per Vaginal", text: "Per Vaginal" },
+  { id: "Oral", text: "Oral" },
+  { id: "Intravenous", text: "Intravenous" },
+  { id: "Inhalation ", text: "Inhalation " },
+];
+
+export const timeUnits = [
+  { id: "day", text: "Day(s)" },
+  { id: "week", text: "Week(s)" },
+  { id: "month", text: "Month(s)" },
+];

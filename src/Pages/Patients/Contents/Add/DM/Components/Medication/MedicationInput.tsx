@@ -9,13 +9,14 @@ import {
   MenuItem,
   Box,
 } from "@mui/material";
-import { ModalWindow } from "./styles";
+import { ModalWindow } from "../styles";
 import { Close } from "@mui/icons-material";
 import { ReactNode } from "react";
 
 import { DatePicker } from "@mui/x-date-pickers";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import * as UIData from "./UIData";
 
 const centerStyle = { placeItems: "center", justifyContent: "center" };
 
@@ -95,20 +96,26 @@ function AddMedication({
               <Grid container gap={1} sx={{}}>
                 <TextField label="Dose" type="number" size="small" />
                 <SelectInput label="Unit">
-                  <MenuItem>Yes</MenuItem>
-                  <MenuItem>Yes</MenuItem>
-                  <MenuItem>Yes</MenuItem>
+                  {UIData.doseUnits.map((unit) => (
+                    <MenuItem value={unit.id} key={unit.id}>
+                      {unit.text}
+                    </MenuItem>
+                  ))}
                 </SelectInput>
               </Grid>
               <SelectInput label="Frequency">
-                <MenuItem>Yes</MenuItem>
-                <MenuItem>Yes</MenuItem>
-                <MenuItem>Yes</MenuItem>
+                {UIData.frequencyUnits.map((unit) => (
+                  <MenuItem value={unit.id} key={unit.id}>
+                    {unit.text}
+                  </MenuItem>
+                ))}
               </SelectInput>
               <SelectInput label="Route">
-                <MenuItem>Yes</MenuItem>
-                <MenuItem>Yes</MenuItem>
-                <MenuItem>Yes</MenuItem>
+                {UIData.routes.map((unit) => (
+                  <MenuItem value={unit.id} key={unit.id}>
+                    {unit.text}
+                  </MenuItem>
+                ))}
               </SelectInput>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DatePicker label="Start Date" />
@@ -116,17 +123,21 @@ function AddMedication({
               <Grid container gap={1} sx={{}}>
                 <TextField label="Duration" type="number" size="small" />
                 <SelectInput label="Unit">
-                  <MenuItem>Yes</MenuItem>
-                  <MenuItem>Yes</MenuItem>
-                  <MenuItem>Yes</MenuItem>
+                  {UIData.timeUnits.map((unit) => (
+                    <MenuItem value={unit.id} key={unit.id}>
+                      {unit.text}
+                    </MenuItem>
+                  ))}
                 </SelectInput>
               </Grid>
               <Grid container gap={1} sx={{}}>
                 <TextField label="Total Quantity" type="number" size="small" />
                 <SelectInput label="Unit">
-                  <MenuItem>Yes</MenuItem>
-                  <MenuItem>Yes</MenuItem>
-                  <MenuItem>Yes</MenuItem>
+                  {UIData.doseUnits.map((unit) => (
+                    <MenuItem value={unit.id} key={unit.id}>
+                      {unit.text}
+                    </MenuItem>
+                  ))}
                 </SelectInput>
               </Grid>
             </Grid>

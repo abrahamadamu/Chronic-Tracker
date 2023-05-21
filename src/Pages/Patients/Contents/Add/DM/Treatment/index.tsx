@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Select, MenuItem, FormControl, InputLabel } from "@mui/material";
 import { FormContainer } from "../styled";
 import EditableList from "../Components/CustomMultiList";
-import MedicationList from "../Components/MedicationList";
+import MedicationList from "../Components/Medication/MedicationList";
 
 import { DataFormat } from "..";
 
