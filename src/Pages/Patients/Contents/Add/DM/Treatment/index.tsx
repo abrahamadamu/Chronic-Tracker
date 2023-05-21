@@ -1,15 +1,8 @@
 import { useState, useEffect } from "react";
-import {
-  Select,
-  MenuItem,
-  Box,
-  FormLabel,
-  FormControl,
-  InputLabel,
-} from "@mui/material";
+import { Select, MenuItem, FormControl, InputLabel } from "@mui/material";
 import { FormContainer } from "../styled";
 import EditableList from "../Components/CustomMultiList";
-import MedicationInput from "../Components/MedicationInput";
+import MedicationList from "../Components/MedicationList";
 
 import { DataFormat } from "..";
 
@@ -44,6 +37,9 @@ function History({
           chosen={{ get: lifestylechanges, set: setLifestylechanges }}
           listType="simple"
         />
+
+        <MedicationList />
+
         <FormControl>
           <InputLabel size="small" id="adherence-label">
             Adherence

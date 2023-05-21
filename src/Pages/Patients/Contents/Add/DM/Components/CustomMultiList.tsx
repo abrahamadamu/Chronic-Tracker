@@ -1,15 +1,5 @@
 import { useState, useEffect, useRef } from "react";
 import { isEqual } from "lodash";
-import {
-  Typography,
-  List,
-  ListItem,
-  IconButton,
-  Paper,
-  Grid,
-  Button,
-} from "@mui/material";
-import { Add, Delete } from "@mui/icons-material";
 
 import MultiList from "./MultiList";
 

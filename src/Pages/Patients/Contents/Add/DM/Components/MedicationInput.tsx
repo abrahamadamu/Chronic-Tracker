@@ -1,16 +1,45 @@
-import { Modal, Grid, Typography } from "@mui/material";
+import {
+  Modal,
+  Grid,
+  Typography,
+  TextField,
+  Select,
+  InputLabel,
+  FormControl,
+  MenuItem,
+  Box,
+} from "@mui/material";
 import { ModalWindow } from "./styles";
 import { Close } from "@mui/icons-material";
+import { ReactNode } from "react";
 
-import { CategoryValuePair } from "Data/data";
+import { DatePicker } from "@mui/x-date-pickers";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 
 const centerStyle = { placeItems: "center", justifyContent: "center" };
+
+export type GivenMedicationFormat = {
+  name: string;
+  dose: number;
+  doseunit: string;
+  frequency: string;
+  route: string;
+  startdate: number;
+  duration: number;
+  durationunit: string;
+  totalquantity: number;
+  totalquantityunit: string;
+};
 
 function AddMedication({
   chosen,
   open,
 }: {
-  chosen: { get: CategoryValuePair[]; set: (v: CategoryValuePair[]) => void };
+  chosen: {
+    get: GivenMedicationFormat[];
+    set: (v: GivenMedicationFormat[]) => void;
+  };
   open: { get: boolean; set: (v: boolean) => void };
 }) {
   return (
@@ -50,10 +79,78 @@ function AddMedication({
           <Typography variant="h6" sx={{ marginTop: "20px" }}>
             Add Medication
           </Typography>
-          <Grid container gap={1} sx={{ flexGrow: 1, height: "0px" }}></Grid>
+          <Box sx={{ overflow: "auto", flexGrow: 1, height: "0px" }}>
+            <Grid
+              container
+              gap={2}
+              sx={{
+                flexGrow: 1,
+                height: "unset",
+                width: "100%",
+                paddingTop: "5px",
+              }}
+              direction="column"
+            >
+              <TextField label="Name" size="small" />
+              <Grid container gap={1} sx={{}}>
+                <TextField label="Dose" type="number" size="small" />
+                <SelectInput label="Unit">
+                  <MenuItem>Yes</MenuItem>
+                  <MenuItem>Yes</MenuItem>
+                  <MenuItem>Yes</MenuItem>
+                </SelectInput>
+              </Grid>
+              <SelectInput label="Frequency">
+                <MenuItem>Yes</MenuItem>
+                <MenuItem>Yes</MenuItem>
+                <MenuItem>Yes</MenuItem>
+              </SelectInput>
+              <SelectInput label="Route">
+                <MenuItem>Yes</MenuItem>
+                <MenuItem>Yes</MenuItem>
+                <MenuItem>Yes</MenuItem>
+              </SelectInput>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DatePicker label="Start Date" />
+              </LocalizationProvider>
+              <Grid container gap={1} sx={{}}>
+                <TextField label="Duration" type="number" size="small" />
+                <SelectInput label="Unit">
+                  <MenuItem>Yes</MenuItem>
+                  <MenuItem>Yes</MenuItem>
+                  <MenuItem>Yes</MenuItem>
+                </SelectInput>
+              </Grid>
+              <Grid container gap={1} sx={{}}>
+                <TextField label="Total Quantity" type="number" size="small" />
+                <SelectInput label="Unit">
+                  <MenuItem>Yes</MenuItem>
+                  <MenuItem>Yes</MenuItem>
+                  <MenuItem>Yes</MenuItem>
+                </SelectInput>
+              </Grid>
+            </Grid>
+          </Box>
         </ModalWindow>
       </Grid>
     </Modal>
+  );
+}
+
+function SelectInput({
+  children,
+  label,
+}: {
+  children: ReactNode;
+  label: string;
+}) {
+  return (
+    <FormControl size="small" sx={{ minWidth: "120px" }}>
+      <InputLabel id="doselabel">{label}</InputLabel>
+      <Select label={label} labelId="doselabel" placeholder={label}>
+        {children}
+      </Select>
+    </FormControl>
   );
 }
 
