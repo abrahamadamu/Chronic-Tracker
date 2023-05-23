@@ -8,6 +8,7 @@ import {
   FormControl,
   MenuItem,
   Box,
+  Button,
 } from "@mui/material";
 import { ModalWindow } from "../styles";
 import { Close } from "@mui/icons-material";
@@ -59,7 +60,7 @@ function AddMedication({
           sx={{
             ...centerStyle,
 
-            maxHeight: "70vh",
+            maxHeight: "80vh",
             height: "100%",
             flexDirection: "column",
             position: "relative",
@@ -92,7 +93,7 @@ function AddMedication({
               }}
               direction="column"
             >
-              <TextField label="Name" size="small" />
+              <TextField label="Name" />
               <Grid container gap={1} sx={{}}>
                 <TextField label="Dose" type="number" size="small" />
                 <SelectInput label="Unit">
@@ -142,6 +143,9 @@ function AddMedication({
               </Grid>
             </Grid>
           </Box>
+          <Button variant="contained" size="large">
+            Add
+          </Button>
         </ModalWindow>
       </Grid>
     </Modal>

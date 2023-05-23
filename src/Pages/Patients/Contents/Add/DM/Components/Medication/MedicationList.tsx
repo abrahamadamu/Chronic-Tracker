@@ -4,7 +4,7 @@ import MultiList from "../MultiList";
 import MedicationInput, { GivenMedicationFormat } from "./MedicationInput";
 
 function MedicationList() {
-  const [chosen, setChosen] = useState<GivenMedicationFormat[]>([]);
+  const [medications, setMedications] = useState<GivenMedicationFormat[]>([]);
   const [open, setOpen] = useState<boolean>(false);
 
   function addItem() {
@@ -17,11 +17,14 @@ function MedicationList() {
       <MultiList
         title="Medications"
         {...{ addItem, deleteItem }}
-        itemsList={chosen.map((item) => ({ id: item.name, text: item.name }))}
+        itemsList={medications.map((item) => ({
+          id: item.name,
+          text: item.name,
+        }))}
       />
       <MedicationInput
         open={{ get: open, set: setOpen }}
-        chosen={{ get: chosen, set: setChosen }}
+        chosen={{ get: medications, set: setMedications }}
       />
     </>
   );

@@ -15,10 +15,10 @@ function History({
     <>
       <FormContainer>
         <TextField
-          label="FSB / HBA1C"
-          placeholder="FSB / HBA1C"
-          value={data.get.fsbhba1c}
-          onChange={(e) => data.set({ ...data.get, fsbhba1c: e.target.value })}
+          label="FBS / HBA1C"
+          placeholder="FBS / HBA1C"
+          value={data.get.fbshba1c}
+          onChange={(e) => data.set({ ...data.get, fbshba1c: e.target.value })}
         />
         <TextField
           label="Urine Analysis"
