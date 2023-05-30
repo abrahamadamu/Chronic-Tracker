@@ -11,6 +11,8 @@ import {
   CodeTextPair,
 } from "Data/data";
 
+import { getCategoryValuePair, getCodeTextPair, getCodes } from "Data/datautil";
+
 function History({
   data,
   id,
@@ -18,8 +20,12 @@ function History({
   id: string;
   data: { get: DataFormat; set: (v: DataFormat) => void };
 }) {
-  const [symptoms, setSymptoms] = useState<CategoryValuePair[]>([]);
-  const [riskfactors, setRiskFactors] = useState<CategoryValuePair[]>([]);
+  const [symptoms, setSymptoms] = useState<CategoryValuePair[]>(
+    (data.get?.symptoms as CategoryValuePair[]) ?? []
+  );
+  const [riskfactors, setRiskFactors] = useState<CategoryValuePair[]>(
+    (data.get?.riskfactors as CategoryValuePair[]) ?? []
+  );
 
   useEffect(() => {
     data.set({ ...data.get, symptoms, riskfactors });

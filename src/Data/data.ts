@@ -15,7 +15,7 @@ export type CategoryValuePair = {
 
 export type CodeTextPair = { code: string; text: string };
 
-const toExport = {
+export const allExports = {
   symptomsList,
   riskfactorsList,
   oralList,
@@ -39,7 +39,7 @@ export {
   adherenceList,
 };
 
-const duplicateValidation = CheckExportsDuplicateValueCodeError(toExport);
+const duplicateValidation = CheckExportsDuplicateValueCodeError(allExports);
 if (duplicateValidation) throw Error(duplicateValidation);
 
 function CheckExportsDuplicateValueCodeError(

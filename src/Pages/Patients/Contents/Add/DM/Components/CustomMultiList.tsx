@@ -33,7 +33,9 @@ function EditableList({
   const hasCategory =
     isCategoryValuePairArray(choices) && isCategoryBasedChosen(chosen, choices);
 
-  const [tempChosen, setTempChosen] = useState<CategoryValuePair[]>([]);
+  const [tempChosen, setTempChosen] = useState<CategoryValuePair[]>(
+    toCategoryValuePair(chosen.get)
+  );
 
   const intermChosen: {
     get: CategoryValuePair[];
