@@ -25,7 +25,7 @@ function History({
   const [adherence, setAdherence] = useState("");
 
   useEffect(() => {
-    data.set({ ...data.get, symptoms: lifestylechanges, adherence: adherence });
+    data.set({ ...data.get, lifestylechanges, adherence });
   }, [lifestylechanges]);
 
   return (
