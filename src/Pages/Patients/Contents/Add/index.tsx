@@ -80,7 +80,7 @@ function Content({
         }}
       >
         {tabs.map((tab) => (
-          <Tab label={tab.name} value={tab.id} />
+          <Tab key={tab.id} label={tab.name} value={tab.id} />
         ))}
       </Tabs>
       <Component />

@@ -10,7 +10,10 @@ import {
   CategoryValuePair,
   lifestyleChangesList,
   adherenceList,
+  CodeTextPair,
 } from "Data/data";
+
+import { getCategoryValuePair, getCodeTextPair, getCodes } from "Data/datautil";
 
 function History({
   data,
@@ -19,14 +22,21 @@ function History({
   id: string;
   data: { get: DataFormat; set: (v: DataFormat) => void };
 }) {
-  const [lifestylechanges, setLifestylechanges] = useState<CategoryValuePair[]>(
-    []
+  const [lifestylechanges, setLifestylechanges] = useState<CodeTextPair[]>(
+    getCodeTextPair(data.get?.lifestylechanges as string[])
   );
-  const [adherence, setAdherence] = useState("");
+
+  const dataStates: Record<string, CodeTextPair[]> = {
+    lifestylechanges,
+  };
 
   useEffect(() => {
-    data.set({ ...data.get, lifestylechanges, adherence });
-  }, [lifestylechanges]);
+    let newData = data.get;
+    Object.keys(dataStates).forEach((stateName) => {
+      newData = { ...newData, [stateName]: getCodes(dataStates[stateName]) };
+    });
+    data.set({ ...newData });
+  }, Object.values(dataStates));
 
   return (
     <>
@@ -48,8 +58,10 @@ function History({
             size="small"
             label="Adherence"
             labelId="adherence-label"
-            value={adherence}
-            onChange={(e) => setAdherence(e.target.value)}
+            value={data.get?.adherence}
+            onChange={(e) =>
+              data.set({ ...data.get, adherence: e.target.value })
+            }
           >
             {adherenceList?.map((adherence) => (
               <MenuItem key={adherence.code} value={adherence.code}>

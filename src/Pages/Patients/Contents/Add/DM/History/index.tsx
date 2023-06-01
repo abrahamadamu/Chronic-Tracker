@@ -21,15 +21,24 @@ function History({
   data: { get: DataFormat; set: (v: DataFormat) => void };
 }) {
   const [symptoms, setSymptoms] = useState<CategoryValuePair[]>(
-    (data.get?.symptoms as CategoryValuePair[]) ?? []
+    getCategoryValuePair((data.get?.symptoms as string[]) ?? [])
   );
   const [riskfactors, setRiskFactors] = useState<CategoryValuePair[]>(
-    (data.get?.riskfactors as CategoryValuePair[]) ?? []
+    getCategoryValuePair((data.get?.riskfactors as string[]) ?? [])
   );
 
+  const dataStates: Record<string, CategoryValuePair[] | CodeTextPair[]> = {
+    symptoms,
+    riskfactors,
+  };
+
   useEffect(() => {
-    data.set({ ...data.get, symptoms, riskfactors });
-  }, [symptoms, riskfactors]);
+    let newData = data.get;
+    Object.keys(dataStates).forEach((stateName) => {
+      newData = { ...newData, [stateName]: getCodes(dataStates[stateName]) };
+    });
+    data.set({ ...newData });
+  }, Object.values(dataStates));
 
   return (
     <>

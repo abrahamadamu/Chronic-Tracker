@@ -1,6 +1,4 @@
 import { useState, useEffect } from "react";
-import { TextField } from "@mui/material";
-import { isEqual } from "lodash";
 
 import { FormContainer } from "../styled";
 import EditableList from "../Components/CustomMultiList";
