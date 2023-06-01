@@ -13,7 +13,7 @@ import { FormContainer, DividerText } from "../styled";
 
 import { DataFormat } from "..";
 
-function History({
+function Laboratory({
   data,
   id,
 }: {
@@ -24,12 +24,18 @@ function History({
 
   function setValue(key: string, value: string | number) {
     if (!key) return;
-    data.set({ ...data, id: { key: value } });
+    data.set({
+      ...data.get,
+      laboratory: {
+        ...(data.get as Record<string, any>)?.laboratory,
+        [key]: value,
+      },
+    });
   }
   function getValue(key: string) {
     if (!key) return;
-    const dt = data.get[id];
-    return isRecord(dt) ? dt[key] : undefined;
+    const dt = data.get?.laboratory;
+    return isRecord(dt) ? dt[key] ?? "" : "";
 
     function isRecord(value: any): value is Record<string, any> {
       return !!value;
@@ -58,8 +64,8 @@ function History({
         <TextField
           label="HBA1C"
           placeholder="HBA1C"
-          value={data.get.hba1c}
-          onChange={(e) => data.set({ ...data.get, hba1c: e.target.value })}
+          value={getValue("hba1c")}
+          onChange={(e) => setValue("hba1c", e.target.value)}
         />
 
         <DividerText>Urine Analysis</DividerText>
@@ -67,20 +73,20 @@ function History({
         <TextField
           label="Urine Protein"
           placeholder="U/A Protein"
-          value={data.get.uaprotein}
-          onChange={(e) => data.set({ ...data.get, uaprotein: e.target.value })}
+          value={getValue("uaprotein")}
+          onChange={(e) => setValue("uaprotein", e.target.value)}
         />
         <TextField
           label="Urine Ketone"
           placeholder="U/A Ketone"
-          value={data.get.uaketone}
-          onChange={(e) => data.set({ ...data.get, uaketone: e.target.value })}
+          value={getValue("uaketone")}
+          onChange={(e) => setValue("uaketone", e.target.value)}
         />
         <TextField
           label="Urine Glucose"
           placeholder="U/A Glucose"
-          value={data.get.uaglucose}
-          onChange={(e) => data.set({ ...data.get, uaglucose: e.target.value })}
+          value={getValue("uaglucose")}
+          onChange={(e) => setValue("uaglucose", e.target.value)}
         />
 
         <DividerText>Others</DividerText>
@@ -128,8 +134,8 @@ function History({
         <TextField
           label="BUN"
           placeholder="BUN"
-          value={data.get.bun}
-          onChange={(e) => data.set({ ...data.get, bun: e.target.value })}
+          value={getValue("bun")}
+          onChange={(e) => setValue("bun", e.target.value)}
         />
 
         <TextField
@@ -154,7 +160,7 @@ function InputWithUnit({
   label: string;
   units: string[];
   value: {
-    get: (k: string) => string | undefined;
+    get: (k: string) => string;
     set: (k: string, v: string) => void;
   };
   defaultUnit?: string;
@@ -189,7 +195,7 @@ function InputWithUnit({
               labelId="doselabel"
               placeholder={"label"}
               variant="standard"
-              value={value.get(id + "unit") ?? defaultUnit ?? ""}
+              value={(value.get(id + "unit") || defaultUnit) ?? ""}
               onChange={(e) => {
                 value.set(id + "unit", e.target.value);
               }}
@@ -214,4 +220,4 @@ function InputWithUnit({
   );
 }
 
-export default History;
+export default Laboratory;
