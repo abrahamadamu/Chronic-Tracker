@@ -8,7 +8,9 @@ export function getCodes(data: CategoryValuePair[] | CodeTextPair[]) {
   return codes;
 }
 
-export function getCategoryValuePair(codes: string[]) {
+export function getCategoryValuePair(codes?: string[]) {
+  if (!codes) return [];
+
   let result = codes.map((code) => {
     const collections = Object.values(allExports).filter(
       (item) => !isCodeTextPairArray(item)
@@ -24,7 +26,9 @@ export function getCategoryValuePair(codes: string[]) {
   return result.filter((item) => !!item) as CategoryValuePair[];
 }
 
-export function getCodeTextPair(codes: string[]) {
+export function getCodeTextPair(codes?: string[]) {
+  if (!codes) return [];
+
   let result = codes.map((code) => {
     const collections = Object.values(allExports).filter((item) =>
       isCodeTextPairArray(item)

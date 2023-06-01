@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { TextField } from "@mui/material";
+import { isEqual } from "lodash";
 
 import { FormContainer } from "../styled";
 import EditableList from "../Components/CustomMultiList";
@@ -14,6 +15,7 @@ import {
   musculoskeletalList,
   neurologicList,
 } from "Data/data";
+import { getCategoryValuePair, getCodeTextPair, getCodes } from "Data/datautil";
 
 function History({
   data,
@@ -22,10 +24,33 @@ function History({
   id: string;
   data: { get: DataFormat; set: (v: DataFormat) => void };
 }) {
-  const [oral, setOral] = useState<CategoryValuePair[]>([]);
-  const [skin, setSkin] = useState<CodeTextPair[]>([]);
-  const [musculoskeletal, setMusculoSkeletal] = useState<CodeTextPair[]>([]);
-  const [neurologic, setNeurologic] = useState<CategoryValuePair[]>([]);
+  const [oral, setOral] = useState<CategoryValuePair[]>(
+    getCategoryValuePair(data.get?.oral as string[])
+  );
+  const [skin, setSkin] = useState<CodeTextPair[]>(
+    getCodeTextPair(data.get?.skin as string[])
+  );
+  const [musculoskeletal, setMusculoSkeletal] = useState<CodeTextPair[]>(
+    getCodeTextPair(data.get?.musculoskeletal as string[])
+  );
+  const [neurologic, setNeurologic] = useState<CategoryValuePair[]>(
+    getCategoryValuePair(data.get?.neurologic as string[])
+  );
+
+  const dataStates: Record<string, CategoryValuePair[] | CodeTextPair[]> = {
+    oral,
+    skin,
+    musculoskeletal,
+    neurologic,
+  };
+
+  useEffect(() => {
+    let newData = data.get;
+    Object.keys(dataStates).forEach((stateName) => {
+      newData = { ...newData, [stateName]: getCodes(dataStates[stateName]) };
+    });
+    data.set({ ...newData });
+  }, Object.values(dataStates));
 
   return (
     <>
