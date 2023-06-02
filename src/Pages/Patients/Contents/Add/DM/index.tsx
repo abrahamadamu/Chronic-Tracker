@@ -36,17 +36,16 @@ const tabs = [
   },
 ];
 
-function DM() {
-  const [data, setData] = useState<DataFormat>({ height: "1.6" });
-
+function DM({
+  dmData,
+}: {
+  dmData: { get: DataFormat; set: (v: DataFormat) => void };
+}) {
   return (
     <Box sx={{ padding: "0 30px" }}>
       <Routes>
         <Route path="" element={<Navigate to={tabs[0].id} />} />
-        <Route
-          path=":URL_dmcategory/*"
-          element={<Content data={{ get: data, set: setData }} />}
-        />
+        <Route path=":URL_dmcategory/*" element={<Content data={dmData} />} />
       </Routes>
     </Box>
   );

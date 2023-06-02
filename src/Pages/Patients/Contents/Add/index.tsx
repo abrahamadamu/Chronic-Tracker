@@ -10,26 +10,23 @@ import { Grid, Typography, Tabs, Tab } from "@mui/material";
 import { TabType, FormDataType } from "./types";
 
 import Personal from "./Personal";
-import DM from "./DM";
+import DM, { DataFormat } from "./DM";
 
 const tabs: TabType[] = [
   {
     id: "personal",
     name: "Personal",
     title: "Personal Information",
-    component: Personal,
   },
   {
     id: "dmhypertension",
     name: "DM And Hypertension",
     title: "DM And Hypertension",
-    component: DM,
   },
   {
     id: "heart",
     name: "Heart Disease",
     title: "Heart Disease",
-    component: () => <></>,
   },
 ];
 
@@ -60,16 +57,16 @@ function Content({
   const navigate = useNavigate();
 
   const [currentTab, setCurrentTab] = useState<TabType | undefined>();
+  const [personalData, setPersonalData] = useState<
+    Record<string, string | number>
+  >({});
+  const [dmData, setDmData] = useState<DataFormat>({ height: "1.6" });
 
   useEffect(() => {
     if (currentTab && currentTab.id !== URL_chronicinfotype) {
       navigate("../" + currentTab.id);
     }
   }, [currentTab, URL_chronicinfotype]);
-
-  const Component =
-    tabs.find((tab) => tab.id === URL_chronicinfotype)?.component ||
-    (() => <></>);
 
   return (
     <>
@@ -83,7 +80,21 @@ function Content({
           <Tab key={tab.id} label={tab.name} value={tab.id} />
         ))}
       </Tabs>
-      <Component />
+      {(() => {
+        switch (URL_chronicinfotype) {
+          case "personal":
+            return (
+              <Personal
+                personalData={{ get: personalData, set: setPersonalData }}
+              />
+            );
+          case "dmhypertension":
+            return <DM dmData={{ get: dmData, set: setDmData }} />;
+          case "heart":
+            return <></>;
+        }
+        return <></>;
+      })()}
     </>
   );
 }
