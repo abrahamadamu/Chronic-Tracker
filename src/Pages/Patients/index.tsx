@@ -6,10 +6,11 @@ import Container from "./ContentSide";
 import LeftSideBar, { LeftMenuType } from "./LeftSideBar";
 
 import AddPatient from "./Contents/Add";
+import Explore from "./Contents/Explore";
 
 const leftMenus: LeftMenuType[] = [
   { id: "addnew", name: "Add new", component: <AddPatient /> },
-  { id: "explore", name: "Explore", component: <></> },
+  { id: "explore", name: "Explore", component: <Explore /> },
   { id: "settings", name: "Settings", component: <></> },
 ];
 
