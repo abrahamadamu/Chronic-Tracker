@@ -16,6 +16,13 @@ function History({
     <>
       <FormContainer>
         <TextField
+          label="Height (m)"
+          placeholder="Enter height"
+          value={data.get.height}
+          onChange={(e) => data.set({ ...data.get, height: e.target.value })}
+          type="number"
+        />
+        <TextField
           label="Weight (Kg)"
           placeholder="Enter weight"
           value={data.get.weight}
@@ -36,6 +43,13 @@ function History({
             return Math.round((100 * weight) / height ** 2) / 100;
           })()}
           disabled
+        />
+        <TextField
+          label="Waist Circumference (cm)"
+          placeholder="Enter Waist Circumference"
+          value={data.get.waist}
+          onChange={(e) => data.set({ ...data.get, waist: e.target.value })}
+          type="number"
         />
         <TextField
           label="BP (mmHg)"

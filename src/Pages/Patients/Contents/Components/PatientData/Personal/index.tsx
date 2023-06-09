@@ -39,6 +39,13 @@ function Personal({
         />
         <TextField
           variant="standard"
+          label="Chronic reg. number"
+          size="small"
+          value={getValue("chno")}
+          onChange={(e) => setValue("chno", e.target.value)}
+        />
+        <TextField
+          variant="standard"
           label="Full name"
           size="small"
           value={getValue("fullname")}
@@ -73,23 +80,6 @@ function Personal({
             <MenuItem value="f">Female</MenuItem>
           </Select>
         </FormControl>
-
-        <TextField
-          variant="standard"
-          label="Height"
-          size="small"
-          type="number"
-          value={getValue("height")}
-          onChange={(e) => setValue("height", e.target.value)}
-        />
-        <TextField
-          variant="standard"
-          label="Waist Circumference (cm)"
-          size="small"
-          value={getValue("waist")}
-          onChange={(e) => setValue("waist", e.target.value)}
-          type="number"
-        />
       </InputGroup>
       <InputGroup title="Address">
         <TextField

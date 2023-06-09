@@ -30,6 +30,11 @@ const tabs = [
     component: Laboratory,
   },
   {
+    id: "diagnosis",
+    text: "Diagnosis",
+    component: Laboratory,
+  },
+  {
     id: "treatment",
     text: "Treatment Plan and Adherence",
     component: Treatment,
