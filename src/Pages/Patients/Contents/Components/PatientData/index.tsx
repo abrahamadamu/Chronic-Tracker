@@ -1,5 +1,5 @@
-import { Tabs, Tab } from "@mui/material";
-import { useState, useEffect } from "react";
+import { Tabs, Tab, Grid, Button } from "@mui/material";
+import { useState, useEffect, useRef } from "react";
 import {
   useParams,
   useNavigate,
@@ -7,9 +7,12 @@ import {
   Route,
   Routes,
 } from "react-router-dom";
+import { isEqual } from "lodash";
+
 import DM, { DataFormat } from "./DM";
 import Personal from "./Personal";
 import { TabType } from "./types";
+import { Save } from "@mui/icons-material";
 
 type FormDataType = Record<string, any>;
 
@@ -63,6 +66,9 @@ function Content({
     formData.get?.dm ?? { height: "1.6" }
   );
 
+  const [changed, setChanged] = useState(false);
+  const prevFormData = useRef(formData.get);
+
   useEffect(() => {
     if (currentTab && currentTab.id !== URL_chronicinfotype) {
       navigate("../" + currentTab.id);
@@ -73,18 +79,41 @@ function Content({
     formData.set({ personal: personalData, dm: dmData });
   }, [personalData, dmData]);
 
+  useEffect(() => {
+    const changed = !isEqual(formData.get, prevFormData.current);
+    if (changed && isEqual(prevFormData.current, {})) {
+      prevFormData.current = formData.get;
+      return;
+    }
+    setChanged(changed);
+  }, [formData.get]);
+
   return (
     <>
-      <Tabs
-        value={URL_chronicinfotype}
-        onChange={(e, value) => {
-          setCurrentTab(tabs.find((tab) => tab.id === value));
-        }}
-      >
-        {tabs.map((tab) => (
-          <Tab key={tab.id} label={tab.name} value={tab.id} />
-        ))}
-      </Tabs>
+      <Grid container direction="row" justifyContent="space-between">
+        <Tabs
+          value={URL_chronicinfotype}
+          onChange={(e, value) => {
+            setCurrentTab(tabs.find((tab) => tab.id === value));
+          }}
+        >
+          {tabs.map((tab) => (
+            <Tab key={tab.id} label={tab.name} value={tab.id} />
+          ))}
+        </Tabs>
+        {changed && (
+          <Button
+            startIcon={<Save />}
+            variant="contained"
+            onClick={() => {
+              prevFormData.current = formData.get;
+              setChanged(false);
+            }}
+          >
+            Save Changes
+          </Button>
+        )}
+      </Grid>
       {(() => {
         switch (URL_chronicinfotype) {
           case "personal":
@@ -100,6 +129,25 @@ function Content({
         }
         return <></>;
       })()}
+      <Grid
+        container
+        direction="row"
+        justifyContent="center"
+        sx={{ minHeight: "50px" }}
+      >
+        {changed && (
+          <Button
+            startIcon={<Save />}
+            onClick={() => {
+              prevFormData.current = formData.get;
+              setChanged(false);
+            }}
+            variant="contained"
+          >
+            Save Changes
+          </Button>
+        )}
+      </Grid>
     </>
   );
 }

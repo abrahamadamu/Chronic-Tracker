@@ -35,7 +35,9 @@ function History({
   useEffect(() => {
     let newData = data.get;
     Object.keys(dataStates).forEach((stateName) => {
-      newData = { ...newData, [stateName]: getCodes(dataStates[stateName]) };
+      const codes = getCodes(dataStates[stateName]);
+      if (codes.length === 0) return;
+      newData = { ...newData, [stateName]: codes };
     });
     data.set({ ...newData });
   }, Object.values(dataStates));
