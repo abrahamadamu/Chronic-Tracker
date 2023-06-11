@@ -7,4 +7,4 @@ app.get("/", (req, res) => {
   res.send("<h1>Working</h1>");
 });
 
-export const helloWorld = onRequest(app);
+export const backend = onRequest(app);
