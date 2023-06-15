@@ -36,8 +36,11 @@ function History({
     let newData = data.get;
     Object.keys(dataStates).forEach((stateName) => {
       const codes = getCodes(dataStates[stateName]);
-      if (codes.length === 0) return;
-      newData = { ...newData, [stateName]: codes };
+      if (codes.length > 0) {
+        newData = { ...newData, [stateName]: codes };
+      } else {
+        delete newData[stateName];
+      }
     });
     data.set({ ...newData });
   }, Object.values(dataStates));

@@ -8,7 +8,7 @@ routes.post("/add", async (req, res, next) => {
   try {
     if (!req.body) next(createError(400, "empty request"));
 
-    console.log({ data: req.body });
+    console.log({ data: JSON.stringify(req.body) });
     console.log(typeof req.body);
 
     await Patients.addPatient(req.body);

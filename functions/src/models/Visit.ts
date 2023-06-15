@@ -1,11 +1,6 @@
 import mongoose, { Schema } from "mongoose";
 
 const patientSchema = new Schema({
-  regno: {
-    type: Number,
-    required: true,
-    unique: true,
-  },
   fullname: { type: String, required: true },
   chno: {
     unique: true,
