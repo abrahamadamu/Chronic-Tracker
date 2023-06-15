@@ -8,6 +8,7 @@ import {
   Routes,
 } from "react-router-dom";
 import { isEqual } from "lodash";
+import { backend } from "Config/data";
 
 import DM, { DataFormat } from "./DM";
 import Personal from "./Personal";
@@ -88,6 +89,29 @@ function Content({
     setChanged(changed);
   }, [formData.get]);
 
+  function saveData() {
+    console.log(JSON.stringify(formData.get));
+    // return;
+
+    fetch(backend + "/patients/add", {
+      method: "POST",
+      body: JSON.stringify(formData.get),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then(async (response) => {
+        if (response.status >= 300 || response.status < 200) {
+          throw new Error(await response.text());
+        }
+        setChanged(false);
+        prevFormData.current = formData.get;
+      })
+      .catch((e) => {
+        alert(e);
+      });
+  }
+
   return (
     <>
       <Grid container direction="row" justifyContent="space-between">
@@ -106,8 +130,8 @@ function Content({
             startIcon={<Save />}
             variant="contained"
             onClick={() => {
-              prevFormData.current = formData.get;
-              setChanged(false);
+              // prevFormData.current = formData.get;
+              saveData();
             }}
           >
             Save Changes
@@ -139,8 +163,7 @@ function Content({
           <Button
             startIcon={<Save />}
             onClick={() => {
-              prevFormData.current = formData.get;
-              setChanged(false);
+              saveData();
             }}
             variant="contained"
           >

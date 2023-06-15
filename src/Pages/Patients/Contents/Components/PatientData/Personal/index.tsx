@@ -23,8 +23,11 @@ function Personal({
     if (!personalData.get) return "";
     return personalData.get[id] ?? "";
   }
-  function setValue(id: string, value: string | number) {
-    personalData.set({ ...personalData.get, [id]: value });
+  function setValue(id: string, value: string | number, number?: boolean) {
+    personalData.set({
+      ...personalData.get,
+      [id]: number ? Number(value) : value,
+    });
   }
 
   return (
@@ -35,14 +38,16 @@ function Personal({
           label="Medical reg. number"
           size="small"
           value={getValue("regno")}
-          onChange={(e) => setValue("regno", e.target.value)}
+          onChange={(e) => setValue("regno", e.target.value, true)}
+          type="number"
         />
         <TextField
           variant="standard"
           label="Chronic reg. number"
           size="small"
           value={getValue("chno")}
-          onChange={(e) => setValue("chno", e.target.value)}
+          onChange={(e) => setValue("chno", e.target.value, true)}
+          type="number"
         />
         <TextField
           variant="standard"
@@ -56,7 +61,7 @@ function Personal({
           label="Age"
           size="small"
           value={getValue("age")}
-          onChange={(e) => setValue("age", e.target.value)}
+          onChange={(e) => setValue("age", e.target.value, true)}
           type="number"
         />
 
@@ -130,11 +135,15 @@ function Personal({
       <InputGroup title="More">
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <DatePicker
-            label="Date of enrollment"
+            label="Date of enrolment"
             onChange={(e) =>
-              setValue("enrolmentdate", e ? (e as any).toDate().getTime() : "")
+              setValue(
+                "dateofenrolment",
+                e ? (e as any).toDate().getTime() : "",
+                true
+              )
             }
-            value={dayjs(getValue("enrolmentdate") || new Date())}
+            value={dayjs(getValue("dateofenrolment") || new Date())}
           />
         </LocalizationProvider>
         <TextField
