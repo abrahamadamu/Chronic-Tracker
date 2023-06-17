@@ -1,5 +1,5 @@
 import { Tabs, Tab, Grid, Button } from "@mui/material";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useContext } from "react";
 import {
   useParams,
   useNavigate,
@@ -8,14 +8,13 @@ import {
   Routes,
 } from "react-router-dom";
 import { isEqual } from "lodash";
-import { backend } from "Config/data";
+
+import { patientDataContext, FormDataType } from "./contexts";
 
 import DM, { DataFormat } from "./DM";
 import Personal from "./Personal";
 import { TabType } from "./types";
 import { Save } from "@mui/icons-material";
-
-type FormDataType = Record<string, any>;
 
 const tabs: TabType[] = [
   {
@@ -37,38 +36,44 @@ const tabs: TabType[] = [
 
 function PatientData({
   formData,
+  saveAction,
 }: {
   formData: { get: FormDataType; set: (v: FormDataType) => void };
+  saveAction: () => Promise<any>;
 }) {
   return (
     <Routes>
       <Route path="" element={<Navigate to={tabs[0].id} />} />
       <Route
         path=":URL_chronicinfotype/*"
-        element={<Content formData={formData} />}
+        element={
+          <patientDataContext.Provider value={formData}>
+            <Content saveAction={saveAction} />
+          </patientDataContext.Provider>
+        }
       />
     </Routes>
   );
 }
 
-function Content({
-  formData,
-}: {
-  formData: { get: FormDataType; set: (v: FormDataType) => void };
-}) {
+function Content({ saveAction }: { saveAction: () => Promise<any> }) {
   const { URL_chronicinfotype } = useParams();
   const navigate = useNavigate();
+
+  const patientData = useContext(patientDataContext);
 
   const [currentTab, setCurrentTab] = useState<TabType | undefined>();
   const [personalData, setPersonalData] = useState<
     Record<string, string | number>
-  >(formData.get?.personal ?? {});
-  const [dmData, setDmData] = useState<DataFormat>(
-    formData.get?.dm ?? { height: "1.6" }
-  );
+  >(patientData.get?.personal ?? {});
+  const [dmData, setDmData] = useState<DataFormat>(patientData.get?.dm ?? {});
 
   const [changed, setChanged] = useState(false);
-  const prevFormData = useRef(formData.get);
+  const prevFormData = useRef(patientData.get);
+
+  const [visitData, setVisitData] = useState(
+    patientData.get?.visit ?? { visitdate: new Date().getTime() }
+  );
 
   useEffect(() => {
     if (currentTab && currentTab.id !== URL_chronicinfotype) {
@@ -77,39 +82,28 @@ function Content({
   }, [currentTab, URL_chronicinfotype]);
 
   useEffect(() => {
-    formData.set({ personal: personalData, dm: dmData });
+    patientData.set({
+      personal: personalData,
+      dm: dmData,
+      visit: { ...patientData.get.visit },
+    });
   }, [personalData, dmData]);
 
   useEffect(() => {
-    const changed = !isEqual(formData.get, prevFormData.current);
+    const changed = !isEqual(patientData.get, prevFormData.current);
     if (changed && isEqual(prevFormData.current, {})) {
-      prevFormData.current = formData.get;
+      prevFormData.current = patientData.get;
       return;
     }
     setChanged(changed);
-  }, [formData.get]);
+  }, [patientData.get]);
 
   function saveData() {
-    console.log(JSON.stringify(formData.get));
-    // return;
-
-    fetch(backend + "/patients/add", {
-      method: "POST",
-      body: JSON.stringify(formData.get),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then(async (response) => {
-        if (response.status >= 300 || response.status < 200) {
-          throw new Error(await response.text());
-        }
-        setChanged(false);
-        prevFormData.current = formData.get;
-      })
-      .catch((e) => {
-        alert(e);
-      });
+    console.log(JSON.stringify(patientData.get));
+    saveAction().then((r) => {
+      setChanged(false);
+      prevFormData.current = patientData.get;
+    });
   }
 
   return (
@@ -138,21 +132,19 @@ function Content({
           </Button>
         )}
       </Grid>
-      {(() => {
-        switch (URL_chronicinfotype) {
-          case "personal":
-            return (
-              <Personal
-                personalData={{ get: personalData, set: setPersonalData }}
-              />
-            );
-          case "dmhypertension":
-            return <DM dmData={{ get: dmData, set: setDmData }} />;
-          case "heart":
-            return <></>;
-        }
-        return <></>;
-      })()}
+      <patientDataContext.Provider value={patientData}>
+        {(() => {
+          switch (URL_chronicinfotype) {
+            case "personal":
+              return <Personal />;
+            case "dmhypertension":
+              return <DM />;
+            case "heart":
+              return <></>;
+          }
+          return <></>;
+        })()}
+      </patientDataContext.Provider>
       <Grid
         container
         direction="row"

@@ -13,10 +13,12 @@ import Anthropometry from "./Anthropometry";
 import PhysicalExam from "./PhysicalExam";
 import Laboratory from "./Laboratory";
 import Treatment from "./Treatment";
+import VisitInformation from "./VisitInformation";
 
 export type DataFormat = Record<string, Record<string, any> | string | number>;
 
 const tabs = [
+  { id: "visit", text: "Visit Information", component: VisitInformation },
   { id: "history", text: "History and Risk Factors", component: History },
   {
     id: "anthropometry",
@@ -41,26 +43,18 @@ const tabs = [
   },
 ];
 
-function DM({
-  dmData,
-}: {
-  dmData: { get: DataFormat; set: (v: DataFormat) => void };
-}) {
+function DM() {
   return (
     <Box sx={{ padding: "0 30px" }}>
       <Routes>
         <Route path="" element={<Navigate to={tabs[0].id} />} />
-        <Route path=":URL_dmcategory/*" element={<Content data={dmData} />} />
+        <Route path=":URL_dmcategory/*" element={<Content />} />
       </Routes>
     </Box>
   );
 }
 
-function Content({
-  data,
-}: {
-  data: { get: DataFormat; set: (v: DataFormat) => void };
-}) {
+function Content() {
   const { URL_dmcategory } = useParams();
   const navigate = useNavigate();
 
@@ -126,7 +120,7 @@ function Content({
             if (!tab) return <></>;
             const Component = tab.component ?? (() => <></>);
 
-            return <Component data={data} id={tab.id} />;
+            return <Component id={tab.id} />;
           })()}
         </Box>
       </Paper>

@@ -1,42 +1,57 @@
-import { useState, useEffect } from "react";
+import { useContext } from "react";
 import { TextField } from "@mui/material";
 
 import { FormContainer } from "../styled";
 
+import { patientDataContext } from "../../contexts";
+
 import { DataFormat } from "..";
 
-function History({
-  data,
-  id,
-}: {
-  id: string;
-  data: { get: DataFormat; set: (v: DataFormat) => void };
-}) {
+function History({ id }: { id: string }) {
+  const patientData = useContext(patientDataContext);
+
+  function setValue(key: string, value: string | number) {
+    if (!key) return;
+    patientData.set({
+      ...patientData.get,
+      dm: {
+        ...patientData.get?.dm,
+        [key]: value,
+      },
+    });
+  }
+  function getValue(key: string) {
+    if (!key) return;
+    if (!patientData.get?.dm) return;
+
+    return patientData.get?.dm[key];
+  }
+
   return (
     <>
       <FormContainer>
         <TextField
           label="Height (m)"
           placeholder="Enter height"
-          value={data.get.height}
-          onChange={(e) => data.set({ ...data.get, height: e.target.value })}
+          value={getValue("height")}
+          onChange={(e) => setValue("height", e.target.value)}
           type="number"
         />
         <TextField
           label="Weight (Kg)"
           placeholder="Enter weight"
-          value={data.get.weight}
-          onChange={(e) => data.set({ ...data.get, weight: e.target.value })}
+          value={getValue("weight")}
+          onChange={(e) => setValue("weight", e.target.value)}
           type="number"
         />
         <TextField
           label="BMI (Kg/m2)"
           placeholder="To be calculated"
           value={(() => {
-            const height = Number(data.get.height);
+            const height = Number(getValue("height"));
             if (Number.isNaN(height) || height === 0)
               return "Enter height first";
-            const weight = Number(data.get.weight);
+            const weight = Number(getValue("weight"));
             if (Number.isNaN(weight) || weight === 0)
               return "Enter weight first";
 
@@ -47,17 +62,15 @@ function History({
         <TextField
           label="Waist Circumference (cm)"
           placeholder="Enter Waist Circumference"
-          value={data.get.waist}
-          onChange={(e) => data.set({ ...data.get, waist: e.target.value })}
+          value={getValue("waist")}
+          onChange={(e) => setValue("waist", e.target.value)}
           type="number"
         />
         <TextField
           label="BP (mmHg)"
           placeholder="Enter BP"
-          value={data.get.bloodpressure}
-          onChange={(e) =>
-            data.set({ ...data.get, bloodpressure: e.target.value })
-          }
+          value={getValue("bloodpressure")}
+          onChange={(e) => setValue("bloodpressure", e.target.value)}
         />
       </FormContainer>
     </>

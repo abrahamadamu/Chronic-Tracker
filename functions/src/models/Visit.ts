@@ -1,29 +1,21 @@
 import mongoose, { Schema } from "mongoose";
 
-const patientSchema = new Schema({
-  fullname: { type: String, required: true },
-  chno: {
-    unique: true,
+const VisitsSchema = new Schema({
+  regno: {
+    type: Number,
     required: true,
-    type: Number,
   },
-  sex: { type: String, required: true },
-  yearofbirth: { type: Number, required: true },
-  dateofenrolment: {
-    type: Number,
+  data: {
+    type: mongoose.Schema.Types.Mixed,
+  },
+  date: {
+    types: Number,
     default: () => {
       new Date().getTime();
     },
   },
-  zone: { type: String, required: true },
-  woreda: { type: String, required: true },
-  city: { type: String, required: true },
-  kebele: String,
-  housenumber: String,
-  phonenumber: Number,
-  initialdiganosis: String,
 });
 
-const Patient = mongoose.model("Patient", patientSchema);
+const Visit = mongoose.model("Patient", VisitsSchema);
 
-export { Patient };
+export { Visit };

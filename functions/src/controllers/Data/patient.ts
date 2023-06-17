@@ -1,11 +1,9 @@
-import { Patient } from "../models/Patients";
-
 async function addPatient(data: Record<string, any>) {
   const personal = preparePersonal(data);
   console.log("to save", personal);
 
-  const newPatient = await Patient.create(personal);
-  return newPatient;
+  // const newPatient = await Patient.create(personal);
+  // return newPatient;
 }
 
 function preparePersonal(data: Record<string, any>) {

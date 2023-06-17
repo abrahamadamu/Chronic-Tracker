@@ -1,5 +1,5 @@
 import { Router } from "express";
-import * as Patients from "../controllers/patients";
+import * as Patients from "../controllers/Data/patient";
 import * as createError from "http-errors";
 
 const routes = Router();

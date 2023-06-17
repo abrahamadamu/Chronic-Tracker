@@ -1,8 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { Select, MenuItem, FormControl, InputLabel } from "@mui/material";
 import { FormContainer } from "../styled";
 import EditableList from "../Components/CustomMultiList";
 import MedicationList from "../Components/Medication/MedicationList";
+
+import { patientDataContext } from "../../contexts";
 
 import { DataFormat } from "..";
 
@@ -13,17 +15,13 @@ import {
   CodeTextPair,
 } from "Data/data";
 
-import { getCategoryValuePair, getCodeTextPair, getCodes } from "Data/datautil";
+import { getCodeTextPair, getCodes } from "Data/datautil";
 
-function History({
-  data,
-  id,
-}: {
-  id: string;
-  data: { get: DataFormat; set: (v: DataFormat) => void };
-}) {
+function History({ id }: { id: string }) {
+  const patientData = useContext(patientDataContext);
+
   const [lifestylechanges, setLifestylechanges] = useState<CodeTextPair[]>(
-    getCodeTextPair(data.get?.lifestylechanges as string[])
+    getCodeTextPair(patientData.get?.dm?.lifestylechanges as string[])
   );
 
   const dataStates: Record<string, CodeTextPair[]> = {
@@ -31,7 +29,7 @@ function History({
   };
 
   useEffect(() => {
-    let newData = data.get;
+    let newData = patientData.get?.dm;
     Object.keys(dataStates).forEach((stateName) => {
       const codes = getCodes(dataStates[stateName]);
       if (codes.length > 0) {
@@ -40,7 +38,10 @@ function History({
         delete newData[stateName];
       }
     });
-    data.set({ ...newData });
+    patientData.set({
+      ...patientData.get,
+      dm: { newData },
+    });
   }, Object.values(dataStates));
 
   return (
@@ -63,9 +64,12 @@ function History({
             size="small"
             label="Adherence"
             labelId="adherence-label"
-            value={data.get?.adherence}
+            value={patientData.get?.dm?.adherence}
             onChange={(e) =>
-              data.set({ ...data.get, adherence: e.target.value })
+              patientData.set({
+                ...patientData.get,
+                dm: { ...patientData.get?.dm, adherence: e.target.value },
+              })
             }
           >
             {adherenceList?.map((adherence) => (

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useContext } from "react";
 import {
   TextField,
   InputAdornment,
@@ -9,32 +9,33 @@ import {
   MenuItem,
 } from "@mui/material";
 
+import { patientDataContext } from "../../contexts";
+
 import { FormContainer, DividerText } from "../styled";
 
 import { DataFormat } from "..";
 
-function Laboratory({
-  data,
-  id,
-}: {
-  id: string;
-  data: { get: DataFormat; set: (v: DataFormat) => void };
-}) {
+function Laboratory({ id }: { id: string }) {
   const units = ["mg/dl"];
+
+  const patientData = useContext(patientDataContext);
 
   function setValue(key: string, value: string | number) {
     if (!key) return;
-    data.set({
-      ...data.get,
-      laboratory: {
-        ...(data.get as Record<string, any>)?.laboratory,
-        [key]: value,
+    patientData.set({
+      ...patientData.get,
+      dm: {
+        ...patientData.get?.dm,
+        laboratory: {
+          ...(patientData.get?.dm as Record<string, any>)?.laboratory,
+          [key]: value,
+        },
       },
     });
   }
   function getValue(key: string) {
     if (!key) return;
-    const dt = data.get?.laboratory;
+    const dt = patientData.get?.dm?.laboratory;
     return isRecord(dt) ? dt[key] ?? "" : "";
 
     function isRecord(value: any): value is Record<string, any> {

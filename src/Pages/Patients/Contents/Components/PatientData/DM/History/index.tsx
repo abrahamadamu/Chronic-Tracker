@@ -1,6 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { FormContainer } from "../styled";
 import EditableList from "../Components/CustomMultiList";
+
+import { patientDataContext } from "../../contexts";
 
 import { DataFormat } from "..";
 
@@ -13,18 +15,14 @@ import {
 
 import { getCategoryValuePair, getCodeTextPair, getCodes } from "Data/datautil";
 
-function History({
-  data,
-  id,
-}: {
-  id: string;
-  data: { get: DataFormat; set: (v: DataFormat) => void };
-}) {
+function History({ id }: { id: string }) {
+  const patientData = useContext(patientDataContext);
+
   const [symptoms, setSymptoms] = useState<CategoryValuePair[]>(
-    getCategoryValuePair((data.get?.symptoms as string[]) ?? [])
+    getCategoryValuePair((patientData.get?.dm?.symptoms as string[]) ?? [])
   );
   const [riskfactors, setRiskFactors] = useState<CategoryValuePair[]>(
-    getCategoryValuePair((data.get?.riskfactors as string[]) ?? [])
+    getCategoryValuePair((patientData.get?.dm?.riskfactors as string[]) ?? [])
   );
 
   const dataStates: Record<string, CategoryValuePair[] | CodeTextPair[]> = {
@@ -33,7 +31,7 @@ function History({
   };
 
   useEffect(() => {
-    let newData = data.get;
+    let newData = patientData.get?.dm;
     Object.keys(dataStates).forEach((stateName) => {
       const codes = getCodes(dataStates[stateName]);
       if (codes.length > 0) {
@@ -42,7 +40,7 @@ function History({
         delete newData[stateName];
       }
     });
-    data.set({ ...newData });
+    patientData.set({ ...patientData.get, dm: { ...newData } });
   }, Object.values(dataStates));
 
   return (

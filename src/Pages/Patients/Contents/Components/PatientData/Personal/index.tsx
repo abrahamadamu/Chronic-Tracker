@@ -1,3 +1,4 @@
+import { useContext } from "react";
 import {
   FormControl,
   InputLabel,
@@ -10,23 +11,22 @@ import { FormContainer } from "./styled";
 import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
+import { patientDataContext } from "../contexts";
 
-function Personal({
-  personalData,
-}: {
-  personalData: {
-    get: Record<string, string | number>;
-    set: (v: Record<string, string | number>) => void;
-  };
-}) {
+function Personal() {
+  const patientData = useContext(patientDataContext);
+
   function getValue(id: string) {
-    if (!personalData.get) return "";
-    return personalData.get[id] ?? "";
+    if (!patientData.get) return "";
+    return patientData.get.personal[id] ?? "";
   }
   function setValue(id: string, value: string | number, number?: boolean) {
-    personalData.set({
-      ...personalData.get,
-      [id]: number ? Number(value) : value,
+    patientData.set({
+      ...patientData.get,
+      personal: {
+        ...patientData.get.personal,
+        [id]: number ? Number(value) : value,
+      },
     });
   }
 
