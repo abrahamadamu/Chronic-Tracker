@@ -1,5 +1,15 @@
-async function addPatient(data: Record<string, any>) {
+import {Patient} from "../../models/Patient";
+
+async function savePatient(data: Record<string, any>, newPatient:boolean) {
+  
+  if(!newPatient){{
+    if(!data.regno) throw new Error("Registration Number required")
+    
+    const item = Patient.findOne({regno:data.regno})
+    if(!item) throw new Error("User doesn't exist")
+  }
   const personal = preparePersonal(data);
+
   console.log("to save", personal);
 
   // const newPatient = await Patient.create(personal);
@@ -31,4 +41,4 @@ function prepareDM(data: Record<string, any>) {
   return dmData;
 }
 
-export { addPatient };
+export { savePatient as addPatient };

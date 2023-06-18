@@ -20,7 +20,7 @@ function Laboratory({ id }: { id: string }) {
 
   const patientData = useContext(patientDataContext);
 
-  function setValue(key: string, value: string | number) {
+  function setValue(key: string, value: string | number, number?: boolean) {
     if (!key) return;
     patientData.set({
       ...patientData.get,
@@ -28,7 +28,7 @@ function Laboratory({ id }: { id: string }) {
         ...patientData.get?.dm,
         laboratory: {
           ...(patientData.get?.dm as Record<string, any>)?.laboratory,
-          [key]: value,
+          [key]: number ? Number(value) : value,
         },
       },
     });
@@ -162,7 +162,7 @@ function InputWithUnit({
   units: string[];
   value: {
     get: (k: string) => string;
-    set: (k: string, v: string) => void;
+    set: (k: string, v: string, n?: boolean) => void;
   };
   defaultUnit?: string;
 }) {
@@ -175,7 +175,7 @@ function InputWithUnit({
         type="number"
         value={value.get(id)}
         onChange={(e) => {
-          value.set(id, e.target.value);
+          value.set(id, e.target.value, true);
         }}
         endAdornment={
           <InputAdornment position="end">

@@ -10,13 +10,13 @@ import { DataFormat } from "..";
 function History({ id }: { id: string }) {
   const patientData = useContext(patientDataContext);
 
-  function setValue(key: string, value: string | number) {
+  function setValue(key: string, value: string | number, number?: boolean) {
     if (!key) return;
     patientData.set({
       ...patientData.get,
       dm: {
         ...patientData.get?.dm,
-        [key]: value,
+        [key]: number ? Number(value) : value,
       },
     });
   }
@@ -34,14 +34,14 @@ function History({ id }: { id: string }) {
           label="Height (m)"
           placeholder="Enter height"
           value={getValue("height")}
-          onChange={(e) => setValue("height", e.target.value)}
+          onChange={(e) => setValue("height", e.target.value, true)}
           type="number"
         />
         <TextField
           label="Weight (Kg)"
           placeholder="Enter weight"
           value={getValue("weight")}
-          onChange={(e) => setValue("weight", e.target.value)}
+          onChange={(e) => setValue("weight", e.target.value, true)}
           type="number"
         />
         <TextField
@@ -63,14 +63,15 @@ function History({ id }: { id: string }) {
           label="Waist Circumference (cm)"
           placeholder="Enter Waist Circumference"
           value={getValue("waist")}
-          onChange={(e) => setValue("waist", e.target.value)}
+          onChange={(e) => setValue("waist", e.target.value, true)}
           type="number"
         />
         <TextField
           label="BP (mmHg)"
           placeholder="Enter BP"
           value={getValue("bloodpressure")}
-          onChange={(e) => setValue("bloodpressure", e.target.value)}
+          onChange={(e) => setValue("bloodpressure", e.target.value, true)}
+          type="number"
         />
       </FormContainer>
     </>
