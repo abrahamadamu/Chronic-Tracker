@@ -7,15 +7,15 @@ const VisitsSchema = new Schema({
   },
   data: {
     type: mongoose.Schema.Types.Mixed,
+    required: true,
   },
-  date: {
-    types: Number,
-    default: () => {
-      new Date().getTime();
-    },
+  dateofvisit: {
+    type: Number,
+    required: true,
+    default: () => new Date().getTime(),
   },
 });
 
-const Visit = mongoose.model("Patient", VisitsSchema);
+const Visit = mongoose.model("Visit", VisitsSchema);
 
 export { Visit };

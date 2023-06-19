@@ -1,20 +1,20 @@
 import { Visit } from "../../models/Visit";
 
 async function addVisit(data: Record<string, any>) {
-  const dmData = prepareDm(data);
-  console.log("visit to save", dmData);
+  const visit = {
+    regno: data.personal.regno,
+    dateofvisit: data.visit.dateofvisit,
+    data: {},
+  };
 
-  const newVisit = await Visit.create(dmData);
-  return newVisit;
-}
+  const dmData = data.dm;
+  visit.data = { ...visit.data, dm: dmData };
 
-function prepareDm(data: Record<string, any>) {
-  const personalData = { ...data }.personal;
-  const dmData = { ...data }.dm;
-
-  dmData.regno = personalData.regno;
-
-  return dmData;
+  if (data.visit.id) {
+    return await Visit.updateOne({ _id: data.visit.id }, visit);
+  } else {
+    return await Visit.create(visit);
+  }
 }
 
 export { addVisit };

@@ -100,9 +100,11 @@ function Content({ saveAction }: { saveAction: () => Promise<any> }) {
 
   function saveData() {
     console.log(JSON.stringify(patientData.get));
-    saveAction().then((r) => {
-      setChanged(false);
-      prevFormData.current = patientData.get;
+    saveAction().then((response) => {
+      if (response) {
+        setChanged(false);
+        prevFormData.current = patientData.get;
+      }
     });
   }
 

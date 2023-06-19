@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useState, useContext } from "react";
 import {
   TextField,
   InputAdornment,
@@ -166,6 +166,14 @@ function InputWithUnit({
   };
   defaultUnit?: string;
 }) {
+  const [unit, setUnit] = useState(
+    (value.get(id + "unit") || defaultUnit) ?? ""
+  );
+
+  function saveUnit() {
+    value.set(id + "unit", unit);
+  }
+
   return (
     <FormControl>
       <InputLabel id="inputlabel">{label}</InputLabel>
@@ -176,11 +184,10 @@ function InputWithUnit({
         value={value.get(id)}
         onChange={(e) => {
           value.set(id, e.target.value, true);
+          saveUnit();
         }}
         endAdornment={
           <InputAdornment position="end">
-            {/* <FormControl size="small" > */}
-            {/* <InputLabel id="doselabel">{label}</InputLabel> */}
             <Select
               sx={{
                 margin: "0",
@@ -196,9 +203,9 @@ function InputWithUnit({
               labelId="doselabel"
               placeholder={"label"}
               variant="standard"
-              value={(value.get(id + "unit") || defaultUnit) ?? ""}
+              value={unit}
               onChange={(e) => {
-                value.set(id + "unit", e.target.value);
+                setUnit(e.target.value);
               }}
             >
               {units.map((unit) => (

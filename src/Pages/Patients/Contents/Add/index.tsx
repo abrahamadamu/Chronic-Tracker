@@ -15,7 +15,7 @@ function AddPatient() {
 
   function saveAction(): Promise<any> {
     console.log({ formData });
-    return new Promise((r) => r(3));
+    // return new Promise((r) => r(3));
     return fetch(backend + "/patients/add", {
       method: "POST",
       body: JSON.stringify(formData),
@@ -27,6 +27,7 @@ function AddPatient() {
         if (response.status >= 300 || response.status < 200) {
           throw new Error(await response.text());
         }
+        return true;
       })
       .catch((e) => {
         alert(e);

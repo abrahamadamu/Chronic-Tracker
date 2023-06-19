@@ -1,16 +1,23 @@
-import {Patient} from "../../models/Patient";
+import { Patient } from "../../models/Patient";
+import { addVisit } from "./visit";
 
-async function savePatient(data: Record<string, any>, newPatient:boolean) {
-  
-  if(!newPatient){{
-    if(!data.regno) throw new Error("Registration Number required")
-    
-    const item = Patient.findOne({regno:data.regno})
-    if(!item) throw new Error("User doesn't exist")
-  }
+async function savePatient(data: Record<string, any>, newPatient: boolean) {
   const personal = preparePersonal(data);
 
-  console.log("to save", personal);
+  if (!data.personal.regno) throw new Error("Registration Number required");
+
+  if (newPatient) {
+    await Patient.create(personal);
+  } else {
+    const item = await Patient.findOne({ regno: data.regno });
+    if (!item) throw new Error("User doesn't exist");
+
+    await Patient.updateOne({ regno: personal.regno }, personal);
+  }
+
+  console.log("to save", data);
+
+  return await addVisit(data);
 
   // const newPatient = await Patient.create(personal);
   // return newPatient;
@@ -20,25 +27,11 @@ function preparePersonal(data: Record<string, any>) {
   const personal = { ...data }.personal;
   // handle name vs fullname
 
-  const yearofbirth = new Date().getUTCFullYear() - personal.age;
+  const yearofbirth = new Date().getUTCFullYear() - (personal.age ?? 0);
   delete personal.age;
   personal.yearofbirth = yearofbirth;
 
   return personal;
 }
 
-function prepareDM(data: Record<string, any>) {
-  const dmData = { ...data }.dm;
-  dmData._id = dmData.regno;
-  delete dmData.regno;
-
-  // handle name vs fullname
-
-  const yearofbirth = new Date().getUTCFullYear() - dmData.age;
-  delete dmData.age;
-  dmData.yearofbirth = yearofbirth;
-
-  return dmData;
-}
-
-export { savePatient as addPatient };
+export { savePatient };

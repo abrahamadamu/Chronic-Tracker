@@ -7,11 +7,15 @@ const routes = Router();
 routes.post("/add", async (req, res, next) => {
   if (!req.body) next(createError(400, "empty request"));
 
-  console.log({ data: JSON.stringify(req.body) });
-  console.log(typeof req.body);
+  try {
+    console.log({ data: JSON.stringify(req.body) });
+    console.log(typeof req.body);
 
-  await Patients.addPatient(req.body, true);
-  res.status(200).send({ success: true });
+    await Patients.savePatient(req.body, true);
+    res.status(200).send({ success: true });
+  } catch (e: any) {
+    next(createError(e));
+  }
 });
 
 routes.post("/find", async (req, res) => {
