@@ -51,10 +51,24 @@ function Personal() {
         />
         <TextField
           variant="standard"
-          label="Full name"
+          label="First name"
           size="small"
-          value={getValue("fullname")}
-          onChange={(e) => setValue("fullname", e.target.value)}
+          value={getValue("firstname")}
+          onChange={(e) => setValue("firstname", e.target.value)}
+        />
+        <TextField
+          variant="standard"
+          label="Father's name"
+          size="small"
+          value={getValue("fathername")}
+          onChange={(e) => setValue("fathername", e.target.value)}
+        />
+        <TextField
+          variant="standard"
+          label="G.Father's name"
+          size="small"
+          value={getValue("grandfathername")}
+          onChange={(e) => setValue("grandfathername", e.target.value)}
         />
         <TextField
           variant="standard"

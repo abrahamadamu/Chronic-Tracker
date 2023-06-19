@@ -6,7 +6,9 @@ const patientSchema = new Schema({
     required: true,
     unique: true,
   },
-  fullname: { type: String, required: true },
+  firstname: { type: String, required: true },
+  fathername: { type: String, required: true },
+  grandfathername: String,
   chno: {
     unique: true,
     required: true,
