@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import {
   Paper,
   Grid,
@@ -9,6 +9,8 @@ import {
   TableRow,
   TableCell,
   TableBody,
+  CircularProgress,
+  LinearProgress,
 } from "@mui/material";
 import { Search, AccountCircle } from "@mui/icons-material";
 import lodash from "lodash";
@@ -18,7 +20,7 @@ import { backend } from "Config/data";
 import { PeopleRow } from "..";
 import { toTitleCase } from "Common/utilities";
 
-const searchSafe = lodash.debounce((search: Function) => search(), 1000, {
+const searchDebouncer = lodash.debounce((search: Function) => search(), 1000, {
   leading: true,
 });
 
@@ -26,21 +28,34 @@ function SearchPeople({ data }: { data: PeopleRow[] }) {
   const [people, setPeople] = useState([]);
   const [searchInputs, setSearchInputs] = useState<Record<string, any>>({});
 
-  function search() {
-    fetch(backend + "/patients/find", {
-      method: "POST",
-      body: JSON.stringify(searchInputs),
-      headers: { "Content-Type": "application/json" },
-    }).then((response) => {
-      response.json().then((json) => {
-        console.log({ json });
-        setPeople(json);
-      });
-    });
+  const [searching, setSearching] = useState(false);
+
+  const debouncerWaiting = useRef(false);
+
+  function safeSearch() {
+    debouncerWaiting.current = true;
+    searchDebouncer(search);
+
+    function search() {
+      setSearching(true);
+      debouncerWaiting.current = false;
+      fetch(backend + "/patients/find", {
+        method: "POST",
+        body: JSON.stringify(searchInputs),
+        headers: { "Content-Type": "application/json" },
+      })
+        .then((response) => {
+          response.json().then((json) => {
+            console.log({ json });
+            setPeople(json);
+          });
+        })
+        .finally(() => setSearching(false));
+    }
   }
 
   useEffect(() => {
-    searchSafe(search);
+    safeSearch();
   }, [searchInputs]);
 
   return (
@@ -65,36 +80,56 @@ function SearchPeople({ data }: { data: PeopleRow[] }) {
             />
           ))}
         </Grid>
-        <Table>
-          <colgroup>
-            <col style={{ width: "1%" }} />
-            <col style={{ width: "20%" }} />
-            <col style={{ width: "10%" }} />
-            <col style={{ width: "10%" }} />
-            <col style={{ width: "605%" }} />
-          </colgroup>
-          <TableHead>
+
+        {searching || debouncerWaiting.current ? (
+          <LinearProgress sx={{ margin: "20px", width: "100%" }} />
+        ) : people?.length > 0 ? (
+          <Table>
+            <colgroup>
+              <col style={{ width: "1%" }} />
+              <col style={{ width: "20%" }} />
+              <col style={{ width: "10%" }} />
+              <col style={{ width: "10%" }} />
+              <col style={{ width: "605%" }} />
+            </colgroup>
+            <TableHead>
+              <TableRow>
+                <TableCell colSpan={2}>
+                  <Typography fontWeight="bold">Name</Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography fontWeight="bold">Reg No</Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography fontWeight="bold">CH No</Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography fontWeight="bold">Age</Typography>
+                </TableCell>
+              </TableRow>
+            </TableHead>
+            {/* <TableBody>
             <TableRow>
-              <TableCell colSpan={2}>
-                <Typography fontWeight="bold">Name</Typography>
-              </TableCell>
-              <TableCell>
-                <Typography fontWeight="bold">Reg No</Typography>
-              </TableCell>
-              <TableCell>
-                <Typography fontWeight="bold">CH No</Typography>
-              </TableCell>
-              <TableCell>
-                <Typography fontWeight="bold">Age</Typography>
+              <TableCell colSpan={323} sx={{ border: "solid 2px transparent" }}>
+                <Grid container justifyContent="center">
+                  <CircularProgress sx={{ margin: "20px" }} />
+                </Grid>
               </TableCell>
             </TableRow>
-          </TableHead>
-          <TableBody>
-            {people.map((person) => (
-              <Item data={person} />
-            ))}
-          </TableBody>
-        </Table>
+          </TableBody> */}
+            <TableBody>
+              {people.map((person) => (
+                <Item data={person} />
+              ))}
+            </TableBody>
+          </Table>
+        ) : (
+          <Grid container justifyContent="center" sx={{ padding: "40px" }}>
+            <Typography variant="h6" color="#0008">
+              No results found
+            </Typography>
+          </Grid>
+        )}
       </Grid>
     </Paper>
   );
@@ -124,7 +159,11 @@ function SearchInputs({
       onChange={(e) => {
         searchInputs.set({
           ...searchInputs.get,
-          [name]: number ? Number(e.target.value) : e.target.value,
+          [name]: number
+            ? e.target.value === ""
+              ? ""
+              : Number(e.target.value)
+            : e.target.value,
         });
       }}
     />
