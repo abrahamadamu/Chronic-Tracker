@@ -1,23 +1,30 @@
 import { Patient } from "../../models/Patient";
-import { addVisit } from "./visit";
+import { saveVisit } from "./visit";
 
-async function savePatient(data: Record<string, any>, newPatient: boolean) {
+async function savePatient(data: Record<string, any>) {
   const personal = preparePersonal(data);
 
   if (!data.personal.regno) throw new Error("Registration Number required");
 
-  if (newPatient) {
-    await Patient.create(personal);
+  const response: { patientID?: string; visitID?: string } = {};
+
+  if (!data.patientID) {
+    const newPatient = await Patient.create(personal);
+    response.patientID = newPatient._id + "";
   } else {
-    const item = await Patient.findOne({ regno: data.regno });
+    const item = await Patient.findOne({ _id: data.patientID });
     if (!item) throw new Error("User doesn't exist");
 
-    await Patient.updateOne({ regno: personal.regno }, personal);
+    await Patient.updateOne({ _id: data.patientID }, personal);
+    response.patientID = data.patientID;
   }
 
   console.log("to save", data);
 
-  return await addVisit(data);
+  const savedVisit = await saveVisit(data);
+  response.visitID = savedVisit;
+
+  return response;
 
   function preparePersonal(data: Record<string, any>) {
     const personal = { ...data }.personal;

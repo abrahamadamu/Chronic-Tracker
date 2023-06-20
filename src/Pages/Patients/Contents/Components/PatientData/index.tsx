@@ -83,6 +83,7 @@ function Content({ saveAction }: { saveAction: () => Promise<any> }) {
 
   useEffect(() => {
     patientData.set({
+      ...patientData.get,
       personal: personalData,
       dm: dmData,
       visit: { ...patientData.get.visit },
