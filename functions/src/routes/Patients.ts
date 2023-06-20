@@ -18,13 +18,13 @@ routes.post("/add", async (req, res, next) => {
   }
 });
 
-routes.post("/find", async (req, res) => {
+routes.post("/find", async (req, res, next) => {
   try {
-    // Patients.addPatient(req.body);
-  } catch (e) {
-    // e.
+    const result = await Patients.find(req.body);
+    res.status(200).send(result ?? []);
+  } catch (e: any) {
+    next(createError(e));
   }
-  res.send("hi :)");
 });
 
 export default routes;

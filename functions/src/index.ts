@@ -27,7 +27,6 @@ app.get("/", (req, res, next) => {
 });
 
 app.use((err: any, req: any, res: any, next: any) => {
-  console.log("ERROR HANDLED :)");
   res.status(err.status || 502).send(err.message || "Something went wrong");
 });
 

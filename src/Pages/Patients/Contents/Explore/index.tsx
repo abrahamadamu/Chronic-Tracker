@@ -1,6 +1,6 @@
 import { Typography } from "@mui/material";
 
-import PeopleList from "./PeopleList";
+import ExplorePeople from "./ExplorePeople";
 
 const people = [
   { name: "alemu akana", regno: 14122, chno: 5263, age: 33 },
@@ -13,7 +13,7 @@ function Explore() {
     <>
       <Typography variant="h4">Explore Patient Data</Typography>
 
-      <PeopleList data={people} />
+      <ExplorePeople />
     </>
   );
 }

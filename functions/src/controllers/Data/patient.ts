@@ -19,19 +19,45 @@ async function savePatient(data: Record<string, any>, newPatient: boolean) {
 
   return await addVisit(data);
 
-  // const newPatient = await Patient.create(personal);
-  // return newPatient;
+  function preparePersonal(data: Record<string, any>) {
+    const personal = { ...data }.personal;
+    // handle name vs fullname
+
+    const yearofbirth = new Date().getUTCFullYear() - (personal.age ?? 0);
+    delete personal.age;
+    personal.yearofbirth = yearofbirth;
+
+    return personal;
+  }
 }
 
-function preparePersonal(data: Record<string, any>) {
-  const personal = { ...data }.personal;
-  // handle name vs fullname
+async function find(params: Record<string, any>) {
+  params = { ...params };
+  console.log({ params });
 
-  const yearofbirth = new Date().getUTCFullYear() - (personal.age ?? 0);
-  delete personal.age;
-  personal.yearofbirth = yearofbirth;
+  if (params.id) {
+    const item: Record<string, any> | null = {
+      ...((await Patient.findById(params.id))?.toJSON() ?? {}),
+    };
+    if (!item) return [];
 
-  return personal;
+    item.id = item._id;
+    delete item["_id"];
+
+    return [item];
+  } else {
+    for (const key of Object.keys(params)) {
+      if (params[key] === "") {
+        delete params[key];
+        continue;
+      }
+      if (key.includes("name")) {
+        params[key] = new RegExp(params[key], "i");
+      }
+    }
+    const items = await Patient.find(params);
+    return items ?? [];
+  }
 }
 
-export { savePatient };
+export { savePatient, find };
