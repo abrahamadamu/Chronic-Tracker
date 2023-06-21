@@ -14,7 +14,12 @@ function LeftSideBar({ leftMenus }: { leftMenus: LeftMenuType[] }) {
 
   return (
     <LeftBar>
-      <Typography variant="h4" textAlign="center" color="white">
+      <Typography
+        variant="h4"
+        textAlign="center"
+        color="white"
+        marginTop="20vh"
+      >
         Records
       </Typography>
       <br />
