@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Paper,
   Grid,
@@ -24,7 +25,7 @@ const searchDebouncer = lodash.debounce((search: Function) => search(), 1000, {
   leading: true,
 });
 
-function SearchPeople({ data }: { data: PeopleRow[] }) {
+function SearchPeople() {
   const [people, setPeople] = useState([]);
   const [searchInputs, setSearchInputs] = useState<Record<string, any>>({});
 
@@ -46,7 +47,7 @@ function SearchPeople({ data }: { data: PeopleRow[] }) {
       })
         .then((response) => {
           response.json().then((json) => {
-            console.log({ json });
+            // console.log({ json });
             setPeople(json);
           });
         })
@@ -108,15 +109,6 @@ function SearchPeople({ data }: { data: PeopleRow[] }) {
                 </TableCell>
               </TableRow>
             </TableHead>
-            {/* <TableBody>
-            <TableRow>
-              <TableCell colSpan={323} sx={{ border: "solid 2px transparent" }}>
-                <Grid container justifyContent="center">
-                  <CircularProgress sx={{ margin: "20px" }} />
-                </Grid>
-              </TableCell>
-            </TableRow>
-          </TableBody> */}
             <TableBody>
               {people.map((person) => (
                 <Item data={person} />
@@ -171,6 +163,7 @@ function SearchInputs({
 }
 
 function Item({ data }: { data: PeopleRow }) {
+  const navigate = useNavigate();
   return (
     <TableRow
       sx={{
@@ -180,10 +173,10 @@ function Item({ data }: { data: PeopleRow }) {
         },
       }}
     >
-      <TableCell>
+      <TableCell onClick={clk}>
         <AccountCircle sx={{ color: "#0008" }} />
       </TableCell>
-      <TableCell>
+      <TableCell onClick={clk}>
         {toTitleCase(
           (data.firstname ?? "") +
             " " +
@@ -192,11 +185,15 @@ function Item({ data }: { data: PeopleRow }) {
             (data.grandfathername ?? "")
         )}
       </TableCell>
-      <TableCell>{data.regno}</TableCell>
-      <TableCell>{data.chno}</TableCell>
-      <TableCell>{data.age}</TableCell>
+      <TableCell onClick={clk}>{data.regno}</TableCell>
+      <TableCell onClick={clk}>{data.chno}</TableCell>
+      <TableCell onClick={clk}>{data.age}</TableCell>
     </TableRow>
   );
+
+  function clk() {
+    navigate(data.regno + "");
+  }
 }
 
 export default SearchPeople;

@@ -1,3 +1,4 @@
+import { Routes, Route, Navigate } from "react-router-dom";
 import { Typography } from "@mui/material";
 
 import ExplorePeople from "./ExplorePeople";
@@ -13,7 +14,10 @@ function Explore() {
     <>
       <Typography variant="h4">Explore Patient Data</Typography>
 
-      <ExplorePeople />
+      <Routes>
+        <Route path="/" element={<Navigate to="searchpeople" />} />
+        <Route path="searchpeople/*" element={<ExplorePeople />} />
+      </Routes>
     </>
   );
 }

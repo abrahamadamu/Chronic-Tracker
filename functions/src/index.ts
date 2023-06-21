@@ -6,6 +6,7 @@ import * as cors from "cors";
 import { corsOptions } from "./Config/cors";
 
 import patients from "./routes/Patients";
+import visits from "./routes/Visits";
 
 const app = express();
 app.use(express.json());
@@ -21,6 +22,7 @@ app.use(async (req, res, next) => {
 });
 
 app.use("/patients", patients);
+app.use("/visits", visits);
 
 app.get("/", (req, res, next) => {
   res.send("<h1>Working</h1>");

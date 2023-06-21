@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
-
+import { Routes, Route } from "react-router-dom";
 import SearchPeople from "./SearchPeople";
+import PatientVisits from "./PatientVisits";
 
 export type PeopleRow = {
   firstname: string;
@@ -12,8 +12,12 @@ export type PeopleRow = {
 };
 
 function ExplorePeople() {
-  const [data, setData] = useState<PeopleRow[]>([]);
-  return <SearchPeople data={data} />;
+  return (
+    <Routes>
+      <Route path="/" element={<SearchPeople />} />
+      <Route path=":URL_regno/*" element={<PatientVisits />} />
+    </Routes>
+  );
 }
 
 export default ExplorePeople;
