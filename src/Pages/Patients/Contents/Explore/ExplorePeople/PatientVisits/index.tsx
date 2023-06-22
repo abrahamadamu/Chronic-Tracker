@@ -14,7 +14,12 @@ import {
   TableRow,
   Button,
 } from "@mui/material";
-import { AccountCircle, Checklist, ChevronLeft } from "@mui/icons-material";
+import {
+  AccountCircle,
+  Checklist,
+  ChevronLeft,
+  Add,
+} from "@mui/icons-material";
 
 import { backend } from "Config/data";
 import { getFullName } from "Common/utilities";
@@ -97,7 +102,7 @@ function PatientVisits() {
                   color="error"
                 />
                 <Typography fontSize="10pt" fontWeight="bold" color="red">
-                  CVD Risk: 37%
+                  CVD Risk: 37% (HIGH)
                 </Typography>
               </Grid>
             </Box>
@@ -140,6 +145,13 @@ function PatientVisits() {
                     <Item data={visit} />
                   ))}
                 </TableBody>
+                <TableRow>
+                  <TableCell colSpan={3}>
+                    <Button startIcon={<Add />} variant="contained">
+                      Add Visit
+                    </Button>
+                  </TableCell>
+                </TableRow>
               </Table>
             ) : (
               <Grid container justifyContent="center" sx={{ padding: "40px" }}>
@@ -156,6 +168,8 @@ function PatientVisits() {
 }
 
 function Item({ data }: { data: Record<string, any> }) {
+  const navigate = useNavigate();
+
   return (
     <TableRow
       sx={{
@@ -164,6 +178,7 @@ function Item({ data }: { data: Record<string, any> }) {
           backgroundColor: "background.lightinput",
         },
       }}
+      onClick={() => navigate(data._id)}
     >
       <TableCell>
         <Checklist />

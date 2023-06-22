@@ -3,8 +3,8 @@ import { backend } from "Config/data";
 
 import { Grid, Typography } from "@mui/material";
 
-import PatientData from "../Components/PatientData";
-import { FormDataType } from "../Components/PatientData/contexts";
+import PatientData from "Components/PatientData";
+import { FormDataType } from "Components/PatientData/contexts";
 
 function AddPatient() {
   const [formData, setFormData] = useState<FormDataType>({
