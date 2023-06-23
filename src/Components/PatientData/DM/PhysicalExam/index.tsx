@@ -1,4 +1,5 @@
 import { useState, useEffect, useContext } from "react";
+import { TextField, Typography } from "@mui/material";
 
 import { FormContainer } from "../styled";
 import EditableList from "../Components/CustomMultiList";
@@ -13,7 +14,6 @@ import {
   oralList,
   skinList,
   musculoskeletalList,
-  neurologicList,
 } from "Data/data";
 import { getCategoryValuePair, getCodeTextPair, getCodes } from "Data/datautil";
 
@@ -53,6 +53,23 @@ function History({ id }: { id: string }) {
     patientData.set({ ...patientData.get, dm: { ...newData } });
   }, Object.values(dataStates));
 
+  function setValue(key: string, value: string | number, number?: boolean) {
+    if (!key) return;
+    patientData.set({
+      ...patientData.get,
+      dm: {
+        ...patientData.get?.dm,
+        [key]: number ? Number(value) : value,
+      },
+    });
+  }
+  function getValue(key: string) {
+    if (!key) return;
+    if (!patientData.get?.dm) return;
+
+    return patientData.get?.dm[key];
+  }
+
   return (
     <>
       <FormContainer>
@@ -74,10 +91,41 @@ function History({ id }: { id: string }) {
           chosen={{ get: musculoskeletal, set: setMusculoSkeletal }}
           listType="simple"
         />
-        <EditableList
-          title="Neurologic and Dilated eye exam"
-          choices={neurologicList}
-          chosen={{ get: neurologic, set: setNeurologic }}
+
+        <TextField
+          label="Dilated Eye Exam"
+          size="small"
+          value={getValue("dialatedeyeexam")}
+          onChange={(e) => setValue("dialatedeyeexam", e.target.value)}
+          multiline
+          minRows={3}
+        />
+        <Typography sx={{ marginTop: "20px", gridColumn: "1/-1" }}>
+          Nuerologic
+        </Typography>
+        <TextField
+          label="Motor"
+          size="small"
+          value={getValue("motor")}
+          onChange={(e) => setValue("motor", e.target.value)}
+          multiline
+          minRows={3}
+        />
+        <TextField
+          label="Sensory"
+          size="small"
+          value={getValue("sensory")}
+          onChange={(e) => setValue("sensory", e.target.value)}
+          multiline
+          minRows={3}
+        />
+        <TextField
+          label="Eye Exam"
+          size="small"
+          value={getValue("eyeexam")}
+          onChange={(e) => setValue("eyeexam", e.target.value)}
+          multiline
+          minRows={3}
         />
         {/* <TextField
           label="Weight (Kg)"

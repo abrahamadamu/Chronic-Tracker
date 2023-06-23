@@ -1,7 +1,7 @@
 const origins = [
   "http://localhost:3000",
   "https://chronic-tracker.web.app",
-  "https://chronic-tracker.firebaseapp.com/patients/addnew/personal",
+  "https://chronic-tracker.firebaseapp.com",
 ];
 
 const corsOptions = {
