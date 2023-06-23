@@ -1,9 +1,9 @@
-import { onRequest } from "firebase-functions/v2/https";
+import {onRequest} from "firebase-functions/v2/https";
 import * as express from "express";
-import { connect } from "./models/Connection";
+import {connect} from "./models/Connection";
 
 import * as cors from "cors";
-import { corsOptions } from "./Config/cors";
+import {corsOptions} from "./Config/cors";
 
 import patients from "./routes/Patients";
 import visits from "./routes/Visits";

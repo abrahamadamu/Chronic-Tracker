@@ -1,4 +1,4 @@
-import mongoose, { Schema } from "mongoose";
+import mongoose, {Schema} from "mongoose";
 
 const VisitsSchema = new Schema({
   regno: {
@@ -18,4 +18,4 @@ const VisitsSchema = new Schema({
 
 const Visit = mongoose.model("Visit", VisitsSchema);
 
-export { Visit };
+export {Visit};

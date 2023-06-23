@@ -1,7 +1,7 @@
 const origins = ["http://localhost:3000"];
 
 const corsOptions = {
-  origin: function (origin: any, callback: any) {
+  origin: function(origin: any, callback: any) {
     if (origins.includes(origin)) {
       callback(null, true);
     } else {
@@ -10,4 +10,4 @@ const corsOptions = {
   },
 };
 
-export { corsOptions };
+export {corsOptions};

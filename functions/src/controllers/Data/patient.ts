@@ -1,7 +1,14 @@
 import { Patient } from "../../models/Patient";
 import * as visitData from "./visit";
 
-async function save(data: Record<string, any>) {
+/**
+ * Saves patient data to database
+ * @param {Record<string,any>} data - data to save
+ * @return {Promise}
+ **/
+async function save(
+  data: Record<string, any>
+): Promise<{ patientid?: string; visitid?: string }> {
   const personal = preparePersonal(data);
 
   if (!data.personal.regno) throw new Error("Registration Number required");
@@ -26,7 +33,12 @@ async function save(data: Record<string, any>) {
 
   return response;
 
-  function preparePersonal(data: Record<string, any>) {
+  /**
+   * Prepares and parses personal data before saving
+   * @param {Record<string, any>} data - data to parse and prepare
+   * @return {Record<string,any>}
+   **/
+  function preparePersonal(data: Record<string, any>): Record<string, any> {
     const personal = { ...data }.personal;
     // handle name vs fullname
 
@@ -38,7 +50,14 @@ async function save(data: Record<string, any>) {
   }
 }
 
-async function find(params: Record<string, any>) {
+/**
+ * finds patients using parameters
+ * @param {Record<string,any>} params - parameters to search with
+ * @return {Promise}
+ **/
+async function find(
+  params: Record<string, any>
+): Promise<Record<string, any>[]> {
   params = { ...params };
   console.log({ params });
 
@@ -64,7 +83,7 @@ async function find(params: Record<string, any>) {
         params[key] = new RegExp(params[key], "i");
       }
     }
-    let items = await Patient.find(params);
+    const items = await Patient.find(params);
 
     result = items ?? [];
   }

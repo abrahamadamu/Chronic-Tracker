@@ -1,7 +1,12 @@
 import { Visit } from "../../models/Visit";
 import * as patientData from "./patient";
 
-async function save(data: Record<string, any>) {
+/**
+ * Saves visit data
+ * @param {Record<string,any>} data data to save
+ * @return {Promise<{ id: string }>}
+ */
+async function save(data: Record<string, any>): Promise<{ id: string }> {
   const visit = {
     regno: data.personal.regno,
     dateofvisit: data.visit.dateofvisit,
@@ -19,7 +24,14 @@ async function save(data: Record<string, any>) {
   }
 }
 
-async function find(data: Record<string, any>) {
+/**
+ * Finds visits and returns including the patient data
+ * @param {Record<string,any>} data searching parameters
+ * @return {Promise}
+ */
+async function find(
+  data: Record<string, any>
+): Promise<{ patient: Record<string, any>; visits: Record<string, any>[] }> {
   if (!data.regno && !data._id) throw new Error("regno or id is required");
 
   let patient;
@@ -37,7 +49,7 @@ async function find(data: Record<string, any>) {
     visits = visit ? [visit] : [];
   }
 
-  let patientResult = (await patient) ?? [];
+  const patientResult = (await patient) ?? [];
 
   const result = {
     patient: patientResult?.length > 0 ? patientResult[0] : {},
