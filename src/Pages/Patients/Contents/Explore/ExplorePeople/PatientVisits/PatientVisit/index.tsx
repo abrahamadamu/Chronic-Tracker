@@ -8,11 +8,7 @@ import { ChevronLeft } from "@mui/icons-material";
 import { backend } from "Config/data";
 
 function PatientVisit() {
-  const [formData, setFormData] = useState<FormDataType>({
-    personal: {},
-    dm: {},
-    visit: {},
-  });
+  const [formData, setFormData] = useState<FormDataType | undefined>();
 
   const { URL_visitid } = useParams();
   const navigate = useNavigate();
@@ -53,7 +49,7 @@ function PatientVisit() {
         }
         return response.json().then((json) => {
           const newFormData = {
-            ...formData,
+            ...json,
             patientid: json.patientid,
             visitid: json.visitid,
           };
@@ -79,7 +75,7 @@ function PatientVisit() {
           {"Back"}
         </Button>
         <PatientData
-          formData={{ get: formData, set: setFormData }}
+          formData={formData && { get: formData, set: setFormData }}
           saveAction={saveAction}
         />
       </Box>

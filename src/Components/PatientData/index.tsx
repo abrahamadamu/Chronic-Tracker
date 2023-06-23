@@ -1,4 +1,4 @@
-import { Tabs, Tab, Grid, Button } from "@mui/material";
+import { Tabs, Tab, Grid, Button, CircularProgress } from "@mui/material";
 import { useState, useEffect, useRef, useContext } from "react";
 import {
   useParams,
@@ -38,21 +38,29 @@ function PatientData({
   formData,
   saveAction,
 }: {
-  formData: { get: FormDataType; set: (v: FormDataType) => void };
+  formData: { get: FormDataType; set: (v: FormDataType) => void } | undefined;
   saveAction: () => Promise<any>;
 }) {
   return (
-    <Routes>
-      <Route path="" element={<Navigate to={tabs[0].id} />} />
-      <Route
-        path=":URL_chronicinfotype/*"
-        element={
-          <patientDataContext.Provider value={formData}>
-            <Content saveAction={saveAction} />
-          </patientDataContext.Provider>
-        }
-      />
-    </Routes>
+    <Grid container direction="column">
+      {formData ? (
+        <Routes>
+          <Route path="" element={<Navigate to={tabs[0].id} />} />
+          <Route
+            path=":URL_chronicinfotype/*"
+            element={
+              <patientDataContext.Provider value={formData}>
+                <Content saveAction={saveAction} />
+              </patientDataContext.Provider>
+            }
+          />
+        </Routes>
+      ) : (
+        <Grid container justifyContent="center" alignItems="center">
+          <CircularProgress sx={{ marginTop: "130px" }} />
+        </Grid>
+      )}
+    </Grid>
   );
 }
 
