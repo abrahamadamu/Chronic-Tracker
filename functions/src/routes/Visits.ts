@@ -13,4 +13,13 @@ routes.post("/find", async (req, res, next) => {
   }
 });
 
+routes.post("/save", async (req, res, next) => {
+  try {
+    const result = await Visits.saveVisit(req.body);
+    res.status(200).send(result ?? []);
+  } catch (e: any) {
+    next(createError(e));
+  }
+});
+
 export default routes;

@@ -4,8 +4,8 @@ export type FormDataType = {
   personal: Record<string, any>;
   dm: Record<string, any>;
   visit: Record<string, any>;
-  patientID?: string;
-  visitID?: string;
+  patientid?: string;
+  visitid?: string;
 };
 
 const patientDataContext = createContext<{

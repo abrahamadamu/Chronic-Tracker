@@ -24,7 +24,7 @@ function VisitInformation({ id }: { id: string }) {
   }
   function getValue(key: string) {
     if (!key) return;
-    const dt = patientData.get?.dm?.visit;
+    const dt = patientData.get?.visit;
     return isRecord(dt) ? dt[key] ?? "" : "";
 
     function isRecord(value: any): value is Record<string, any> {

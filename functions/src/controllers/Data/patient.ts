@@ -6,23 +6,23 @@ async function savePatient(data: Record<string, any>) {
 
   if (!data.personal.regno) throw new Error("Registration Number required");
 
-  const response: { patientID?: string; visitID?: string } = {};
+  const response: { patientid?: string; visitid?: string } = {};
 
-  if (!data.patientID) {
+  if (!data.patientid) {
     const newPatient = await Patient.create(personal);
-    response.patientID = newPatient._id + "";
+    response.patientid = newPatient._id + "";
   } else {
-    const item = await Patient.findOne({ _id: data.patientID });
+    const item = await Patient.findOne({ _id: data.patientid });
     if (!item) throw new Error("User doesn't exist");
 
-    await Patient.updateOne({ _id: data.patientID }, personal);
-    response.patientID = data.patientID;
+    await Patient.updateOne({ _id: data.patientid }, personal);
+    response.patientid = data.patientid;
   }
 
   console.log("to save", data);
 
   const savedVisit = await saveVisit(data);
-  response.visitID = savedVisit;
+  response.visitid = savedVisit.id;
 
   return response;
 
@@ -42,6 +42,8 @@ async function find(params: Record<string, any>) {
   params = { ...params };
   console.log({ params });
 
+  let result;
+
   if (params.id) {
     const item: Record<string, any> | null = {
       ...((await Patient.findById(params.id))?.toJSON() ?? {}),
@@ -51,7 +53,7 @@ async function find(params: Record<string, any>) {
     item.id = item._id;
     delete item["_id"];
 
-    return [item];
+    result = [item];
   } else {
     for (const key of Object.keys(params)) {
       if (params[key] === "") {
@@ -62,9 +64,17 @@ async function find(params: Record<string, any>) {
         params[key] = new RegExp(params[key], "i");
       }
     }
-    const items = await Patient.find(params);
-    return items ?? [];
+    let items = await Patient.find(params);
+
+    result = items ?? [];
   }
+
+  for (let i = 0; i < result.length; i++) {
+    const item: any = result[i].toJSON();
+    item.age = new Date().getUTCFullYear() - item.yearofbirth;
+    result[i] = item;
+  }
+  return result;
 }
 
 export { savePatient, find };

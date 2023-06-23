@@ -92,10 +92,18 @@ function Content({ saveAction }: { saveAction: () => Promise<any> }) {
 
   useEffect(() => {
     const changed = !isEqual(patientData.get, prevFormData.current);
-    if (changed && isEqual(prevFormData.current, {})) {
+    if (
+      changed &&
+      isEqual(prevFormData.current, { personal: {}, dm: {}, visit: {} })
+    ) {
       prevFormData.current = patientData.get;
       return;
     }
+    console.log("VS", {
+      changed,
+      current: patientData.get,
+      prev: prevFormData.current,
+    });
     setChanged(changed);
   }, [patientData.get]);
 
@@ -110,7 +118,7 @@ function Content({ saveAction }: { saveAction: () => Promise<any> }) {
   }
 
   return (
-    <>
+    <Grid container gap={4}>
       <Grid container direction="row" justifyContent="space-between">
         <Tabs
           value={URL_chronicinfotype}
@@ -166,7 +174,7 @@ function Content({ saveAction }: { saveAction: () => Promise<any> }) {
           </Button>
         )}
       </Grid>
-    </>
+    </Grid>
   );
 }
 

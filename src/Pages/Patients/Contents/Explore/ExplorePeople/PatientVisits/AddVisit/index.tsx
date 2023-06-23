@@ -7,36 +7,36 @@ import { ChevronLeft } from "@mui/icons-material";
 
 import { backend } from "Config/data";
 
-function PatientVisit() {
+function AddVisit() {
   const [formData, setFormData] = useState<FormDataType>({
     personal: {},
     dm: {},
     visit: {},
   });
 
-  const { URL_visitid } = useParams();
+  const { URL_regno } = useParams();
   const navigate = useNavigate();
   // const useEffect
 
   useEffect(() => {
-    if (!URL_visitid) return;
-    fetch(backend + "/visits/find", {
+    if (!URL_regno) return;
+    fetch(backend + "/patients/find", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ _id: URL_visitid }),
+      body: JSON.stringify({ regno: URL_regno }),
     }).then((response) =>
       response.json().then((json) => {
-        const visit = json.visits.length > 0 ? json.visits[0] : {};
-        setFormData({
-          personal: json.patient,
-          dm: visit?.data?.dm ?? {},
-          visit: visit ?? {},
-          patientid: json.patient._id,
-          visitid: visit?._id,
-        });
+        if (json.length > 0) {
+          setFormData({
+            personal: json[0],
+            dm: {},
+            visit: {},
+            patientid: json[0]._id,
+          });
+        }
       })
     );
-  }, [URL_visitid]);
+  }, [URL_regno]);
 
   function saveAction(): Promise<any> {
     // return new Promise((r) => r(3));
@@ -55,7 +55,6 @@ function PatientVisit() {
           const newFormData = {
             ...formData,
             patientid: json.patientid,
-            visitid: json.visitid,
           };
           setFormData(newFormData);
           console.log({ newFormData });
@@ -87,4 +86,4 @@ function PatientVisit() {
   );
 }
 
-export default PatientVisit;
+export default AddVisit;

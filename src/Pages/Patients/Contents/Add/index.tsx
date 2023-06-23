@@ -30,8 +30,8 @@ function AddPatient() {
         return response.json().then((json) => {
           const newFormData = {
             ...formData,
-            patientID: json.patientID,
-            visitID: json.visitID,
+            patientid: json.patientid,
+            visitid: json.visitid,
           };
           setFormData(newFormData);
           console.log({ newFormData });

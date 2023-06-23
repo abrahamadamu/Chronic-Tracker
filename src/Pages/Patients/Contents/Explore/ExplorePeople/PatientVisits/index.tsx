@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Routes, Route } from "react-router-dom";
 import {
   Typography,
   Paper,
@@ -23,6 +23,9 @@ import {
 
 import { backend } from "Config/data";
 import { getFullName } from "Common/utilities";
+
+import PatientVisit from "./PatientVisit";
+import AddVisit from "./AddVisit";
 
 function PatientVisits() {
   const { URL_regno } = useParams();
@@ -51,119 +54,167 @@ function PatientVisits() {
   }, [URL_regno]);
 
   return (
-    <Box sx={{ marginTop: "30px" }}>
-      <Button startIcon={<ChevronLeft />} onClick={() => navigate("..")}>
-        {"Back"}
-      </Button>
-      <Typography sx={{ marginTop: "20px" }} variant="h5">
-        Patient history
-      </Typography>
-      <br />
-      <Paper sx={{ padding: "20px" }}>
-        <Grid container direction="row" sx={{ marginTop: "20px", gap: 15 }}>
-          <Grid
-            container
-            direction="column"
-            alignItems="center"
-            width="fit-content"
-          >
-            <Box sx={{ position: "relative" }}>
-              {loading && (
-                <Grid
-                  container
-                  sx={{ position: "absolute", width: "100%", height: "100%" }}
-                  justifyContent="center"
-                  alignItems="center"
-                >
-                  <CircularProgress />
-                </Grid>
-              )}
+    <Routes>
+      <Route
+        path="/"
+        element={
+          <Box sx={{ marginTop: "30px" }}>
+            <Button
+              color="secondary"
+              startIcon={<ChevronLeft />}
+              onClick={() => navigate("..")}
+            >
+              Back
+            </Button>
+            <Typography sx={{ marginTop: "20px" }} variant="h5">
+              Patient history
+            </Typography>
+            <br />
+            <Paper sx={{ padding: "20px" }}>
               <Grid
                 container
-                direction="column"
-                alignItems="center"
-                width="fit-content"
-                sx={{ opacity: loading ? "0" : "unset" }}
+                direction="row"
+                sx={{ marginTop: "20px", gap: 15 }}
               >
-                <AccountCircle sx={{ fontSize: "120px", color: "#0007" }} />
-                <Typography fontWeight="bold" fontSize="14pt">
-                  {loading && "Abebe Molla Zergaw"}
-                  {getFullName(
-                    visitsData.patient.firstname,
-                    visitsData.patient.fathername,
-                    visitsData.patient.grandfathername
-                  )}
-                </Typography>
-                <br />
-                <LinearProgress
-                  variant="determinate"
-                  value={37}
-                  sx={{ width: "100%", height: "10px", borderRadius: "10px" }}
-                  color="error"
-                />
-                <Typography fontSize="10pt" fontWeight="bold" color="red">
-                  CVD Risk: 37% (HIGH)
-                </Typography>
-              </Grid>
-            </Box>
-          </Grid>
-          <Grid
-            container
-            direction="column"
-            alignItems="center"
-            width="0"
-            sx={{ flexGrow: 1 }}
-          >
-            <Typography fontSize="20px" width="100%">
-              Previous Visits
-            </Typography>
+                <Grid
+                  container
+                  direction="column"
+                  alignItems="center"
+                  width="fit-content"
+                >
+                  <Box sx={{ position: "relative" }}>
+                    {loading && (
+                      <Grid
+                        container
+                        sx={{
+                          position: "absolute",
+                          width: "100%",
+                          height: "100%",
+                        }}
+                        justifyContent="center"
+                        alignItems="center"
+                      >
+                        <CircularProgress />
+                      </Grid>
+                    )}
+                    <Grid
+                      container
+                      direction="column"
+                      alignItems="center"
+                      width="fit-content"
+                      sx={{ opacity: loading ? "0" : "unset" }}
+                    >
+                      <AccountCircle
+                        sx={{ fontSize: "120px", color: "#0007" }}
+                      />
+                      <Typography fontWeight="bold" fontSize="14pt">
+                        {loading && "Abebe Molla Zergaw"}
+                        {getFullName(
+                          visitsData.patient.firstname,
+                          visitsData.patient.fathername,
+                          visitsData.patient.grandfathername
+                        )}
+                      </Typography>
+                      <br />
+                      <LinearProgress
+                        variant="determinate"
+                        value={37}
+                        sx={{
+                          width: "100%",
+                          height: "10px",
+                          borderRadius: "10px",
+                        }}
+                        color="error"
+                      />
+                      <Typography fontSize="10pt" fontWeight="bold" color="red">
+                        CVD Risk: 37% (HIGH)
+                      </Typography>
+                    </Grid>
+                  </Box>
+                </Grid>
+                <Grid
+                  container
+                  direction="column"
+                  alignItems="center"
+                  width="0"
+                  sx={{ flexGrow: 1 }}
+                >
+                  <Typography fontSize="20px" width="100%">
+                    Previous Visits
+                  </Typography>
 
-            {loading ? (
-              <LinearProgress
-                sx={{ margin: "20px", width: "90%", marginLeft: "-7%" }}
-              />
-            ) : visitsData.visits.length > 0 ? (
-              <Table>
-                <colgroup>
-                  <col style={{ width: "5%" }} />
-                  <col style={{ width: "50%" }} />
-                  <col style={{ width: "50%" }} />
-                  <col style={{ width: "605%" }} />
-                </colgroup>
-                <TableHead>
-                  <TableRow>
-                    <TableCell colSpan={2}>
-                      <Typography fontWeight="bold">Visit Date</Typography>
-                    </TableCell>
-                    <TableCell>
-                      <Typography fontWeight="bold">CVD Risk</Typography>
-                    </TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {visitsData?.visits.map((visit) => (
-                    <Item data={visit} />
-                  ))}
-                </TableBody>
-                <TableRow>
-                  <TableCell colSpan={3}>
-                    <Button startIcon={<Add />} variant="contained">
-                      Add Visit
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              </Table>
-            ) : (
-              <Grid container justifyContent="center" sx={{ padding: "40px" }}>
-                <Typography variant="h6" color="#0008">
-                  No results found
-                </Typography>
+                  {loading ? (
+                    <LinearProgress
+                      sx={{ margin: "20px", width: "90%", marginLeft: "-7%" }}
+                    />
+                  ) : visitsData.visits.length > 0 ? (
+                    <Table>
+                      <colgroup>
+                        <col style={{ width: "5%" }} />
+                        <col style={{ width: "50%" }} />
+                        <col style={{ width: "50%" }} />
+                        <col style={{ width: "605%" }} />
+                      </colgroup>
+                      <TableHead>
+                        <TableRow>
+                          <TableCell colSpan={2}>
+                            <Typography fontWeight="bold">
+                              Visit Date
+                            </Typography>
+                          </TableCell>
+                          <TableCell>
+                            <Typography fontWeight="bold">CVD Risk</Typography>
+                          </TableCell>
+                        </TableRow>
+                      </TableHead>
+                      <TableBody>
+                        {visitsData?.visits.map((visit) => (
+                          <Item key={visit._id} data={visit} />
+                        ))}
+                      </TableBody>
+                      <TableRow>
+                        <TableCell colSpan={3}>
+                          <Button
+                            startIcon={<Add />}
+                            variant="contained"
+                            onClick={() => navigate("add")}
+                          >
+                            Add Visit
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    </Table>
+                  ) : (
+                    <Grid
+                      container
+                      direction="column"
+                      justifyContent="center"
+                      alignItems="center"
+                      sx={{ padding: "40px" }}
+                    >
+                      <Typography variant="h6" color="#0008">
+                        No results found
+                      </Typography>
+                      <Grid container justifyContent="start">
+                        <Button
+                          startIcon={<Add />}
+                          variant="contained"
+                          onClick={() => navigate("add")}
+                        >
+                          Add Visit
+                        </Button>
+                      </Grid>
+                    </Grid>
+                  )}
+                </Grid>
               </Grid>
-            )}
-          </Grid>
-        </Grid>
-      </Paper>
-    </Box>
+            </Paper>
+          </Box>
+        }
+      />
+      <Route path="add/*" element={<AddVisit />} />
+      <Route path=":URL_visitid/*" element={<PatientVisit />} />
+    </Routes>
   );
 }
 
