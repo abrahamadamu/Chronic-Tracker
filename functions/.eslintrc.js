@@ -29,5 +29,7 @@ module.exports = {
     "new-cap": "off",
     "max-len": "off",
     "quote-props": "off",
+    "linebreak-style": "off",
+    "space-before-function-paren": "off",
   },
 };

@@ -1,7 +1,11 @@
-const origins = ["http://localhost:3000"];
+const origins = [
+  "http://localhost:3000",
+  "https://chronic-tracker.web.app",
+  "https://chronic-tracker.firebaseapp.com/patients/addnew/personal",
+];
 
 const corsOptions = {
-  origin: function(origin: any, callback: any) {
+  origin: function (origin: any, callback: any) {
     if (origins.includes(origin)) {
       callback(null, true);
     } else {
@@ -10,4 +14,4 @@ const corsOptions = {
   },
 };
 
-export {corsOptions};
+export { corsOptions };

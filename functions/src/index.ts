@@ -1,9 +1,9 @@
-import {onRequest} from "firebase-functions/v2/https";
+import * as functions from "firebase-functions";
 import * as express from "express";
-import {connect} from "./models/Connection";
+import { connect } from "./models/Connection";
 
 import * as cors from "cors";
-import {corsOptions} from "./Config/cors";
+import { corsOptions } from "./Config/cors";
 
 import patients from "./routes/Patients";
 import visits from "./routes/Visits";
@@ -32,10 +32,6 @@ app.use((err: any, req: any, res: any, next: any) => {
   res.status(err.status || 502).send(err.message || "Something went wrong");
 });
 
-export const backend = onRequest(app);
-// export const backend = onRequest((req, res) => {
-//   return cors(corsOptions)(req, res, () => {
-//     return app(req, res);
-//     res.setHeader("Access-Control-Allow-Origin", "*");
-//   });
-// });
+export const backend = functions
+  .runWith({ maxInstances: 40 })
+  .https.onRequest(app);
