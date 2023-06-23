@@ -1,7 +1,7 @@
 import { Visit } from "../../models/Visit";
-import { Patient } from "../../models/Patient";
+import * as patientData from "./patient";
 
-async function saveVisit(data: Record<string, any>) {
+async function save(data: Record<string, any>) {
   const visit = {
     regno: data.personal.regno,
     dateofvisit: data.visit.dateofvisit,
@@ -27,20 +27,26 @@ async function find(data: Record<string, any>) {
   let visits;
 
   if (data.regno) {
-    patient = Patient.findOne({ regno: data.regno });
+    patient = patientData.find({ regno: data.regno });
     visits = Visit.find({ regno: data.regno });
   } else {
     const visit = await Visit.findById(data._id);
     if (visit) {
-      patient = visit && Patient.findOne({ regno: visit.regno });
+      patient = visit && patientData.find({ regno: visit.regno });
     }
     visits = visit ? [visit] : [];
   }
-  const result = { patient: await patient, visits: await visits };
+
+  let patientResult = (await patient) ?? [];
+
+  const result = {
+    patient: patientResult?.length > 0 ? patientResult[0] : {},
+    visits: await visits,
+  };
 
   if (!result.patient) throw new Error("Visit not found");
 
   return result;
 }
 
-export { saveVisit, find };
+export { save, find };

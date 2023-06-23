@@ -1,7 +1,7 @@
 import { Patient } from "../../models/Patient";
-import { saveVisit } from "./visit";
+import * as visitData from "./visit";
 
-async function savePatient(data: Record<string, any>) {
+async function save(data: Record<string, any>) {
   const personal = preparePersonal(data);
 
   if (!data.personal.regno) throw new Error("Registration Number required");
@@ -21,7 +21,7 @@ async function savePatient(data: Record<string, any>) {
 
   console.log("to save", data);
 
-  const savedVisit = await saveVisit(data);
+  const savedVisit = await visitData.save(data);
   response.visitid = savedVisit.id;
 
   return response;
@@ -77,4 +77,4 @@ async function find(params: Record<string, any>) {
   return result;
 }
 
-export { savePatient, find };
+export { save, find };

@@ -11,7 +11,7 @@ routes.post("/save", async (req, res, next) => {
     console.log({ data: JSON.stringify(req.body) });
     console.log(typeof req.body);
 
-    const response = await Patients.savePatient(req.body);
+    const response = await Patients.save(req.body);
     res.status(200).send(response);
   } catch (e: any) {
     next(createError(e));

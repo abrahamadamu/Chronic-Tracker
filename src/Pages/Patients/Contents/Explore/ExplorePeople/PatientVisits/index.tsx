@@ -27,6 +27,11 @@ import { getFullName } from "Common/utilities";
 import PatientVisit from "./PatientVisit";
 import AddVisit from "./AddVisit";
 
+export type VisitsDataType = {
+  patient: Record<string, any>;
+  visits: Record<string, any>[];
+};
+
 function PatientVisits() {
   const { URL_regno } = useParams();
   const navigate = useNavigate();
@@ -171,18 +176,18 @@ function PatientVisits() {
                         {visitsData?.visits.map((visit) => (
                           <Item key={visit._id} data={visit} />
                         ))}
+                        <TableRow>
+                          <TableCell colSpan={3}>
+                            <Button
+                              startIcon={<Add />}
+                              variant="contained"
+                              onClick={() => navigate("add")}
+                            >
+                              Add Visit
+                            </Button>
+                          </TableCell>
+                        </TableRow>
                       </TableBody>
-                      <TableRow>
-                        <TableCell colSpan={3}>
-                          <Button
-                            startIcon={<Add />}
-                            variant="contained"
-                            onClick={() => navigate("add")}
-                          >
-                            Add Visit
-                          </Button>
-                        </TableCell>
-                      </TableRow>
                     </Table>
                   ) : (
                     <Grid
@@ -213,7 +218,12 @@ function PatientVisits() {
         }
       />
       <Route path="add/*" element={<AddVisit />} />
-      <Route path=":URL_visitid/*" element={<PatientVisit />} />
+      <Route
+        path=":URL_visitid/*"
+        element={
+          <PatientVisit visitsData={{ get: visitsData, set: setVisitsData }} />
+        }
+      />
     </Routes>
   );
 }
