@@ -12,12 +12,16 @@ function History({ id }: { id: string }) {
 
   function setValue(key: string, value: string | number, number?: boolean) {
     if (!key) return;
-    patientData.set({
-      ...patientData.get,
-      dm: {
-        ...patientData.get?.dm,
-        [key]: number ? Number(value) : value,
-      },
+    patientData.set((prevData) => {
+      if (!prevData) return;
+
+      return {
+        ...prevData,
+        dm: {
+          ...prevData?.dm,
+          [key]: number ? Number(value) : value,
+        },
+      };
     });
   }
   function getValue(key: string) {
@@ -67,10 +71,17 @@ function History({ id }: { id: string }) {
           type="number"
         />
         <TextField
-          label="BP (mmHg)"
+          label="BP Systolic (mmHg)"
           placeholder="Enter BP"
-          value={getValue("bloodpressure")}
-          onChange={(e) => setValue("bloodpressure", e.target.value, true)}
+          value={getValue("bpsystolic")}
+          onChange={(e) => setValue("bpdiastolic", e.target.value, true)}
+          type="number"
+        />
+        <TextField
+          label="BP Diastolic (mmHg)"
+          placeholder="Enter BP"
+          value={getValue("bpdiastolic")}
+          onChange={(e) => setValue("bpdiastolic", e.target.value, true)}
           type="number"
         />
       </FormContainer>

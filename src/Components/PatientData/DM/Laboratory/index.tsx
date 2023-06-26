@@ -9,7 +9,7 @@ import {
   MenuItem,
 } from "@mui/material";
 
-import { patientDataContext } from "../../contexts";
+import { patientDataContext, FormDataStateType } from "../../contexts";
 
 import { FormContainer, DividerText } from "../styled";
 
@@ -22,15 +22,19 @@ function Laboratory({ id }: { id: string }) {
 
   function setValue(key: string, value: string | number, number?: boolean) {
     if (!key) return;
-    patientData.set({
-      ...patientData.get,
-      dm: {
-        ...patientData.get?.dm,
-        laboratory: {
-          ...(patientData.get?.dm as Record<string, any>)?.laboratory,
-          [key]: number ? Number(value) : value,
+    patientData.set((prevData) => {
+      if (!prevData) return;
+
+      return {
+        ...prevData,
+        dm: {
+          ...prevData?.dm,
+          laboratory: {
+            ...(prevData?.dm as Record<string, any>)?.laboratory,
+            [key]: number ? Number(value) : value,
+          },
         },
-      },
+      };
     });
   }
   function getValue(key: string) {
@@ -50,7 +54,10 @@ function Laboratory({ id }: { id: string }) {
           id="fbs"
           label="FBS"
           units={units}
-          value={{ get: getValue, set: setValue }}
+          value={{
+            get: getValue,
+            set: setValue,
+          }}
           defaultUnit={units[0]}
         />
 
@@ -58,7 +65,10 @@ function Laboratory({ id }: { id: string }) {
           label="RBS"
           id="rbs"
           units={units}
-          value={{ get: getValue, set: setValue }}
+          value={{
+            get: getValue,
+            set: setValue,
+          }}
           defaultUnit={units[0]}
         />
 
@@ -96,7 +106,10 @@ function Laboratory({ id }: { id: string }) {
           label="HDL"
           id="hdl"
           units={units}
-          value={{ get: getValue, set: setValue }}
+          value={{
+            get: getValue,
+            set: setValue,
+          }}
           defaultUnit={units[0]}
         />
 
@@ -104,7 +117,10 @@ function Laboratory({ id }: { id: string }) {
           label="LDL"
           id="ldl"
           units={units}
-          value={{ get: getValue, set: setValue }}
+          value={{
+            get: getValue,
+            set: setValue,
+          }}
           defaultUnit={units[0]}
         />
 
@@ -112,7 +128,10 @@ function Laboratory({ id }: { id: string }) {
           label="Triglycerides"
           id="triglycerides"
           units={units}
-          value={{ get: getValue, set: setValue }}
+          value={{
+            get: getValue,
+            set: setValue,
+          }}
           defaultUnit={units[0]}
         />
 
@@ -120,7 +139,10 @@ function Laboratory({ id }: { id: string }) {
           label="Total Cholesterol"
           id="cholesterol"
           units={units}
-          value={{ get: getValue, set: setValue }}
+          value={{
+            get: getValue,
+            set: setValue,
+          }}
           defaultUnit={units[0]}
         />
 
@@ -128,7 +150,10 @@ function Laboratory({ id }: { id: string }) {
           label="Cr"
           id="cr"
           units={units}
-          value={{ get: getValue, set: setValue }}
+          value={{
+            get: getValue,
+            set: setValue,
+          }}
           defaultUnit={units[0]}
         />
 

@@ -8,7 +8,7 @@ import { ChevronLeft } from "@mui/icons-material";
 import { backend } from "Config/data";
 
 function AddVisit() {
-  const [formData, setFormData] = useState<FormDataType>({
+  const [formData, setFormData] = useState<FormDataType | undefined>({
     personal: {},
     dm: {},
     visit: {},
@@ -51,6 +51,8 @@ function AddVisit() {
         if (response.status >= 300 || response.status < 200) {
           throw new Error(await response.text());
         }
+        if (!formData) return undefined;
+
         return response.json().then((json) => {
           const newFormData = {
             ...formData,

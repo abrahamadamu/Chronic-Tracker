@@ -7,6 +7,7 @@ import neurologicList from "./neurologic";
 import laboratoryList from "./laboratory";
 import lifestyleChangesList from "./lifestyle";
 import adherenceList from "./adherence";
+import physical_othersList from "./physical_others";
 
 export type CategoryValuePair = {
   category: { code: string; text: string };
@@ -25,6 +26,7 @@ export const allExports = {
   laboratoryList,
   lifestyleChangesList,
   adherenceList,
+  physical_othersList,
 };
 
 export {
@@ -37,6 +39,7 @@ export {
   laboratoryList,
   lifestyleChangesList,
   adherenceList,
+  physical_othersList,
 };
 
 const duplicateValidation = CheckExportsDuplicateValueCodeError(allExports);

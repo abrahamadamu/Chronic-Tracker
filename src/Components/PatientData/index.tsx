@@ -9,7 +9,11 @@ import {
 } from "react-router-dom";
 import { isEqual } from "lodash";
 
-import { patientDataContext, FormDataType } from "./contexts";
+import {
+  patientDataContext,
+  FormDataType,
+  FormDataStateType,
+} from "./contexts";
 
 import DM, { DataFormat } from "./DM";
 import Personal from "./Personal";
@@ -38,7 +42,16 @@ function PatientData({
   formData,
   saveAction,
 }: {
-  formData: { get: FormDataType; set: (v: FormDataType) => void } | undefined;
+  formData:
+    | {
+        get: FormDataStateType;
+        set: (
+          v:
+            | FormDataStateType
+            | ((prevData: FormDataStateType) => FormDataStateType)
+        ) => void;
+      }
+    | undefined;
   saveAction: () => Promise<any>;
 }) {
   return (
@@ -94,7 +107,7 @@ function Content({ saveAction }: { saveAction: () => Promise<any> }) {
       ...patientData.get,
       personal: personalData,
       dm: dmData,
-      visit: { ...patientData.get.visit },
+      visit: { ...(patientData.get?.visit ?? {}) },
     });
   }, [personalData, dmData]);
 

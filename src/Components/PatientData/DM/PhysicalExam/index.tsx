@@ -14,6 +14,7 @@ import {
   oralList,
   skinList,
   musculoskeletalList,
+  physical_othersList,
 } from "Data/data";
 import { getCategoryValuePair, getCodeTextPair, getCodes } from "Data/datautil";
 
@@ -29,19 +30,22 @@ function History({ id }: { id: string }) {
   const [musculoskeletal, setMusculoSkeletal] = useState<CodeTextPair[]>(
     getCodeTextPair(patientData.get?.dm?.musculoskeletal as string[])
   );
-  const [neurologic, setNeurologic] = useState<CategoryValuePair[]>(
-    getCategoryValuePair(patientData.get?.dm?.neurologic as string[])
+  const [physical_others, setPhysical_others] = useState<CategoryValuePair[]>(
+    getCategoryValuePair(patientData.get?.dm?.physical_others as string[])
   );
 
   const dataStates: Record<string, CategoryValuePair[] | CodeTextPair[]> = {
     oral,
     skin,
     musculoskeletal,
-    neurologic,
+    physical_others,
   };
 
   useEffect(() => {
-    let newData = patientData.get?.dm;
+    if (!patientData.get) return;
+
+    let newData = patientData.get.dm;
+
     Object.keys(dataStates).forEach((stateName) => {
       const codes = getCodes(dataStates[stateName]);
       if (codes.length > 0) {
@@ -55,12 +59,16 @@ function History({ id }: { id: string }) {
 
   function setValue(key: string, value: string | number, number?: boolean) {
     if (!key) return;
-    patientData.set({
-      ...patientData.get,
-      dm: {
-        ...patientData.get?.dm,
-        [key]: number ? Number(value) : value,
-      },
+    patientData.set((prevData) => {
+      if (!prevData) return;
+
+      return {
+        ...prevData,
+        dm: {
+          ...prevData?.dm,
+          [key]: number ? Number(value) : value,
+        },
+      };
     });
   }
   function getValue(key: string) {
@@ -92,6 +100,12 @@ function History({ id }: { id: string }) {
           listType="simple"
         />
 
+        <EditableList
+          title="Others"
+          choices={physical_othersList}
+          chosen={{ get: physical_others, set: setPhysical_others }}
+        />
+
         <TextField
           label="Dilated Eye Exam"
           size="small"
@@ -101,7 +115,7 @@ function History({ id }: { id: string }) {
           minRows={3}
         />
         <Typography sx={{ marginTop: "20px", gridColumn: "1/-1" }}>
-          Nuerologic
+          Neurologic
         </Typography>
         <TextField
           label="Motor"

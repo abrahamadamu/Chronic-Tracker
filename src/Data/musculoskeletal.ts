@@ -2,24 +2,8 @@ import { CodeTextPair } from "./data";
 
 const musculoskeletal: CodeTextPair[] = [
   {
-    code: "MUSC_0",
-    text: "Dry Skin / Callus / Deformity",
-  },
-  {
     code: "MUSC_1",
     text: "Ulcer",
-  },
-  {
-    code: "MUSC_2",
-    text: "Absent/asymmetric pulses, poor capillary filling",
-  },
-  {
-    code: "MUSC_3",
-    text: "Reduced or absent light touch, Vibration or position sense",
-  },
-  {
-    code: "MUSC_4",
-    text: "Decreased/Absent DTR",
   },
   {
     code: "MUSC_5",
@@ -36,6 +20,38 @@ const musculoskeletal: CodeTextPair[] = [
   {
     code: "MUSC_8",
     text: "Normal Findings",
+  },
+  {
+    code: "MUSC_0",
+    text: "Dry Skin",
+  },
+  {
+    code: "MUSC_10",
+    text: "Callus",
+  },
+  {
+    code: "MUSC_11",
+    text: "Deformity",
+  },
+  {
+    code: "MUSC_9",
+    text: "Poor capillary filling",
+  },
+  {
+    code: "MUSC_2",
+    text: "Absent pulses",
+  },
+  {
+    code: "MUSC_12",
+    text: "Asymmetric pulses",
+  },
+  {
+    code: "MUSC_4",
+    text: "Decreased DTR",
+  },
+  {
+    code: "MUSC_13",
+    text: "Absent DTR",
   },
 ];
 

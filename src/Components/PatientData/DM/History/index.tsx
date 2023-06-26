@@ -31,6 +31,8 @@ function History({ id }: { id: string }) {
   };
 
   useEffect(() => {
+    if (!patientData.get) return;
+
     let newData = patientData.get?.dm;
     Object.keys(dataStates).forEach((stateName) => {
       const codes = getCodes(dataStates[stateName]);

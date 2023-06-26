@@ -7,7 +7,7 @@ import PatientData from "Components/PatientData";
 import { FormDataType } from "Components/PatientData/contexts";
 
 function AddPatient() {
-  const [formData, setFormData] = useState<FormDataType>({
+  const [formData, setFormData] = useState<FormDataType | undefined>({
     dm: {},
     personal: {},
     visit: {},
@@ -27,6 +27,8 @@ function AddPatient() {
         if (response.status >= 300 || response.status < 200) {
           throw new Error(await response.text());
         }
+        if (!formData) return false;
+
         return response.json().then((json) => {
           const newFormData = {
             ...formData,

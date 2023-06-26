@@ -12,7 +12,7 @@ const skin: CodeTextPair[] = [
   },
   {
     code: "SKIN_2",
-    text: "Hypersonic Injection Site",
+    text: "Hypertrophic Injection Site",
   },
   {
     code: "SKIN_3",

@@ -1,4 +1,4 @@
-import mongoose, {Schema} from "mongoose";
+import mongoose, { Schema } from "mongoose";
 
 const patientSchema = new Schema({
   regno: {
@@ -6,25 +6,25 @@ const patientSchema = new Schema({
     required: true,
     unique: true,
   },
-  firstname: {type: String, required: true},
-  fathername: {type: String, required: true},
+  firstname: { type: String, required: true },
+  fathername: { type: String, required: true },
   grandfathername: String,
   chno: {
     unique: true,
     required: true,
     type: Number,
   },
-  sex: {type: String, required: true},
-  yearofbirth: {type: Number, required: true},
+  sex: { type: String, required: true },
+  yearofbirth: { type: Number, required: true },
   dateofenrolment: {
     type: Number,
     default: () => {
       new Date().getTime();
     },
   },
-  zone: {type: String, required: true},
-  woreda: {type: String, required: true},
-  city: {type: String, required: true},
+  zone: { type: String, required: true },
+  woreda: { type: String, required: true },
+  city: { type: String, required: true },
   kebele: String,
   housenumber: String,
   phonenumber: Number,
@@ -33,4 +33,4 @@ const patientSchema = new Schema({
 
 const Patient = mongoose.model("Patient", patientSchema);
 
-export {Patient};
+export { Patient };

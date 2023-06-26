@@ -12,16 +12,21 @@ import { DataFormat } from "..";
 function VisitInformation({ id }: { id: string }) {
   const patientData = useContext(patientDataContext);
 
-  function setValue(key: string, value: string | number, isNumber?: boolean) {
+  function setValue(key: string, value: string | number, number?: boolean) {
     if (!key) return;
-    patientData.set({
-      ...patientData.get,
-      visit: {
-        ...patientData.get?.visit,
-        [key]: isNumber ? Number(value) : value,
-      },
+    patientData.set((prevData) => {
+      if (!prevData) return;
+
+      return {
+        ...prevData,
+        visit: {
+          ...prevData?.visit,
+          [key]: number ? Number(value) : value,
+        },
+      };
     });
   }
+
   function getValue(key: string) {
     if (!key) return;
     const dt = patientData.get?.visit;

@@ -20,13 +20,18 @@ function Personal() {
     if (!patientData.get) return "";
     return patientData.get.personal[id] ?? "";
   }
-  function setValue(id: string, value: string | number, number?: boolean) {
-    patientData.set({
-      ...patientData.get,
-      personal: {
-        ...patientData.get.personal,
-        [id]: number ? Number(value) : value,
-      },
+  function setValue(key: string, value: string | number, number?: boolean) {
+    if (!key) return;
+    patientData.set((prevData) => {
+      if (!prevData) return;
+
+      return {
+        ...prevData,
+        personal: {
+          ...prevData?.personal,
+          [key]: number ? Number(value) : value,
+        },
+      };
     });
   }
 

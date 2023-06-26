@@ -14,7 +14,7 @@ function PatientVisit({
 }: {
   visitsData: { get: VisitsDataType; set: (v: VisitsDataType) => void };
 }) {
-  const [formData, setFormData] = useState<FormDataType | undefined>();
+  const [formData, setFormData] = useState<FormDataType | undefined>(undefined);
 
   const { URL_visitid } = useParams();
   const navigate = useNavigate();

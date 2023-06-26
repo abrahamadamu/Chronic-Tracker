@@ -8,9 +8,13 @@ export type FormDataType = {
   visitid?: string;
 };
 
+export type FormDataStateType = FormDataType | undefined;
+
 const patientDataContext = createContext<{
-  get: FormDataType;
-  set: (v: FormDataType) => void;
+  get: FormDataStateType;
+  set: (
+    v: FormDataStateType | ((prevData: FormDataStateType) => FormDataStateType)
+  ) => void;
 }>({ get: { personal: {}, dm: {}, visit: {} }, set: () => {} });
 
 export { patientDataContext };

@@ -27,6 +27,7 @@ function MultiList({
         padding: "10px",
         display: "flex",
         flexDirection: "column",
+        height: "fit-content",
       }}
     >
       <Typography variant="h6">{title}</Typography>

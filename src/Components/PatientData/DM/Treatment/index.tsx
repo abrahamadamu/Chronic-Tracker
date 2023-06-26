@@ -1,5 +1,11 @@
 import { useState, useEffect, useContext } from "react";
-import { Select, MenuItem, FormControl, InputLabel } from "@mui/material";
+import {
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
+  TextField,
+} from "@mui/material";
 import { FormContainer } from "../styled";
 import EditableList from "../Components/CustomMultiList";
 import MedicationList from "../Components/Medication/MedicationList";
@@ -29,6 +35,8 @@ function History({ id }: { id: string }) {
   };
 
   useEffect(() => {
+    if (!patientData.get) return;
+
     let newData = patientData.get?.dm;
     Object.keys(dataStates).forEach((stateName) => {
       const codes = getCodes(dataStates[stateName]);
@@ -44,6 +52,27 @@ function History({ id }: { id: string }) {
     });
   }, Object.values(dataStates));
 
+  function setValue(key: string, value: string | number, number?: boolean) {
+    if (!key) return;
+    patientData.set((prevData) => {
+      if (!prevData) return;
+
+      return {
+        ...prevData,
+        dm: {
+          ...prevData?.dm,
+          [key]: number ? Number(value) : value,
+        },
+      };
+    });
+  }
+  function getValue(key: string) {
+    if (!key) return;
+    if (!patientData.get?.dm) return;
+
+    return patientData.get?.dm[key];
+  }
+
   return (
     <>
       <FormContainer>
@@ -56,6 +85,15 @@ function History({ id }: { id: string }) {
 
         <MedicationList />
 
+        <TextField
+          label="Medication Side Effects"
+          size="small"
+          value={getValue("medicationsideeffects")}
+          onChange={(e) => setValue("medicationsideeffects", e.target.value)}
+          multiline
+          minRows={3}
+        />
+
         <FormControl>
           <InputLabel size="small" id="adherence-label">
             Adherence
@@ -65,12 +103,7 @@ function History({ id }: { id: string }) {
             label="Adherence"
             labelId="adherence-label"
             value={patientData.get?.dm?.adherence}
-            onChange={(e) =>
-              patientData.set({
-                ...patientData.get,
-                dm: { ...patientData.get?.dm, adherence: e.target.value },
-              })
-            }
+            onChange={(e) => setValue("medicaladherence", e.target.value)}
           >
             {adherenceList?.map((adherence) => (
               <MenuItem key={adherence.code} value={adherence.code}>
