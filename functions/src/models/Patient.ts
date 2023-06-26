@@ -1,6 +1,6 @@
 import mongoose, { Schema } from "mongoose";
 
-//Temporary schema to only allow adding with only reg no and ch no
+// Temporary schema to only allow adding with only reg no and ch no
 const patientSchema = new Schema({
   regno: {
     type: Number,
