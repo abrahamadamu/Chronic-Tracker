@@ -1,5 +1,6 @@
 import { Patient } from "../../models/Patient";
 import * as visitData from "./visit";
+import * as createError from "http-errors";
 
 /**
  * Saves patient data to database
@@ -11,7 +12,8 @@ async function save(
 ): Promise<{ patientid?: string; visitid?: string }> {
   const personal = preparePersonal(data);
 
-  if (!data.personal.regno) throw new Error("Registration Number required");
+  if (!data.personal.regno)
+    throw createError(400, "Registration Number required");
 
   const response: { patientid?: string; visitid?: string } = {};
 
@@ -20,7 +22,7 @@ async function save(
     response.patientid = newPatient._id + "";
   } else {
     const item = await Patient.findOne({ _id: data.patientid });
-    if (!item) throw new Error("User doesn't exist");
+    if (!item) throw createError(400, "User doesn't exist");
 
     await Patient.updateOne({ _id: data.patientid }, personal);
     response.patientid = data.patientid;

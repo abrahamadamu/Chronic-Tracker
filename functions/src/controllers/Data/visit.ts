@@ -1,5 +1,6 @@
 import { Visit } from "../../models/Visit";
 import * as patientData from "./patient";
+import * as createError from "http-errors";
 
 /**
  * Saves visit data
@@ -32,7 +33,8 @@ async function save(data: Record<string, any>): Promise<{ id: string }> {
 async function find(
   data: Record<string, any>
 ): Promise<{ patient: Record<string, any>; visits: Record<string, any>[] }> {
-  if (!data.regno && !data._id) throw new Error("regno or id is required");
+  if (!data.regno && !data._id)
+    throw createError(400, "regno or id is required");
 
   let patient;
 
@@ -56,7 +58,7 @@ async function find(
     visits: await visits,
   };
 
-  if (!result.patient) throw new Error("Visit not found");
+  if (!result.patient) throw createError(400, "Visit not found");
 
   return result;
 }

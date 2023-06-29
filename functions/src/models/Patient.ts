@@ -7,15 +7,15 @@ const patientSchema = new Schema({
     required: true,
     unique: true,
   },
-  firstname: { type: String },
-  fathername: { type: String },
-  grandfathername: String,
+  firstname: { type: String, trim: true, lowercase: true },
+  fathername: { type: String, trim: true, lowercase: true },
+  grandfathername: { type: String, trim: true, lowercase: true },
   chno: {
     unique: true,
     required: true,
     type: Number,
   },
-  sex: { type: String },
+  sex: { type: String, trim: true, enum: ["m", "f"] },
   yearofbirth: { type: Number },
   dateofenrolment: {
     type: Number,
@@ -23,13 +23,13 @@ const patientSchema = new Schema({
       new Date().getTime();
     },
   },
-  zone: { type: String },
-  woreda: { type: String },
-  city: { type: String },
-  kebele: String,
-  housenumber: String,
+  zone: { type: String, trim: true, lowercase: true },
+  woreda: { type: String, trim: true, lowercase: true },
+  city: { type: String, trim: true, lowercase: true },
+  kebele: { type: String, trim: true, lowercase: true },
+  housenumber: { type: String, trim: true },
   phonenumber: Number,
-  initialdiganosis: String,
+  initialdiganosis: { type: String, trim: true },
 });
 // const patientSchema = new Schema({
 //   regno: {
@@ -37,15 +37,15 @@ const patientSchema = new Schema({
 //     required: true,
 //     unique: true,
 //   },
-//   firstname: { type: String, required: true },
-//   fathername: { type: String, required: true },
-//   grandfathername: String,
+//   firstname: { type: String, trim:true, lowercase:true, required: true },
+//   fathername: { type: String, trim:true, lowercase:true, required: true },
+//   grandfathername: {type: String, trim:true, lowercase:true},
 //   chno: {
 //     unique: true,
 //     required: true,
 //     type: Number,
 //   },
-//   sex: { type: String, required: true },
+//   sex: { type: String, trim:true, enum:["m", "f"] },
 //   yearofbirth: { type: Number, required: true },
 //   dateofenrolment: {
 //     type: Number,
@@ -53,13 +53,13 @@ const patientSchema = new Schema({
 //       new Date().getTime();
 //     },
 //   },
-//   zone: { type: String, required: true },
-//   woreda: { type: String, required: true },
-//   city: { type: String, required: true },
-//   kebele: String,
-//   housenumber: String,
+//   zone: { type: String, trim:true, lowercase:true, required: true },
+//   woreda: { type: String, trim:true, lowercase:true, required: true },
+//   city: { type: String, trim:true, lowercase:true, required: true },
+//   kebele: {type: String, trim:true, lowercase:true},
+//   housenumber: {type:String, trim:true},
 //   phonenumber: Number,
-//   initialdiganosis: String,
+//   initialdiganosis: {type: String, trim:true},
 // });
 
 const Patient = mongoose.model("Patient", patientSchema);
