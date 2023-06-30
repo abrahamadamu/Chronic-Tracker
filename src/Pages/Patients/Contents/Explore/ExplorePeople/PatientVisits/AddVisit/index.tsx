@@ -5,7 +5,7 @@ import { FormDataType } from "Components/PatientData/contexts";
 import { Box, Button } from "@mui/material";
 import { ChevronLeft } from "@mui/icons-material";
 
-import { backend } from "Config/data";
+import Api from "Services/api";
 
 function AddVisit() {
   const [formData, setFormData] = useState<FormDataType | undefined>({
@@ -20,49 +20,40 @@ function AddVisit() {
 
   useEffect(() => {
     if (!URL_regno) return;
-    fetch(backend + "/patients/find", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ regno: URL_regno }),
-    }).then((response) =>
-      response.json().then((json) => {
-        if (json.length > 0) {
+    Api.post("/patients/find", { regno: URL_regno }).then((response) => {
+      const data = response.data;
+      {
+        if (data.length > 0) {
           setFormData({
-            personal: json[0],
+            personal: data[0],
             dm: {},
             visit: {},
-            patientid: json[0]._id,
+            patientid: data[0]._id,
           });
         }
-      })
-    );
+      }
+    });
   }, [URL_regno]);
 
   function saveAction(): Promise<any> {
     // return new Promise((r) => r(3));
-    return fetch(backend + "/patients/save", {
-      method: "POST",
-      body: JSON.stringify(formData),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then(async (response) => {
+    return Api.post("/patients/save", formData)
+      .then((response) => {
         if (response.status >= 300 || response.status < 200) {
-          throw new Error(await response.text());
+          throw new Error(response.data);
         }
         if (!formData) return undefined;
 
-        return response.json().then((json) => {
-          const newFormData = {
-            ...formData,
-            patientid: json.patientid,
-          };
-          setFormData(newFormData);
-          console.log({ newFormData });
+        const data = response.data;
 
-          return true;
-        });
+        const newFormData = {
+          ...formData,
+          patientid: data.patientid,
+        };
+        setFormData(newFormData);
+        console.log({ newFormData });
+
+        return true;
       })
       .catch((e) => {
         alert(e);

@@ -16,7 +16,7 @@ import {
 import { Search, AccountCircle } from "@mui/icons-material";
 import lodash from "lodash";
 
-import { backend } from "Config/data";
+import Api from "Services/api";
 
 import { PeopleRow } from "..";
 import { toTitleCase } from "Common/utilities";
@@ -40,16 +40,10 @@ function SearchPeople() {
     function search() {
       setSearching(true);
       debouncerWaiting.current = false;
-      fetch(backend + "/patients/find", {
-        method: "POST",
-        body: JSON.stringify(searchInputs),
-        headers: { "Content-Type": "application/json" },
-      })
+
+      Api.post("/patients/find", searchInputs)
         .then((response) => {
-          response.json().then((json) => {
-            // console.log({ json });
-            setPeople(json);
-          });
+          setPeople(response.data);
         })
         .finally(() => setSearching(false));
     }

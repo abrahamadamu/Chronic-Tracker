@@ -19,6 +19,8 @@ routes.post("/save", async (req, res, next) => {
 });
 
 routes.post("/find", async (req, res, next) => {
+  console.log({ authHeader: req.headers.authorization });
+
   try {
     const result = await Patients.find(req.body);
     res.status(200).send(result ?? []);

@@ -1,5 +1,8 @@
 import { Grid, Typography, Button, TextField, Paper } from "@mui/material";
 import { AccountCircle } from "@mui/icons-material";
+import Auth from "Services/auth";
+
+console.log(Auth.login);
 
 function Login() {
   return (
