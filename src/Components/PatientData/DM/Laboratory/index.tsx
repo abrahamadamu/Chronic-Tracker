@@ -167,7 +167,27 @@ function Laboratory({ id }: { id: string }) {
         <TextField
           label="Estimated GFR"
           placeholder="Estimated GFR"
-          value="CALCULATED"
+          value={(() => {
+            if (!patientData.get) {
+              return "error";
+            }
+
+            const age = Number(patientData.get.personal.age);
+            const weight = patientData.get.dm.weight;
+            const sex = patientData.get.personal.sex;
+            const cr = getValue("cr");
+
+            if (!age) return "Enter age First";
+            if (!weight) return "Enter weight First";
+            if (!sex) return "Enter Sex First";
+            if (!cr) return "Enter Cr First";
+
+            let result: number | string =
+              (((140 - age) * weight) / (cr * 72)) * (sex === "f" ? 0.85 : 1);
+            result = result.toFixed(4);
+
+            return result;
+          })()}
           disabled
         />
       </FormContainer>

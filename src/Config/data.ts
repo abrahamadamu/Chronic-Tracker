@@ -1,4 +1,4 @@
-let useLocal;
+let useLocal = false;
 
 const local = "http://localhost:5001/chronic-tracker/us-central1/backend";
 const prod = "https://us-central1-chronic-tracker.cloudfunctions.net/backend";
