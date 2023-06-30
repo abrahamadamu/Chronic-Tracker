@@ -188,7 +188,6 @@ function Laboratory({ id }: { id: string }) {
 
             return result;
           })()}
-          disabled
         />
       </FormContainer>
     </>
