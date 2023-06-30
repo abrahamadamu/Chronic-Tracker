@@ -30,7 +30,7 @@ app.use("/auth", auth);
 
 app.use(Authenticate);
 
-//Protected paths
+// Protected paths
 app.use("/patients", patients);
 app.use("/visits", visits);
 

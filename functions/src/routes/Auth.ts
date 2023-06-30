@@ -31,8 +31,9 @@ router.post("/signup", async (req, res, next) => {
 
 export const Authenticate: Handler = (req, res, next) => {
   let accessToken = req.headers.authorization;
-  if (!accessToken || accessToken.toLowerCase().indexOf("bearer ") < 0)
+  if (!accessToken || accessToken.toLowerCase().indexOf("bearer ") < 0) {
     return next(createError(401, "Unauthorized"));
+  }
   accessToken = accessToken?.split(" ")[1];
 
   if (Auth.verifyToken(accessToken)) {

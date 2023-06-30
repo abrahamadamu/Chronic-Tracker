@@ -31,5 +31,6 @@ module.exports = {
     "quote-props": "off",
     "linebreak-style": "off",
     "space-before-function-paren": "off",
+    "no-throw-literal": "off",
   },
 };

@@ -33,8 +33,9 @@ async function save(data: Record<string, any>): Promise<{ id: string }> {
 async function find(
   data: Record<string, any>
 ): Promise<{ patient: Record<string, any>; visits: Record<string, any>[] }> {
-  if (!data.regno && !data._id)
+  if (!data.regno && !data._id) {
     throw createError(400, "regno or id is required");
+  }
 
   let patient;
 

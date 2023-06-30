@@ -1,11 +1,21 @@
 import { User } from "../../models/User";
 
+/**
+ * gets user data by username
+ * @param {string} username
+ * @return {Record<string,string>} user data
+ */
 function getUser(username: string) {
   return User.findOne({
     username: ("" + username).toLowerCase().trim(),
   });
 }
 
+/**
+ * saves user to database
+ * @param {Record<string,string>} userData
+ * @return {boolean} success of the operation
+ */
 async function save(userData: {
   username: string;
   password: string;

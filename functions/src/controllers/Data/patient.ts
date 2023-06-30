@@ -12,8 +12,9 @@ async function save(
 ): Promise<{ patientid?: string; visitid?: string }> {
   const personal = preparePersonal(data);
 
-  if (!data.personal.regno)
+  if (!data.personal.regno) {
     throw createError(400, "Registration Number required");
+  }
 
   const response: { patientid?: string; visitid?: string } = {};
 
