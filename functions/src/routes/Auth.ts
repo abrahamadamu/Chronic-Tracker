@@ -11,6 +11,14 @@ router.post("/login", async (req, res, next) => {
   }
 });
 
+router.post("/verify", async (req, res, next) => {
+  try {
+    res.send({ valid: Auth.verifyToken(req.body.accessToken) });
+  } catch (e) {
+    next(e);
+  }
+});
+
 router.post("/signup", async (req, res, next) => {
   try {
     res.send({ accessToken: await Auth.signup(req.body) });

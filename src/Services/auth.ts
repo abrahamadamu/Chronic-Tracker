@@ -14,6 +14,17 @@ async function login(creds: {
   });
 }
 
+async function checkAuth(): Promise<boolean> {
+  const accessToken = readAccessToken();
+  if (!accessToken) return false;
+
+  return Axios.post(backend + "/auth/verify", { accessToken }).then(
+    (response) => {
+      return !!response.data.verify;
+    }
+  );
+}
+
 function readAccessToken() {
   return localStorage.getItem("akt") ?? false;
 }
@@ -22,7 +33,4 @@ function writeAccessToken(accessToken: string) {
   localStorage.setItem("akt", accessToken);
 }
 
-(window as any).login = login;
-(window as any).readAccessToken = readAccessToken;
-
-export default { readAccessToken, writeAccessToken, login };
+export default { readAccessToken, writeAccessToken, login, checkAuth };

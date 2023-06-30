@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { backend } from "Config/data";
 
 import { Grid, Typography } from "@mui/material";
+
+import Api from "Services/api";
 
 import PatientData from "Components/PatientData";
 import { FormDataType } from "Components/PatientData/contexts";
@@ -16,30 +17,24 @@ function AddPatient() {
   function saveAction(): Promise<any> {
     console.log({ formData });
     // return new Promise((r) => r(3));
-    return fetch(backend + "/patients/save", {
-      method: "POST",
-      body: JSON.stringify(formData),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then(async (response) => {
+    return Api.post("/patients/save", formData)
+      .then((response) => {
         if (response.status >= 300 || response.status < 200) {
-          throw new Error(await response.text());
+          throw new Error(response.data());
         }
         if (!formData) return false;
 
-        return response.json().then((json) => {
-          const newFormData = {
-            ...formData,
-            patientid: json.patientid,
-            visitid: json.visitid,
-          };
-          setFormData(newFormData);
-          console.log({ newFormData });
+        const data = response.data;
 
-          return true;
-        });
+        const newFormData = {
+          ...formData,
+          patientid: data.patientid,
+          visitid: data.visitid,
+        };
+        setFormData(newFormData);
+        console.log({ newFormData });
+
+        return true;
       })
       .catch((e) => {
         alert(e);

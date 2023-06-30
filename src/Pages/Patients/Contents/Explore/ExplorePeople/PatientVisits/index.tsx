@@ -21,7 +21,7 @@ import {
   Add,
 } from "@mui/icons-material";
 
-import { backend } from "Config/data";
+import Api from "Services/api";
 import { getFullName } from "Common/utilities";
 
 import PatientVisit from "./PatientVisit";
@@ -45,16 +45,10 @@ function PatientVisits() {
   useEffect(() => {
     if (!URL_regno) return;
     setLoading(true);
-    fetch(backend + "/visits/find", {
-      method: "POST",
-      body: JSON.stringify({ regno: URL_regno }),
-      headers: { "Content-Type": "application/json" },
-    })
-      .then((response) =>
-        response.json().then((json) => {
-          setVisitsData(json);
-        })
-      )
+    Api.post("/visits/find", { regno: URL_regno })
+      .then((response) => {
+        setVisitsData(response.data);
+      })
       .finally(() => setLoading(false));
   }, [URL_regno]);
 

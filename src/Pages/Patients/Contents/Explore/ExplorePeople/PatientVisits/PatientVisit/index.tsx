@@ -5,7 +5,7 @@ import { FormDataType } from "Components/PatientData/contexts";
 import { Box, Button } from "@mui/material";
 import { ChevronLeft } from "@mui/icons-material";
 
-import { backend } from "Config/data";
+import Api from "Services/api";
 
 import { VisitsDataType } from "..";
 
@@ -58,57 +58,53 @@ function PatientVisit({
 
   function saveAction(): Promise<any> {
     // return new Promise((r) => r(3));
-    return fetch(backend + "/patients/save", {
-      method: "POST",
-      body: JSON.stringify(formData),
-      headers: {
-        "Content-Type": "application/json",
-      },
+    return Api.post("/patients/save", {
+      formData,
     })
-      .then(async (response) => {
+      .then((response) => {
         if (response.status >= 300 || response.status < 200) {
-          throw new Error(await response.text());
+          throw new Error(response.data());
         }
-        return response.json().then((json) => {
-          if (formData) {
-            const newVisits = [...visitsData.get.visits];
-            const currentVisitIndex = newVisits.findIndex(
-              (visit) => visit._id === formData.visit._id
-            );
-            console.log({
-              currentVisitIndex,
-              compare: { newVisits, forDataVisit: formData.visit },
-            });
-            if (currentVisitIndex >= 0) {
-              newVisits[currentVisitIndex] = {
-                ...formData.visit,
-                data: { dm: formData.dm },
-              };
-            }
+        const data = response.data;
 
-            visitsData.set({
-              patient: formData.personal ?? visitsData.get.patient,
-              visits: newVisits,
-            });
-
-            console.log("Visit Datas Comparison", {
-              old: visitsData.get,
-              new: {
-                patient: formData.personal ?? visitsData.get.patient,
-                visits: newVisits,
-              },
-            });
-
-            // const newFormData = {
-            //   ...formData,
-            //   patientid: json.patientid,
-            //   visitid: json.visitid,
-            // };
-            // setFormData(newFormData);
+        if (formData) {
+          const newVisits = [...visitsData.get.visits];
+          const currentVisitIndex = newVisits.findIndex(
+            (visit) => visit._id === formData.visit._id
+          );
+          console.log({
+            currentVisitIndex,
+            compare: { newVisits, forDataVisit: formData.visit },
+          });
+          if (currentVisitIndex >= 0) {
+            newVisits[currentVisitIndex] = {
+              ...formData.visit,
+              data: { dm: formData.dm },
+            };
           }
 
-          return true;
-        });
+          visitsData.set({
+            patient: formData.personal ?? visitsData.get.patient,
+            visits: newVisits,
+          });
+
+          console.log("Visit Datas Comparison", {
+            old: visitsData.get,
+            new: {
+              patient: formData.personal ?? visitsData.get.patient,
+              visits: newVisits,
+            },
+          });
+
+          // const newFormData = {
+          //   ...formData,
+          //   patientid: json.patientid,
+          //   visitid: json.visitid,
+          // };
+          // setFormData(newFormData);
+        }
+
+        return true;
       })
       .catch((e) => {
         alert(e);

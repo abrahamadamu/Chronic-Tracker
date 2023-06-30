@@ -25,7 +25,11 @@ async function getToken(userData: { username: string; password: string }) {
 function verifyToken(token: string) {
   if (!secret) throw createError(500, "Unable to get secret");
 
-  return jwt.verify(token, secret);
+  try {
+    return !!jwt.verify(token, secret);
+  } catch (e) {
+    return false;
+  }
 }
 
 async function signup(userData: {

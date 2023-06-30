@@ -104,8 +104,8 @@ function SearchPeople() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {people.map((person) => (
-                <Item data={person} />
+              {people.map((person, i) => (
+                <Item key={(person as any)._id ?? i} data={person} />
               ))}
             </TableBody>
           </Table>
