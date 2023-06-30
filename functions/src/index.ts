@@ -7,7 +7,7 @@ import { corsOptions } from "./Config/cors";
 
 import patients from "./routes/Patients";
 import visits from "./routes/Visits";
-import auth from "./routes/Auth";
+import auth, { Authenticate } from "./routes/Auth";
 
 const app = express();
 app.use(express.json());
@@ -22,13 +22,17 @@ app.use(async (req, res, next) => {
   next();
 });
 
-app.use("/patients", patients);
-app.use("/visits", visits);
-app.use("/auth", auth);
-
 app.get("/", (req, res, next) => {
   res.send("<h1>Working</h1>");
 });
+
+app.use("/auth", auth);
+
+app.use(Authenticate);
+
+//Protected paths
+app.use("/patients", patients);
+app.use("/visits", visits);
 
 app.use((err: any, req: any, res: any, next: any) => {
   res.status(err.status || 502).send(err.message || "Something went wrong");

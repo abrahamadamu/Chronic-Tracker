@@ -14,4 +14,15 @@ newAxios.interceptors.request.use((config) => {
   return config;
 });
 
+newAxios.interceptors.response.use(
+  (config) => config,
+  (error) => {
+    if (error.response.status === 401) {
+      window.location.replace("/login");
+    }
+
+    return Promise.reject(error);
+  }
+);
+
 export default newAxios;

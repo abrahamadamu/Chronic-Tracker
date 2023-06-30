@@ -29,7 +29,10 @@ function readAccessToken() {
   return localStorage.getItem("akt") ?? false;
 }
 
-function writeAccessToken(accessToken: string) {
+function writeAccessToken(accessToken?: string) {
+  if (!accessToken) {
+    return localStorage.removeItem("akt");
+  }
   localStorage.setItem("akt", accessToken);
 }
 

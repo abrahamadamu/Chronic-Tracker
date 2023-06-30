@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { Grid, Typography, Button, TextField, Paper } from "@mui/material";
 import { AccountCircle } from "@mui/icons-material";
@@ -11,6 +11,10 @@ function Login() {
 
   const [error, setError] = useState("");
   const [loggingIn, setLoggingIn] = useState(false);
+
+  useEffect(() => {
+    Auth.writeAccessToken();
+  }, []);
 
   function login() {
     setError("");

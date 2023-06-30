@@ -1,5 +1,7 @@
+import { Handler } from "express";
 import { Router } from "express";
 import * as Auth from "../controllers/auth";
+import * as createError from "http-errors";
 
 const router = Router();
 
@@ -26,5 +28,18 @@ router.post("/signup", async (req, res, next) => {
     next(e);
   }
 });
+
+export const Authenticate: Handler = (req, res, next) => {
+  let accessToken = req.headers.authorization;
+  if (!accessToken || accessToken.toLowerCase().indexOf("bearer ") < 0)
+    return next(createError(401, "Unauthorized"));
+  accessToken = accessToken?.split(" ")[1];
+
+  if (Auth.verifyToken(accessToken)) {
+    next();
+  } else {
+    next(createError(401, "Unauthorized"));
+  }
+};
 
 export default router;
