@@ -56,7 +56,8 @@ function AddVisit() {
         return true;
       })
       .catch((e) => {
-        alert(e);
+        const error = e.response.data ?? e.message;
+        alert(error);
       });
   }
 

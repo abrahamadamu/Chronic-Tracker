@@ -43,8 +43,7 @@ function Personal() {
           label="Medical reg. number"
           size="small"
           value={getValue("regno")}
-          onChange={(e) => setValue("regno", e.target.value, true)}
-          type="number"
+          onChange={(e) => setValue("regno", e.target.value)}
         />
         <TextField
           variant="standard"
@@ -56,21 +55,21 @@ function Personal() {
         />
         <TextField
           variant="standard"
-          label="First name"
+          label="Given name"
           size="small"
           value={getValue("givenname")}
           onChange={(e) => setValue("givenname", e.target.value)}
         />
         <TextField
           variant="standard"
-          label="Father's name"
+          label="Middle name (father)"
           size="small"
           value={getValue("middlename")}
           onChange={(e) => setValue("middlename", e.target.value)}
         />
         <TextField
           variant="standard"
-          label="G.Father's name"
+          label="Familly name"
           size="small"
           value={getValue("familyname")}
           onChange={(e) => setValue("familyname", e.target.value)}

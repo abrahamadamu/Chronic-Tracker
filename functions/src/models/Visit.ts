@@ -1,8 +1,8 @@
-import mongoose, {Schema} from "mongoose";
+import mongoose, { Schema } from "mongoose";
 
 const VisitsSchema = new Schema({
   regno: {
-    type: Number,
+    type: String,
     required: true,
   },
   data: {
@@ -18,4 +18,4 @@ const VisitsSchema = new Schema({
 
 const Visit = mongoose.model("Visit", VisitsSchema);
 
-export {Visit};
+export { Visit };

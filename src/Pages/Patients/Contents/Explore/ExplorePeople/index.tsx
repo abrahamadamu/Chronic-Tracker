@@ -6,7 +6,7 @@ export type PeopleRow = {
   givenname: string;
   middlename: string;
   familyname: string;
-  regno: number;
+  regno: string;
   chno: number;
   age: number;
 };

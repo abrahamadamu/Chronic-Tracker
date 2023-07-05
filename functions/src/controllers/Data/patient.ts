@@ -23,7 +23,7 @@ async function save(
     response.patientid = newPatient._id + "";
   } else {
     const item = await Patient.findOne({ _id: data.patientid });
-    if (!item) throw createError(400, "User doesn't exist");
+    if (!item) throw createError(400, "Patient doesn't exist");
 
     await Patient.updateOne({ _id: data.patientid }, personal);
     response.patientid = data.patientid;
@@ -45,9 +45,12 @@ async function save(
     const personal = { ...data }.personal;
     // handle name vs fullname
 
-    const yearofbirth = new Date().getUTCFullYear() - (personal.age ?? 0);
+    let yearofbirth;
+    if (personal.age) {
+      yearofbirth = new Date().getUTCFullYear() - personal.age;
+      personal.yearofbirth = yearofbirth;
+    }
     delete personal.age;
-    personal.yearofbirth = yearofbirth;
 
     return personal;
   }

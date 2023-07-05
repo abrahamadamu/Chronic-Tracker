@@ -20,6 +20,7 @@ function AddPatient() {
     return Api.post("/patients/save", formData)
       .then((response) => {
         if (response.status >= 300 || response.status < 200) {
+          alert("here");
           throw new Error(response.data());
         }
         if (!formData) return false;
@@ -37,7 +38,8 @@ function AddPatient() {
         return true;
       })
       .catch((e) => {
-        alert(e);
+        const error = e.response.data ?? e.message;
+        alert(error);
       });
   }
 

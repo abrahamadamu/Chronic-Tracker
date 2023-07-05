@@ -63,7 +63,7 @@ function SearchPeople() {
             { name: "givenname", text: "Given Name", number: false },
             { name: "middlename", text: "Middle Name (Father)", number: false },
             { name: "familyname", text: "Family Name", number: false },
-            { name: "regno", text: "Reg No", number: true },
+            { name: "regno", text: "Reg No", number: false },
             { name: "chno", text: "Ch No", number: true },
           ].map((input) => (
             <SearchInputs

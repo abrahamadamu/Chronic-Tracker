@@ -16,10 +16,10 @@ app.use(cors(corsOptions));
 app.use(async (req, res, next) => {
   try {
     await connect();
+    next();
   } catch (e) {
-    res.status(500).send("db connection error");
+    res.status(500).send("database connection error");
   }
-  next();
 });
 
 app.get("/", (req, res, next) => {

@@ -96,6 +96,8 @@ function Content({ saveAction }: { saveAction: () => Promise<any> }) {
     patientData.get?.visit ?? { visitdate: new Date().getTime() }
   );
 
+  const [saving, setSaving] = useState(false);
+
   useEffect(() => {
     if (currentTab && currentTab.id !== URL_chronicinfotype) {
       navigate("../" + currentTab.id);
@@ -130,12 +132,15 @@ function Content({ saveAction }: { saveAction: () => Promise<any> }) {
 
   function saveData() {
     console.log(JSON.stringify(patientData.get));
-    saveAction().then((response) => {
-      if (response) {
-        setChanged(false);
-        prevFormData.current = patientData.get;
-      }
-    });
+    setSaving(true);
+    saveAction()
+      .then((response) => {
+        if (response) {
+          setChanged(false);
+          prevFormData.current = patientData.get;
+        }
+      })
+      .finally(() => setSaving(false));
   }
 
   return (
@@ -153,12 +158,13 @@ function Content({ saveAction }: { saveAction: () => Promise<any> }) {
         </Tabs>
         {changed && (
           <Button
-            startIcon={<Save />}
+            startIcon={saving ? <CircularProgress /> : <Save />}
             variant="contained"
             onClick={() => {
               // prevFormData.current = formData.get;
               saveData();
             }}
+            disabled={saving}
           >
             Save Changes
           </Button>
@@ -185,11 +191,12 @@ function Content({ saveAction }: { saveAction: () => Promise<any> }) {
       >
         {changed && (
           <Button
-            startIcon={<Save />}
+            startIcon={saving ? <CircularProgress /> : <Save />}
             onClick={() => {
               saveData();
             }}
             variant="contained"
+            disabled={saving}
           >
             Save Changes
           </Button>
