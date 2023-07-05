@@ -19,8 +19,8 @@ function getUser(username: string) {
 async function save(userData: {
   username: string;
   password: string;
-  firstname: string;
-  fathername: string;
+  givenname: string;
+  middlename: string;
 }) {
   const existing = await getUser(userData.username);
   if (existing) {

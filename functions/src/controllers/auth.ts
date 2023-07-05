@@ -55,8 +55,8 @@ function verifyToken(token: string) {
 async function signup(userData: {
   username: string;
   password: string;
-  firstname: string;
-  fathername: string;
+  givenname: string;
+  middlename: string;
 }) {
   if (!userData) {
     throw createError(400, "User data not given for signup");

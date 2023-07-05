@@ -60,9 +60,9 @@ function SearchPeople() {
         <Grid container direction="row" gap={2}>
           <Search sx={{ fontSize: "30px" }} />
           {[
-            { name: "firstname", text: "First Name", number: false },
-            { name: "fathername", text: "Father's Name", number: false },
-            { name: "grandfathername", text: "G.Father's Name", number: false },
+            { name: "givenname", text: "Given Name", number: false },
+            { name: "middlename", text: "Middle Name (Father)", number: false },
+            { name: "familyname", text: "Family Name", number: false },
             { name: "regno", text: "Reg No", number: true },
             { name: "chno", text: "Ch No", number: true },
           ].map((input) => (
@@ -172,11 +172,11 @@ function Item({ data }: { data: PeopleRow }) {
       </TableCell>
       <TableCell onClick={clk}>
         {toTitleCase(
-          (data.firstname ?? "") +
+          (data.givenname ?? "") +
             " " +
-            (data.fathername ?? "") +
+            (data.middlename ?? "") +
             " " +
-            (data.grandfathername ?? "")
+            (data.familyname ?? "")
         )}
       </TableCell>
       <TableCell onClick={clk}>{data.regno}</TableCell>

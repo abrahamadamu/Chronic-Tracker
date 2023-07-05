@@ -12,13 +12,13 @@ const UserSchema = new Schema({
     type: String,
     required: true,
   },
-  firstname: {
+  givenname: {
     type: String,
     required: true,
     trim: true,
     lowercase: true,
   },
-  fathername: {
+  middlename: {
     type: String,
     required: true,
     trim: true,

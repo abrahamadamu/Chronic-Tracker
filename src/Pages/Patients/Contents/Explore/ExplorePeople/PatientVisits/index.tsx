@@ -109,9 +109,9 @@ function PatientVisits() {
                       <Typography fontWeight="bold" fontSize="14pt">
                         {loading && "Abebe Molla Zergaw"}
                         {getFullName(
-                          visitsData.patient.firstname,
-                          visitsData.patient.fathername,
-                          visitsData.patient.grandfathername
+                          visitsData.patient.givenname,
+                          visitsData.patient.middlename,
+                          visitsData.patient.familyname
                         )}
                       </Typography>
                       <br />

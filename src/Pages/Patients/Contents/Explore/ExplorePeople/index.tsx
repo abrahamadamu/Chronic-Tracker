@@ -3,9 +3,9 @@ import SearchPeople from "./SearchPeople";
 import PatientVisits from "./PatientVisits";
 
 export type PeopleRow = {
-  firstname: string;
-  fathername: string;
-  grandfathername: string;
+  givenname: string;
+  middlename: string;
+  familyname: string;
   regno: number;
   chno: number;
   age: number;

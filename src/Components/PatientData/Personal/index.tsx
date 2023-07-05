@@ -58,22 +58,22 @@ function Personal() {
           variant="standard"
           label="First name"
           size="small"
-          value={getValue("firstname")}
-          onChange={(e) => setValue("firstname", e.target.value)}
+          value={getValue("givenname")}
+          onChange={(e) => setValue("givenname", e.target.value)}
         />
         <TextField
           variant="standard"
           label="Father's name"
           size="small"
-          value={getValue("fathername")}
-          onChange={(e) => setValue("fathername", e.target.value)}
+          value={getValue("middlename")}
+          onChange={(e) => setValue("middlename", e.target.value)}
         />
         <TextField
           variant="standard"
           label="G.Father's name"
           size="small"
-          value={getValue("grandfathername")}
-          onChange={(e) => setValue("grandfathername", e.target.value)}
+          value={getValue("familyname")}
+          onChange={(e) => setValue("familyname", e.target.value)}
         />
         <TextField
           variant="standard"

@@ -14,24 +14,18 @@ export const toTitleCase = (str: string) =>
   str ? str.replace(/(^|\s)\S/g, (l) => l.toUpperCase()) : str;
 
 /** Prepare Full name from separate names
- * @param {string} firstname
- * @param {string} fathername
- * @param {string} grandfathername
+ * @param {string} givenname
+ * @param {string} middlename
+ * @param {string} familyname
  * @return {string}
  */
 export function getFullName(
-  firstname?: string,
-  fathername?: string,
-  grandfathername?: string
+  givenname?: string,
+  middlename?: string,
+  familyname?: string
 ) {
   return toTitleCase(
-    (
-      (firstname ?? "") +
-      " " +
-      (fathername ?? "") +
-      " " +
-      (grandfathername ?? "")
-    )
+    ((givenname ?? "") + " " + (middlename ?? "") + " " + (familyname ?? ""))
       .trim()
       .replace(/  /g, " ")
   );
