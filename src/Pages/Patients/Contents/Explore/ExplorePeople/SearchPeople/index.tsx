@@ -201,7 +201,10 @@ function Item({ data }: { data: PeopleRow }) {
   );
 
   function clk() {
-    navigate(data.regno + "");
+    const encodedRegno = encodeURIComponent(data.regno + "")
+      .replace(/[!'()*]/g, escape)
+      .replace(/\*/g, "%2A");
+    navigate(encodedRegno);
   }
 }
 
