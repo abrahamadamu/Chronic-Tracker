@@ -43,8 +43,11 @@ function SearchPeople() {
       debouncerWaiting.current = false;
 
       const searchData = { ...searchInputs };
-      searchData.regno = (searchData.regno + "").replace(/^0*/, "");
+      if (searchData.regno) {
+        searchData.regno = (searchData.regno + "").replace(/^0*/, "");
+      }
 
+      setPeople([]);
       Api.post("/patients/find", searchData)
         .then((response) => {
           setPeople(response.data);
