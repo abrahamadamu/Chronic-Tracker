@@ -61,7 +61,7 @@ function Pages() {
         </Typography>
         <Grid container direction="row" sx={{ width: "fit-content" }}>
           <Typography variant="h5" color="gray" textAlign="center">
-            Try reloading
+            Try again
           </Typography>
           <IconButton onClick={() => window.location.replace("/login")}>
             <Replay />
