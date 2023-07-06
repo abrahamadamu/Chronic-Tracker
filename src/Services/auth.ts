@@ -20,7 +20,7 @@ async function checkAuth(): Promise<boolean> {
 
   return Axios.post(backend + "/auth/verify", { accessToken }).then(
     (response) => {
-      return !!response.data.verify;
+      return !!response.data.valid;
     }
   );
 }

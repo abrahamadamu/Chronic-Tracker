@@ -85,8 +85,11 @@ async function find(
         delete params[key];
         continue;
       }
-      if (key.includes("name")) {
-        params[key] = new RegExp(params[key], "i");
+      if (key.includes("name") || key === "regno") {
+        params[key] = new RegExp(
+          (key === "regno" ? "^" : "") + params[key],
+          "i"
+        );
       }
     }
     const items = await Patient.find(params).limit(20);
