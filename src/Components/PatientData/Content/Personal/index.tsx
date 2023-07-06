@@ -6,12 +6,12 @@ import {
   Select,
   TextField,
 } from "@mui/material";
-import InputGroup from "../Components/InputGroup";
+import InputGroup from "../../Components/InputGroup";
 import { FormContainer } from "./styled";
 import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
-import { patientDataContext } from "../contexts";
+import { patientDataContext } from "../../contexts";
 
 function Personal() {
   const patientData = useContext(patientDataContext);
