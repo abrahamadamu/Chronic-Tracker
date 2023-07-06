@@ -50,7 +50,7 @@ function Personal() {
           label="Chronic reg. number"
           size="small"
           value={getValue("chno")}
-          onChange={(e) => setValue("chno", e.target.value, true)}
+          onChange={(e) => setValue("chno", e.target.value)}
           type="number"
         />
         <TextField

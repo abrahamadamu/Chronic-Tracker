@@ -85,9 +85,11 @@ async function find(
         delete params[key];
         continue;
       }
-      if (key.includes("name") || key === "regno") {
+
+      const strings = ["regno", "chno"];
+      if (key.includes("name") || strings.includes(key)) {
         params[key] = new RegExp(
-          (key === "regno" ? "^" : "") + params[key],
+          (strings.includes(key) ? "^" : "") + params[key],
           "i"
         );
       }

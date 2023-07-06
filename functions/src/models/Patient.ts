@@ -13,7 +13,7 @@ import mongoose, { Schema } from "mongoose";
 //   chno: {
 //     unique: true,
 //     required: true,
-//     type: Number,
+//     type: String,
 //   },
 //   sex: { type: String, trim: true, enum: ["m", "f"] },
 //   yearofbirth: { type: Number },
@@ -44,7 +44,7 @@ const patientSchema = new Schema({
   chno: {
     unique: true,
     required: true,
-    type: Number,
+    type: String,
   },
   sex: { type: String, trim: true, enum: ["m", "f"] },
   yearofbirth: { type: Number, required: true },
