@@ -89,7 +89,7 @@ async function find(
         params[key] = new RegExp(params[key], "i");
       }
     }
-    const items = await Patient.find(params);
+    const items = await Patient.find(params).limit(20);
 
     result = items ?? [];
   }

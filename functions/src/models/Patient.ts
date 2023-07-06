@@ -36,6 +36,7 @@ const patientSchema = new Schema({
     type: String,
     required: true,
     unique: true,
+    lowercase: true,
   },
   givenname: { type: String, trim: true, lowercase: true, required: true },
   middlename: { type: String, trim: true, lowercase: true, required: true },

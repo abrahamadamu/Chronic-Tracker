@@ -12,6 +12,7 @@ import {
   TableBody,
   CircularProgress,
   LinearProgress,
+  Pagination,
 } from "@mui/material";
 import { Search, AccountCircle } from "@mui/icons-material";
 import lodash from "lodash";
@@ -79,36 +80,44 @@ function SearchPeople() {
         {searching || debouncerWaiting.current ? (
           <LinearProgress sx={{ margin: "20px", width: "100%" }} />
         ) : people?.length > 0 ? (
-          <Table>
-            <colgroup>
-              <col style={{ width: "1%" }} />
-              <col style={{ width: "20%" }} />
-              <col style={{ width: "10%" }} />
-              <col style={{ width: "10%" }} />
-              <col style={{ width: "605%" }} />
-            </colgroup>
-            <TableHead>
-              <TableRow>
-                <TableCell colSpan={2}>
-                  <Typography fontWeight="bold">Name</Typography>
-                </TableCell>
-                <TableCell>
-                  <Typography fontWeight="bold">Reg No</Typography>
-                </TableCell>
-                <TableCell>
-                  <Typography fontWeight="bold">CH No</Typography>
-                </TableCell>
-                <TableCell>
-                  <Typography fontWeight="bold">Age</Typography>
-                </TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {people.map((person, i) => (
-                <Item key={(person as any)._id ?? i} data={person} />
-              ))}
-            </TableBody>
-          </Table>
+          <>
+            <Table>
+              <colgroup>
+                <col style={{ width: "1%" }} />
+                <col style={{ width: "20%" }} />
+                <col style={{ width: "10%" }} />
+                <col style={{ width: "10%" }} />
+                <col style={{ width: "605%" }} />
+              </colgroup>
+              <TableHead>
+                <TableRow>
+                  <TableCell colSpan={2}>
+                    <Typography fontWeight="bold">Name</Typography>
+                  </TableCell>
+                  <TableCell>
+                    <Typography fontWeight="bold">Reg No</Typography>
+                  </TableCell>
+                  <TableCell>
+                    <Typography fontWeight="bold">CH No</Typography>
+                  </TableCell>
+                  <TableCell>
+                    <Typography fontWeight="bold">Age</Typography>
+                  </TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {people.map((person, i) => (
+                  <Item key={(person as any)._id ?? i} data={person} />
+                ))}
+              </TableBody>
+            </Table>
+            {/* <Pagination
+              count={10}
+              page={3}
+              color="secondary"
+              sx={{ marginTop: "10px" }}
+            /> */}
+          </>
         ) : (
           <Grid container justifyContent="center" sx={{ padding: "40px" }}>
             <Typography variant="h6" color="#0008">
