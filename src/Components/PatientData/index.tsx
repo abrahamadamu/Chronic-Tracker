@@ -1,9 +1,14 @@
 import { Grid, CircularProgress } from "@mui/material";
 import { Navigate, Route, Routes } from "react-router-dom";
 
-import { patientDataContext, FormDataStateType } from "./contexts";
-
+import {
+  patientDataContext,
+  FormDataStateType,
+  FormDataType,
+} from "./contexts";
 import { TabType } from "./Content/types";
+
+import Api from "Services/api";
 
 import Content from "./Content";
 
@@ -62,6 +67,35 @@ function PatientData({
       )}
     </Grid>
   );
+}
+
+export function saveData(
+  formData: FormDataType | undefined
+): Promise<FormDataType & { patientid: string; visitid: string }> {
+  console.log({ formData });
+  // return new Promise((r) => r(3));
+  return Api.post("/patients/save", formData)
+    .then((response) => {
+      if (response.status >= 300 || response.status < 200) {
+        throw new Error(response.data());
+      }
+      if (!formData) throw new Error("No form data");
+
+      const data = response.data;
+
+      const newFormData = {
+        ...formData,
+        patientid: data.patientid,
+        visitid: data.visitid,
+      };
+      console.log({ newFormData });
+      return newFormData;
+    })
+    .catch((e) => {
+      const error = e.response.data ?? e.message;
+      alert(error);
+      throw error;
+    });
 }
 
 export default PatientData;

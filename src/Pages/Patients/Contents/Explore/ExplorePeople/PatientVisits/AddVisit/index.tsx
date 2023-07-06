@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import PatientData from "Components/PatientData";
+import PatientData, { saveData } from "Components/PatientData";
 import { FormDataType } from "Components/PatientData/contexts";
 import { Box, Button } from "@mui/material";
 import { ChevronLeft } from "@mui/icons-material";
@@ -35,30 +35,14 @@ function AddVisit() {
     });
   }, [URL_regno]);
 
-  function saveAction(): Promise<any> {
-    // return new Promise((r) => r(3));
-    return Api.post("/patients/save", formData)
-      .then((response) => {
-        if (response.status >= 300 || response.status < 200) {
-          throw new Error(response.data);
-        }
-        if (!formData) return undefined;
+  async function saveAction() {
+    let result;
+    try {
+      result = await saveData(formData);
+      setFormData(result);
+    } catch (e) {}
 
-        const data = response.data;
-
-        const newFormData = {
-          ...formData,
-          patientid: data.patientid,
-        };
-        setFormData(newFormData);
-        console.log({ newFormData });
-
-        return true;
-      })
-      .catch((e) => {
-        const error = e.response.data ?? e.message;
-        alert(error);
-      });
+    return !!result;
   }
 
   return (

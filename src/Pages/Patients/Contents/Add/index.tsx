@@ -4,7 +4,7 @@ import { Grid, Typography } from "@mui/material";
 
 import Api from "Services/api";
 
-import PatientData from "Components/PatientData";
+import PatientData, { saveData } from "Components/PatientData";
 import { FormDataType } from "Components/PatientData/contexts";
 
 function AddPatient() {
@@ -14,33 +14,14 @@ function AddPatient() {
     visit: {},
   });
 
-  function saveAction(): Promise<any> {
-    console.log({ formData });
-    // return new Promise((r) => r(3));
-    return Api.post("/patients/save", formData)
-      .then((response) => {
-        if (response.status >= 300 || response.status < 200) {
-          alert("here");
-          throw new Error(response.data());
-        }
-        if (!formData) return false;
+  async function saveAction() {
+    let result;
+    try {
+      result = await saveData(formData);
+      setFormData(result);
+    } catch (e) {}
 
-        const data = response.data;
-
-        const newFormData = {
-          ...formData,
-          patientid: data.patientid,
-          visitid: data.visitid,
-        };
-        setFormData(newFormData);
-        console.log({ newFormData });
-
-        return true;
-      })
-      .catch((e) => {
-        const error = e.response.data ?? e.message;
-        alert(error);
-      });
+    return !!result;
   }
 
   return (
