@@ -43,7 +43,13 @@ function Personal() {
           label="Medical reg. number"
           size="small"
           value={getValue("regno")}
-          onChange={(e) => setValue("regno", e.target.value)}
+          onChange={(e) => {
+            if ((e.target.value + "dummy")[0] === "0") {
+              alert("registration number shouldn't start with 0");
+              return;
+            }
+            setValue("regno", (e.target.value + "").replace(/^0*/, ""));
+          }}
         />
         <TextField
           variant="standard"

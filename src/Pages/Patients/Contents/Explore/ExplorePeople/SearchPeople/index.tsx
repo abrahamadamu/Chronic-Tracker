@@ -42,7 +42,10 @@ function SearchPeople() {
       setSearching(true);
       debouncerWaiting.current = false;
 
-      Api.post("/patients/find", searchInputs)
+      const searchData = { ...searchInputs };
+      searchData.regno = (searchData.regno + "").replace(/^0*/, "");
+
+      Api.post("/patients/find", searchData)
         .then((response) => {
           setPeople(response.data);
         })
