@@ -57,14 +57,14 @@ async function find(
     visits = visit ? [visit] : [];
   }
 
-  const patientResult = (await patient) ?? [];
+  const patientResult = await patient;
+  if (!patientResult || patientResult.length <= 0)
+    throw createError(400, "Patient not found");
 
   const result = {
-    patient: patientResult?.length > 0 ? patientResult[0] : {},
+    patient: patientResult[0],
     visits: await visits,
   };
-
-  if (!result.patient) throw createError(400, "Visit not found");
 
   return result;
 }

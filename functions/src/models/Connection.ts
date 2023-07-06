@@ -9,7 +9,7 @@ async function connect() {
     return true;
   } else {
     return mongoose
-      .connect(process.env.DB_URL + "")
+      .connect(process.env.DB_URL + "", { dbName: "prod" })
       .then((r) => {
         console.log("new db connection estabelished");
       })

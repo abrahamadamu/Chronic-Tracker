@@ -36,23 +36,39 @@ function PatientVisits() {
   const { URL_regno } = useParams();
   const navigate = useNavigate();
 
-  const [visitsData, setVisitsData] = useState<{
-    patient: Record<string, any>;
-    visits: Record<string, any>[];
-  }>({ patient: {}, visits: [] });
-  const [loading, setLoading] = useState(false);
+  const [visitsData, setVisitsData] = useState<
+    | {
+        patient: Record<string, any>;
+        visits: Record<string, any>[];
+      }
+    | undefined
+    | null
+  >();
 
   useEffect(() => {
     if (!URL_regno) return;
-    setLoading(true);
     Api.post("/visits/find", { regno: URL_regno })
       .then((response) => {
         setVisitsData(response.data);
       })
-      .finally(() => setLoading(false));
+      .catch((e) => {
+        setVisitsData(null);
+      });
   }, [URL_regno]);
 
-  return (
+  return visitsData === null ? (
+    <Typography
+      variant="h6"
+      sx={{
+        marginTop: "150px",
+        width: "100%",
+        color: "red",
+        textAlign: "center",
+      }}
+    >
+      Patient data not found
+    </Typography>
+  ) : (
     <Routes>
       <Route
         path="/"
@@ -82,7 +98,7 @@ function PatientVisits() {
                   width="fit-content"
                 >
                   <Box sx={{ position: "relative" }}>
-                    {loading && (
+                    {!visitsData && (
                       <Grid
                         container
                         sx={{
@@ -101,18 +117,18 @@ function PatientVisits() {
                       direction="column"
                       alignItems="center"
                       width="fit-content"
-                      sx={{ opacity: loading ? "0" : "unset" }}
+                      sx={{ opacity: !visitsData ? "0" : "unset" }}
                     >
                       <AccountCircle
                         sx={{ fontSize: "120px", color: "#0007" }}
                       />
                       <Typography fontWeight="bold" fontSize="14pt">
-                        {loading && "Abebe Molla Zergaw"}
-                        {getFullName(
-                          visitsData.patient.givenname,
-                          visitsData.patient.middlename,
-                          visitsData.patient.familyname
-                        )}
+                        {visitsData &&
+                          getFullName(
+                            visitsData.patient.givenname,
+                            visitsData.patient.middlename,
+                            visitsData.patient.familyname
+                          )}
                       </Typography>
                       <br />
                       <LinearProgress
@@ -142,7 +158,7 @@ function PatientVisits() {
                     Previous Visits
                   </Typography>
 
-                  {loading ? (
+                  {!visitsData ? (
                     <LinearProgress
                       sx={{ margin: "20px", width: "90%", marginLeft: "-7%" }}
                     />
@@ -189,10 +205,10 @@ function PatientVisits() {
                       direction="column"
                       justifyContent="center"
                       alignItems="center"
-                      sx={{ padding: "40px" }}
+                      sx={{ padding: "40px 0" }}
                     >
                       <Typography variant="h6" color="#0008">
-                        No results found
+                        No visits found
                       </Typography>
                       <Grid container justifyContent="start">
                         <Button
@@ -215,7 +231,20 @@ function PatientVisits() {
       <Route
         path=":URL_visitid/*"
         element={
-          <PatientVisit visitsData={{ get: visitsData, set: setVisitsData }} />
+          <>
+            <Typography
+              variant="h6"
+              sx={{
+                marginTop: "150px",
+                width: "100%",
+                color: "red",
+                textAlign: "center",
+              }}
+            >
+              Visit data not found
+            </Typography>
+            {/* <PatientVisit visitsData={{ get: visitsData, set: setVisitsData }} /> */}
+          </>
         }
       />
     </Routes>
