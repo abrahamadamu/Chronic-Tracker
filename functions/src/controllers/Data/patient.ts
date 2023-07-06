@@ -22,10 +22,12 @@ async function save(
     const newPatient = await Patient.create(personal);
     response.patientid = newPatient._id + "";
   } else {
-    const item = await Patient.findOne({ _id: data.patientid });
-    if (!item) throw createError(400, "Patient doesn't exist");
+    const existingPatient = await Patient.findOne({ _id: data.patientid });
+    if (!existingPatient) throw createError(400, "Patient doesn't exist");
 
-    await Patient.updateOne({ _id: data.patientid }, personal);
+    Object.assign(existingPatient, personal);
+    await existingPatient.save();
+
     response.patientid = data.patientid;
   }
 

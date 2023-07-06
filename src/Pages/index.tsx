@@ -25,10 +25,8 @@ function Pages() {
     (async () => {
       Auth.checkAuth()
         .then((auth) => {
-          if (auth) {
-            setAuthCheck(auth);
-          } else {
-            console.log({ auth });
+          setAuthCheck(auth);
+          if (!auth) {
             navigate("/login");
           }
         })

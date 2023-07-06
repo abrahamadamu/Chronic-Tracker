@@ -18,7 +18,12 @@ async function save(data: Record<string, any>): Promise<{ id: string }> {
   visit.data = { ...visit.data, dm: dmData };
 
   if (data.visitid) {
-    await Visit.updateOne({ _id: data.visitid }, visit);
+    const existingVisit = await Visit.findOne({ _id: data.visitid });
+    if (!existingVisit) throw createError(400, "Visit doesn't exist");
+
+    Object.assign(existingVisit, visit);
+    await existingVisit.save();
+
     return { id: data.visitid };
   } else {
     return { id: (await Visit.create(visit))._id + "" };
