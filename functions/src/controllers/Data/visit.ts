@@ -58,8 +58,9 @@ async function find(
   }
 
   const patientResult = await patient;
-  if (!patientResult || patientResult.length <= 0)
+  if (!patientResult || patientResult.length <= 0) {
     throw createError(400, "Patient not found");
+  }
 
   const result = {
     patient: patientResult[0],
