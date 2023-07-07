@@ -17,13 +17,19 @@ function VisitInformation({ id }: { id: string }) {
     patientData.set((prevData) => {
       if (!prevData) return;
 
-      return {
+      const out = {
         ...prevData,
         visit: {
           ...prevData?.visit,
           [key]: number ? Number(value) : value,
         },
       };
+
+      if (value === "") {
+        delete out.visit[key];
+      }
+
+      return out;
     });
   }
 

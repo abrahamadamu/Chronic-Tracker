@@ -60,6 +60,7 @@ function Content({
       dm: dmData,
       visit: { ...(patientData.get?.visit ?? {}) },
     });
+    prevFormData.current = patientData.get;
   }, [personalData, dmData]);
 
   useEffect(() => {

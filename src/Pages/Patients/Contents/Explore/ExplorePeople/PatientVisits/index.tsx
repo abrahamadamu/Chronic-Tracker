@@ -231,20 +231,37 @@ function PatientVisits() {
       <Route
         path=":URL_visitid/*"
         element={
-          <>
-            <Typography
-              variant="h6"
-              sx={{
-                marginTop: "150px",
-                width: "100%",
-                color: "red",
-                textAlign: "center",
-              }}
+          visitsData ? (
+            <PatientVisit
+              visitsData={{ get: visitsData, set: setVisitsData }}
+            />
+          ) : (
+            <Grid
+              container
+              alignItems="center"
+              direction="column"
+              sx={{ marginTop: "150px" }}
             >
-              Visit data not found
-            </Typography>
-            {/* <PatientVisit visitsData={{ get: visitsData, set: setVisitsData }} /> */}
-          </>
+              <Typography
+                variant="h6"
+                sx={{
+                  width: "100%",
+                  color: "red",
+                  textAlign: "center",
+                }}
+              >
+                Visit data not found
+              </Typography>
+              <Button
+                color="secondary"
+                startIcon={<ChevronLeft />}
+                onClick={() => navigate("..")}
+                sx={{ marginTop: "20px" }}
+              >
+                Back
+              </Button>
+            </Grid>
+          )
         }
       />
     </Routes>

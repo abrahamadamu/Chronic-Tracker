@@ -62,13 +62,19 @@ function History({ id }: { id: string }) {
     patientData.set((prevData) => {
       if (!prevData) return;
 
-      return {
+      const out = {
         ...prevData,
         dm: {
           ...prevData?.dm,
           [key]: number ? Number(value) : value,
         },
       };
+
+      if (value === "") {
+        delete out.dm[key];
+      }
+
+      return out;
     });
   }
   function getValue(key: string) {

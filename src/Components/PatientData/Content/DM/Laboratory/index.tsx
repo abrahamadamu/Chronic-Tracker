@@ -25,7 +25,7 @@ function Laboratory({ id }: { id: string }) {
     patientData.set((prevData) => {
       if (!prevData) return;
 
-      return {
+      const out = {
         ...prevData,
         dm: {
           ...prevData?.dm,
@@ -35,6 +35,16 @@ function Laboratory({ id }: { id: string }) {
           },
         },
       };
+
+      if (value === "") {
+        delete out.dm.laboratory[key];
+        delete out.dm.laboratory[key + "unit"];
+      }
+      if (JSON.stringify(out.dm.laboratory) === "{}") {
+        delete out.dm.laboratory;
+      }
+
+      return out;
     });
   }
   function getValue(key: string) {
@@ -214,7 +224,8 @@ function InputWithUnit({
     (value.get(id + "unit") || defaultUnit) ?? ""
   );
 
-  function saveUnit() {
+  function saveUnit(curval: string) {
+    if (curval === "") return;
     value.set(id + "unit", unit);
   }
 
@@ -228,7 +239,7 @@ function InputWithUnit({
         value={value.get(id)}
         onChange={(e) => {
           value.set(id, e.target.value, true);
-          saveUnit();
+          saveUnit(e.target.value);
         }}
         endAdornment={
           <InputAdornment position="end">

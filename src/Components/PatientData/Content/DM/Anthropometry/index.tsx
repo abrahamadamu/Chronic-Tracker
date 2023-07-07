@@ -15,13 +15,19 @@ function History({ id }: { id: string }) {
     patientData.set((prevData) => {
       if (!prevData) return;
 
-      return {
+      const output = {
         ...prevData,
         dm: {
           ...prevData?.dm,
           [key]: number ? Number(value) : value,
         },
       };
+
+      if (value === "") {
+        delete output.dm[key];
+      }
+
+      return output;
     });
   }
   function getValue(key: string) {
@@ -74,7 +80,7 @@ function History({ id }: { id: string }) {
           label="BP Systolic (mmHg)"
           placeholder="Enter BP"
           value={getValue("bpsystolic")}
-          onChange={(e) => setValue("bpdiastolic", e.target.value, true)}
+          onChange={(e) => setValue("bpsystolic", e.target.value, true)}
           type="number"
         />
         <TextField

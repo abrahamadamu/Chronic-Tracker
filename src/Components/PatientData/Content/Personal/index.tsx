@@ -25,13 +25,19 @@ function Personal() {
     patientData.set((prevData) => {
       if (!prevData) return;
 
-      return {
+      const out = {
         ...prevData,
         personal: {
           ...prevData?.personal,
           [key]: number ? Number(value) : value,
         },
       };
+
+      if (value === "") {
+        delete out.personal[key];
+      }
+
+      return out;
     });
   }
 
