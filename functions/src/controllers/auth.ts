@@ -26,7 +26,7 @@ async function getToken(userData: { username: string; password: string }) {
   const match = await bcrypt.compare(userData.password, dbUser.password);
 
   if (match) {
-    return jwt.sign({ username: dbUser.username }, secret, { expiresIn: "1d" });
+    return jwt.sign({ username: dbUser.username }, secret, { expiresIn: "6h" });
   } else {
     throw createError(401, "wrong credentials");
   }

@@ -37,7 +37,11 @@ function Login() {
           }
         })
         .catch((e) => {
-          setError("Invalid Credentials");
+          if (e.response.status >= 500) {
+            setError("Error while logging in");
+          } else {
+            setError("Invalid Credentials");
+          }
         })
         .finally(() => {
           setLoggingIn(false);

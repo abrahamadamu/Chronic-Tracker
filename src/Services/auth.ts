@@ -26,14 +26,14 @@ async function checkAuth(): Promise<boolean> {
 }
 
 function readAccessToken() {
-  return localStorage.getItem("akt") ?? false;
+  return sessionStorage.getItem("akt") ?? false;
 }
 
 function writeAccessToken(accessToken?: string) {
   if (!accessToken) {
-    return localStorage.removeItem("akt");
+    return sessionStorage.removeItem("akt");
   }
-  localStorage.setItem("akt", accessToken);
+  sessionStorage.setItem("akt", accessToken);
 }
 
 export default { readAccessToken, writeAccessToken, login, checkAuth };
