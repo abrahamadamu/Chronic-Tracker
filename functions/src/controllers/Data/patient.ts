@@ -16,6 +16,10 @@ async function save(
     throw createError(400, "Registration Number required");
   }
 
+  if (JSON.stringify(data.dm) === "{}") {
+    throw createError(400, "The visit data can't be empty");
+  }
+
   const response: { patientid?: string; visitid?: string } = {};
 
   if (!data.patientid) {

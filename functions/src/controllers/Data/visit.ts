@@ -10,7 +10,7 @@ import * as createError from "http-errors";
 async function save(data: Record<string, any>): Promise<{ id: string }> {
   const visit = {
     regno: data.personal.regno,
-    dateofvisit: data.visit.dateofvisit,
+    dateofvisit: data.visit.dateofvisit ?? Date.now(),
     data: {},
   };
 

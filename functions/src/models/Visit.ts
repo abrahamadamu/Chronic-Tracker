@@ -12,7 +12,6 @@ const VisitsSchema = new Schema({
   dateofvisit: {
     type: Number,
     required: true,
-    default: () => new Date().getTime(),
   },
 });
 
