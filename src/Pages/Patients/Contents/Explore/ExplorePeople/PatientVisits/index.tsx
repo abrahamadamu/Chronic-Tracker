@@ -231,10 +231,14 @@ function PatientVisits() {
       <Route
         path=":URL_visitid/*"
         element={
-          visitsData ? (
-            <PatientVisit
-              visitsData={{ get: visitsData, set: setVisitsData }}
-            />
+          visitsData !== null ? (
+            visitsData ? (
+              <PatientVisit
+                visitsData={{ get: visitsData, set: setVisitsData }}
+              />
+            ) : (
+              <LinearProgress sx={{ height: "2px", opacity: 0.2 }} />
+            )
           ) : (
             <Grid
               container

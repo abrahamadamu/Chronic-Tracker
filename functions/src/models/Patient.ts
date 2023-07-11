@@ -29,7 +29,7 @@ import mongoose, { Schema } from "mongoose";
 //   kebele: { type: String, trim: true, lowercase: true },
 //   housenumber: { type: String, trim: true },
 //   phonenumber: Number,
-//   initialdiganosis: { type: String, trim: true },
+//   initialdiagnosis: { type: String, trim: true },
 // });
 const patientSchema = new Schema({
   regno: {
@@ -60,7 +60,7 @@ const patientSchema = new Schema({
   kebele: { type: String, trim: true, lowercase: true },
   housenumber: { type: String, trim: true },
   phonenumber: Number,
-  initialdiganosis: { type: String, trim: true },
+  initialdiagnosis: { type: Array, trim: true },
 });
 
 const Patient = mongoose.model("Patient", patientSchema);

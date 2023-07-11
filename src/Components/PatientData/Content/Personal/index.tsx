@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useState, useEffect } from "react";
 import {
   FormControl,
   InputLabel,
@@ -12,9 +12,64 @@ import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
 import { patientDataContext } from "../../contexts";
+import EditableList from "../DM/Components/CustomMultiList";
+import { CodeTextPair } from "Data/data";
+
+const diagnosis = [
+  "Type 1 Diabetes Mellitus",
+  "Type 2 Diabetes Mellitus",
+  "Essential Hypertension",
+  "Dilated Cardiomyopathy",
+  "Hypertensive heart disease",
+  "Asthma",
+  "Heart Failure",
+  "Chronic liver disease",
+  "Polyneuropathy",
+  "Rheumatoid arthritis",
+  "Osteoarthritis",
+  "Thyrotoxicosis",
+  "Thyrocardiac disease",
+  "Chronic obstructive pulmonary disease",
+  "Ischemic heart disease",
+  "Cor pulmonale",
+];
+
+let diagnosisMap: CodeTextPair[] = diagnosis.map((dg) => ({
+  code: dg,
+  text: dg,
+}));
 
 function Personal() {
   const patientData = useContext(patientDataContext);
+
+  const [initialDiag, setInitialDiag] = useState<CodeTextPair[]>(
+    (() => {
+      if (patientData.get?.personal?.initialdiagnosis) {
+        let diag: string[] = patientData.get.personal
+          .initialdiagnosis as string[];
+        return diag.map((dg) => ({ code: dg, text: dg }));
+      }
+      return [];
+    })()
+  );
+
+  useEffect(() => {
+    if (!patientData.get) return;
+    if (!patientData.get?.personal) return;
+
+    let personal = patientData.get?.personal;
+
+    if (initialDiag.length > 0) {
+      personal = {
+        ...personal,
+        initialdiagnosis: initialDiag.map((diag) => diag.text),
+      };
+    } else {
+      delete personal["initialdiagnosis"];
+    }
+
+    patientData.set({ ...patientData.get, personal });
+  }, [initialDiag]);
 
   function getValue(id: string) {
     if (!patientData.get) return "";
@@ -176,12 +231,11 @@ function Personal() {
             value={dayjs(getValue("dateofenrolment") || new Date())}
           />
         </LocalizationProvider>
-        <TextField
-          variant="standard"
-          label="Full initial diagnosis"
-          size="small"
-          value={getValue("initialdiagnosis")}
-          onChange={(e) => setValue("initialdiagnosis", e.target.value)}
+        <EditableList
+          title="Full Initial Diagnosis"
+          choices={diagnosisMap}
+          chosen={{ get: initialDiag, set: setInitialDiag }}
+          listType="simple"
         />
       </InputGroup>
     </FormContainer>
