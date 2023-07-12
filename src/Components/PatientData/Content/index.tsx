@@ -60,21 +60,30 @@ function Content({
       dm: dmData,
       visit: { ...(patientData.get?.visit ?? {}) },
     });
-    prevFormData.current = patientData.get;
+
+    const currentForPrev = patientData.get;
+    delete currentForPrev?.patientid;
+    delete currentForPrev?.visitid;
+
+    prevFormData.current = currentForPrev;
   }, [personalData, dmData]);
 
   useEffect(() => {
-    const changed = !isEqual(patientData.get, prevFormData.current);
+    const currentForPrev = patientData.get;
+    delete currentForPrev?.patientid;
+    delete currentForPrev?.visitid;
+
+    const changed = !isEqual(currentForPrev, prevFormData.current);
     if (
       changed &&
       isEqual(prevFormData.current, { personal: {}, dm: {}, visit: {} })
     ) {
-      prevFormData.current = patientData.get;
+      prevFormData.current = currentForPrev;
       return;
     }
     console.log("VS", {
       changed,
-      current: patientData.get,
+      current: currentForPrev,
       prev: prevFormData.current,
     });
     setChanged(changed);
@@ -87,7 +96,12 @@ function Content({
       .then((response) => {
         if (response) {
           setChanged(false);
-          prevFormData.current = patientData.get;
+
+          const currentForPrev = patientData.get;
+          delete currentForPrev?.patientid;
+          delete currentForPrev?.visitid;
+
+          prevFormData.current = currentForPrev;
         }
       })
       .finally(() => setSaving(false));

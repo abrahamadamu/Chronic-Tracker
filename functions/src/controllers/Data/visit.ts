@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import { Visit } from "../../models/Visit";
 import * as patientData from "./patient";
 import * as createError from "http-errors";
@@ -7,7 +8,10 @@ import * as createError from "http-errors";
  * @param {Record<string,any>} data data to save
  * @return {Promise<{ id: string }>}
  */
-async function save(data: Record<string, any>): Promise<{ id: string }> {
+async function save(
+  data: Record<string, any>,
+  session?: mongoose.mongo.ClientSession
+): Promise<{ id: string }> {
   const visit = {
     regno: data.personal.regno,
     dateofvisit: data.visit.dateofvisit ?? Date.now(),
@@ -22,11 +26,18 @@ async function save(data: Record<string, any>): Promise<{ id: string }> {
     if (!existingVisit) throw createError(400, "Visit doesn't exist");
 
     Object.assign(existingVisit, visit);
-    await existingVisit.save();
+    await existingVisit.save({ ...(session ? { session } : {}) });
 
     return { id: data.visitid };
   } else {
-    return { id: (await Visit.create(visit))._id + "" };
+    const newVisit = new Visit(visit);
+    await newVisit.save({
+      ...(session ? { session } : {}),
+    });
+
+    return {
+      id: newVisit._id + "",
+    };
   }
 }
 

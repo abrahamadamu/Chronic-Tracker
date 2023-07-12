@@ -9,7 +9,9 @@ async function connect() {
     return true;
   } else {
     return mongoose
-      .connect(process.env.DB_URL + "", { dbName: "prod" })
+      .connect(process.env.DB_URL + "", {
+        dbName: process.env.FUNCTIONS_EMULATOR === "true" ? "testing" : "prod",
+      })
       .then((r) => {
         console.log("new db connection estabelished");
       })

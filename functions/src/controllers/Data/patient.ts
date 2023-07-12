@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import { Patient } from "../../models/Patient";
 import * as visitData from "./visit";
 import * as createError from "http-errors";
@@ -22,25 +23,39 @@ async function save(
 
   const response: { patientid?: string; visitid?: string } = {};
 
-  if (!data.patientid) {
-    const newPatient = await Patient.create(personal);
-    response.patientid = newPatient._id + "";
-  } else {
-    const existingPatient = await Patient.findOne({ _id: data.patientid });
-    if (!existingPatient) throw createError(400, "Patient doesn't exist");
+  const session = await mongoose.startSession();
+  session.startTransaction();
 
-    Object.assign(existingPatient, personal);
-    await existingPatient.save();
+  try {
+    if (!data.patientid) {
+      const newPatient = new Patient(personal);
+      await newPatient.save({ session });
 
-    response.patientid = data.patientid;
+      response.patientid = newPatient._id + "";
+    } else {
+      const existingPatient = await Patient.findOne({ _id: data.patientid });
+      if (!existingPatient) throw createError(400, "Patient doesn't exist");
+
+      Object.assign(existingPatient, personal);
+      await existingPatient.save({ session });
+
+      response.patientid = data.patientid;
+    }
+
+    console.log("to save", data);
+
+    const savedVisit = await visitData.save(data, session);
+    response.visitid = savedVisit.id;
+
+    await session.commitTransaction();
+
+    return response;
+  } catch (e) {
+    await session.abortTransaction();
+    throw e;
+  } finally {
+    session.endSession();
   }
-
-  console.log("to save", data);
-
-  const savedVisit = await visitData.save(data);
-  response.visitid = savedVisit.id;
-
-  return response;
 
   /**
    * Prepares and parses personal data before saving
