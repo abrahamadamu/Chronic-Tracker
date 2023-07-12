@@ -6,6 +6,7 @@ import * as createError from "http-errors";
 /**
  * Saves visit data
  * @param {Record<string,any>} data data to save
+ * @param {any} session session for transaction
  * @return {Promise<{ id: string }>}
  */
 async function save(
