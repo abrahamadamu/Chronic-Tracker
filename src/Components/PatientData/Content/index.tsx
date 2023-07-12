@@ -61,7 +61,7 @@ function Content({
       visit: { ...(patientData.get?.visit ?? {}) },
     });
 
-    const currentForPrev = patientData.get;
+    const currentForPrev = structuredClone(patientData.get);
     delete currentForPrev?.patientid;
     delete currentForPrev?.visitid;
 
@@ -69,7 +69,7 @@ function Content({
   }, [personalData, dmData]);
 
   useEffect(() => {
-    const currentForPrev = patientData.get;
+    const currentForPrev = structuredClone(patientData.get);
     delete currentForPrev?.patientid;
     delete currentForPrev?.visitid;
 
@@ -97,7 +97,7 @@ function Content({
         if (response) {
           setChanged(false);
 
-          const currentForPrev = patientData.get;
+          const currentForPrev = structuredClone(patientData.get);
           delete currentForPrev?.patientid;
           delete currentForPrev?.visitid;
 
